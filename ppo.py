@@ -26,7 +26,13 @@ def make_env(spec):
     """spec: env id, optionally with a size override, e.g. 'MiniGrid-DoorKey-8x8-v0@size=7'."""
     env_id, _, size = spec.partition("@size=")
     kwargs = {"size": int(size)} if size else {}
-    return lambda: ImgObsWrapper(gym.make(env_id, **kwargs))
+
+    def thunk():
+        env = ImgObsWrapper(gym.make(env_id, **kwargs))
+        env.action_space = gym.spaces.Discrete(7)  # uniform; Dynamic-Obstacles (3 actions) maps extra ones to 'left'
+        return env
+
+    return thunk
 
 
 def to_tensor(obs, device):
@@ -102,8 +108,9 @@ def evaluate(agent, env_id, episodes, device):
     return wins / episodes
 
 
-def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, retain=None):
-    """retain: optional fn() -> loss that protects old skills; added to every PPO minibatch loss."""
+def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, retain=None, life=None):
+    """retain: optional fn() -> loss that protects old skills; added to every PPO minibatch loss.
+    life: optional boundary-blind learner state (Life), updated after every rollout."""
     specs = env_id.split("|")  # 'A|B|C' = mixture: env i runs specs[i % len(specs)]
     envs = gym.vector.SyncVectorEnv(
         [make_env(specs[i % len(specs)]) for i in range(args.num_envs)],
@@ -124,7 +131,7 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
     recent, curve, entropy, steps_to_80, step = [], [], [], None, 0
 
     while step < args.steps:
-        ent_sum = 0.0
+        ent_sum, outcomes = 0.0, []
         init_state = None if state is None else tuple(s.clone() for s in state)
         for t in range(T):
             obs_buf[t], done_buf[t] = next_obs, next_done
@@ -138,8 +145,11 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
             rew_buf[t] = torch.as_tensor(reward, device=device)
             next_obs = to_tensor(obs, device)
             next_done = torch.as_tensor(done, dtype=torch.float32, device=device)
-            recent.extend((reward[done] > 0).tolist())
+            outcomes.extend((reward[done] > 0).tolist())
+        recent.extend(outcomes)  # per-task, for measurement only; the agent never sees task identity
         step += T * N
+        if life is not None:
+            life.update(outcomes, obs_buf.flatten(0, 1))
 
         if rnd is not None:
             # ponytail: single critic on ext + int reward (episodic); separate int value head if this proves unstable
@@ -203,6 +213,62 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
     envs.close()
     # last rollout's observations: a sample of what this task looks like, for retention methods
     return {"curve": curve, "entropy": entropy, "steps_to_80": steps_to_80}, obs_buf.flatten(0, 1).clone()
+
+
+class Life:
+    """Boundary-blind continual learner. Uses only what the agent itself can know (its own success),
+    persists across task switches, and is never told when the task changes.
+
+    - competence-gated consolidation: while its own success rate >= 80%, copy observations + current action
+      probabilities into a fixed-size reservoir (uniform sample over all mastered history; memory does not grow).
+    - replay-distillation from the reservoir on every PPO minibatch (same KL loss as Retention 'distill').
+    - surprise: success collapses (< 30%) after mastery -> "the world changed" -> optionally reset heads + optimizer.
+    """
+
+    def __init__(self, agent, opt, args, batch, device):
+        self.agent, self.opt, self.args, self.batch = agent, opt, args, batch
+        self.recent, self.mastered, self.step, self.events = [], False, 0, []
+        self.cap, self.seen, self.size = args.reservoir, 0, 0
+        self.obs = torch.zeros((self.cap, 3, 7, 7), device=device)
+        self.logits = torch.zeros((self.cap, 7), device=device)
+
+    def update(self, outcomes, obs):
+        self.step += len(obs)
+        self.recent = (self.recent + outcomes)[-100:]
+        rate = float(np.mean(self.recent)) if self.recent else 0.0
+        if len(self.recent) >= 100 and rate >= 0.8:
+            self.mastered = True
+            if self.cap:
+                self.consolidate(obs)
+        elif self.mastered and rate < 0.3:
+            self.mastered = False
+            self.events.append((self.step, "surprise"))
+            if self.args.surprise_reset:
+                self.agent.actor.reset_parameters()
+                self.agent.critic.reset_parameters()
+                self.opt.state.clear()
+
+    @torch.no_grad()
+    def consolidate(self, obs, k=256):
+        x = obs[torch.randperm(len(obs), device=obs.device)[:k]]
+        dist, _, _ = self.agent(x)
+        for xi, li in zip(x, dist.logits):
+            if self.size < self.cap:
+                slot = self.size
+                self.size += 1
+            else:  # reservoir sampling: every item ever offered has equal chance to be kept
+                slot = int(torch.randint(self.seen + 1, ()).item())
+            self.seen += 1
+            if slot < self.cap:
+                self.obs[slot], self.logits[slot] = xi, li
+
+    def __call__(self):
+        if self.size == 0:
+            return 0.0
+        idx = torch.randint(self.size, (self.batch,), device=self.obs.device)
+        dist, _, _ = self.agent(self.obs[idx])
+        old = self.logits[idx]
+        return self.args.retain_coef * (old.exp() * (old - dist.logits)).sum(-1).mean()
 
 
 class Retention:
@@ -296,6 +362,9 @@ def main():
     p.add_argument("--memory", action="store_true", help="LSTM working memory")
     p.add_argument("--retain", default="none", choices=["none", "distill", "ewc"])
     p.add_argument("--retain-coef", type=float, default=1.0)
+    p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
+    p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
+    p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
     p.add_argument("--rnd-coef", type=float, default=0.0, help="curiosity bonus weight; 0 = off")
     args = p.parse_args()
 
@@ -314,20 +383,26 @@ def main():
     rnd_opt = torch.optim.Adam(rnd.predictor.parameters(), lr=args.lr) if rnd else None
     mb = args.num_envs * args.num_steps // args.minibatches
     retain = Retention(agent, args.retain, args.retain_coef, mb) if args.retain != "none" else None
+    life = None
+    if args.blind:
+        assert args.task_switch == "none" and args.retain == "none", "blind mode: no boundary-based interventions"
+        life = retain = Life(agent, opt, args, mb, device)
 
     start = time.time()
     result = {"config": vars(args), "tasks": tasks, "eval_tasks": eval_tasks, "train": [], "matrix": []}
     for i, env_id in enumerate(tasks):
         print(f"[{name} seed {args.seed}] training on {env_id}", flush=True)
         if i > 0:
-            if retain:
+            if retain is not None and life is None:  # boundary-given retention only
                 retain.remember(last_obs)
             opt = on_task_switch(agent, opt, args.task_switch, args.lr)
-        res, last_obs = train_task(agent, opt, env_id, args, device, args.seed * 1000 + i, rnd, rnd_opt, retain)
+        res, last_obs = train_task(agent, opt, env_id, args, device, args.seed * 1000 + i, rnd, rnd_opt, retain, life)
         result["train"].append(res)
         row = [evaluate(agent, e, args.eval_episodes, device) for e in eval_tasks]
         result["matrix"].append(row)
         print("  eval after stage:", {e.removeprefix("MiniGrid-"): f"{s:.0%}" for e, s in zip(eval_tasks, row)})
+    if life:
+        result["life_events"], result["reservoir_size"] = life.events, life.size
     result["wall_seconds"] = time.time() - start
     out.write_text(json.dumps(result))
     torch.save(agent.state_dict(), out.with_suffix(".pt"))

@@ -65,6 +65,12 @@ Two questions split:
 - Exploration (side track, later): 8x8 DoorKey / LavaCrossing, retest curiosity there.
 Baseline default: entropy coef 0.05.
 
+## Overnight plan (2026-10-23, ~6h, autonomous, Rohan asleep)
+1. Blind continual learning: no task-boundary signal. Fixed-size reservoir replay (competence-gated),
+   self-detected task change (own success collapses) -> heads reset. Compare to boundary-given distill and joint.
+2. Longer sequence: 6+ tasks incl. new kinds and revisits, using best method from 1.
+3. Write results/overnight.md, commit + push to private repo.
+
 ## Decisions (made by Claude, Rohan delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.
