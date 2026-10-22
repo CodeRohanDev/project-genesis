@@ -1,0 +1,7 @@
+[B1_Empty-8x8-v0 seed 4] training on MiniGrid-Empty-8x8-v0
+  MiniGrid-Empty-8x8-v0 step    40960  train success(last100) 100%
+  MiniGrid-Empty-8x8-v0 step    81920  train success(last100) 100%
+  MiniGrid-Empty-8x8-v0 step   122880  train success(last100) 100%
+  MiniGrid-Empty-8x8-v0 step   163840  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%'}
+saved results/runs/B1_Empty-8x8-v0_seed4.json  (49s)

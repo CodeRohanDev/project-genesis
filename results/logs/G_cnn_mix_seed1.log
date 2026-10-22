@@ -1,0 +1,39 @@
+[G_cnn_mix seed 1] training on MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    40960  train success(last100) 12%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    81920  train success(last100) 30%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   122880  train success(last100) 96%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   163840  train success(last100) 99%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   286720  train success(last100) 99%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   491520  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   532480  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   573440  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   614400  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   655360  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   696320  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   737280  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   778240  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   819200  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   860160  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   901120  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   942080  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   983040  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1024000  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1064960  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1105920  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1146880  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1187840  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1228800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1269760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1310720  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1351680  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1392640  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1433600  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step  1474560  train success(last100) 100%
+  eval after stage: {'DoorKey-5x5-v0': '100%', 'DoorKey-6x6-v0': '100%', 'DoorKey-8x8-v0@size=7': '100%', 'DoorKey-8x8-v0': '99%', 'DoorKey-8x8-v0@size=10': '96%', 'DoorKey-8x8-v0@size=12': '90%'}
+saved results/runs/G_cnn_mix_seed1.json  (358s)

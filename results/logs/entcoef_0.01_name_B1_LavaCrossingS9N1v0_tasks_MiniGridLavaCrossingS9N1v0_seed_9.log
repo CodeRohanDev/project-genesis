@@ -1,0 +1,27 @@
+[B1_LavaCrossingS9N1-v0 seed 9] training on MiniGrid-LavaCrossingS9N1-v0
+  MiniGrid-LavaCrossingS9N1-v0 step    40960  train success(last100) 15%
+  MiniGrid-LavaCrossingS9N1-v0 step    81920  train success(last100) 19%
+  MiniGrid-LavaCrossingS9N1-v0 step   122880  train success(last100) 10%
+  MiniGrid-LavaCrossingS9N1-v0 step   163840  train success(last100) 20%
+  MiniGrid-LavaCrossingS9N1-v0 step   204800  train success(last100) 14%
+  MiniGrid-LavaCrossingS9N1-v0 step   245760  train success(last100) 22%
+  MiniGrid-LavaCrossingS9N1-v0 step   286720  train success(last100) 20%
+  MiniGrid-LavaCrossingS9N1-v0 step   327680  train success(last100) 25%
+  MiniGrid-LavaCrossingS9N1-v0 step   368640  train success(last100) 20%
+  MiniGrid-LavaCrossingS9N1-v0 step   409600  train success(last100) 15%
+  MiniGrid-LavaCrossingS9N1-v0 step   450560  train success(last100) 22%
+  MiniGrid-LavaCrossingS9N1-v0 step   491520  train success(last100) 26%
+  MiniGrid-LavaCrossingS9N1-v0 step   532480  train success(last100) 29%
+  MiniGrid-LavaCrossingS9N1-v0 step   573440  train success(last100) 27%
+  MiniGrid-LavaCrossingS9N1-v0 step   614400  train success(last100) 39%
+  MiniGrid-LavaCrossingS9N1-v0 step   655360  train success(last100) 40%
+  MiniGrid-LavaCrossingS9N1-v0 step   696320  train success(last100) 24%
+  MiniGrid-LavaCrossingS9N1-v0 step   737280  train success(last100) 28%
+  MiniGrid-LavaCrossingS9N1-v0 step   778240  train success(last100) 35%
+  MiniGrid-LavaCrossingS9N1-v0 step   819200  train success(last100) 31%
+  MiniGrid-LavaCrossingS9N1-v0 step   860160  train success(last100) 26%
+  MiniGrid-LavaCrossingS9N1-v0 step   901120  train success(last100) 33%
+  MiniGrid-LavaCrossingS9N1-v0 step   942080  train success(last100) 29%
+  MiniGrid-LavaCrossingS9N1-v0 step   983040  train success(last100) 30%
+  eval after stage: {'LavaCrossingS9N1-v0': '21%'}
+saved results/runs/B1_LavaCrossingS9N1-v0_seed9.json  (129s)

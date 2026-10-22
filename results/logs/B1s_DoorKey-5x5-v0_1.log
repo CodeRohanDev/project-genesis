@@ -1,0 +1,10 @@
+[B1s_DoorKey-5x5-v0 seed 1] training on MiniGrid-DoorKey-5x5-v0
+  MiniGrid-DoorKey-5x5-v0 step    40960  train success(last100) 20%
+  MiniGrid-DoorKey-5x5-v0 step    81920  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   122880  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   163840  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   286720  train success(last100) 100%
+  eval after stage: {'DoorKey-5x5-v0': '100%'}
+saved results/runs/B1s_DoorKey-5x5-v0_seed1.json  (67s)

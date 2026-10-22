@@ -1,0 +1,28 @@
+[P_shrink seed 7] training on MiniGrid-Empty-5x5-v0
+  MiniGrid-Empty-5x5-v0 step    40960  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step    81920  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step   122880  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step   163840  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step   204800  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step   245760  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0 step   286720  train success(last100) 100%
+  eval after stage: {'Empty-5x5-v0': '100%', 'DoorKey-5x5-v0': '0%', 'LavaGapS5-v0': '22%'}
+[P_shrink seed 7] training on MiniGrid-DoorKey-5x5-v0
+  MiniGrid-DoorKey-5x5-v0 step    40960  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step    81920  train success(last100) 98%
+  MiniGrid-DoorKey-5x5-v0 step   122880  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   163840  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0 step   286720  train success(last100) 100%
+  eval after stage: {'Empty-5x5-v0': '100%', 'DoorKey-5x5-v0': '100%', 'LavaGapS5-v0': '22%'}
+[P_shrink seed 7] training on MiniGrid-LavaGapS5-v0
+  MiniGrid-LavaGapS5-v0 step    40960  train success(last100) 33%
+  MiniGrid-LavaGapS5-v0 step    81920  train success(last100) 36%
+  MiniGrid-LavaGapS5-v0 step   122880  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0 step   163840  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0 step   204800  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0 step   245760  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0 step   286720  train success(last100) 100%
+  eval after stage: {'Empty-5x5-v0': '0%', 'DoorKey-5x5-v0': '0%', 'LavaGapS5-v0': '80%'}
+saved results/runs/P_shrink_seed7.json  (214s)

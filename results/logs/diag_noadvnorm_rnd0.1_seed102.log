@@ -1,0 +1,27 @@
+[diag_noadvnorm_rnd0.1_DoorKey seed 102] training on MiniGrid-DoorKey-8x8-v0
+  MiniGrid-DoorKey-8x8-v0 step    40960  train success(last100) 5%
+  MiniGrid-DoorKey-8x8-v0 step    81920  train success(last100) 3%
+  MiniGrid-DoorKey-8x8-v0 step   122880  train success(last100) 2%
+  MiniGrid-DoorKey-8x8-v0 step   163840  train success(last100) 3%
+  MiniGrid-DoorKey-8x8-v0 step   204800  train success(last100) 1%
+  MiniGrid-DoorKey-8x8-v0 step   245760  train success(last100) 2%
+  MiniGrid-DoorKey-8x8-v0 step   286720  train success(last100) 6%
+  MiniGrid-DoorKey-8x8-v0 step   327680  train success(last100) 3%
+  MiniGrid-DoorKey-8x8-v0 step   368640  train success(last100) 8%
+  MiniGrid-DoorKey-8x8-v0 step   409600  train success(last100) 6%
+  MiniGrid-DoorKey-8x8-v0 step   450560  train success(last100) 0%
+  MiniGrid-DoorKey-8x8-v0 step   491520  train success(last100) 4%
+  MiniGrid-DoorKey-8x8-v0 step   532480  train success(last100) 2%
+  MiniGrid-DoorKey-8x8-v0 step   573440  train success(last100) 2%
+  MiniGrid-DoorKey-8x8-v0 step   614400  train success(last100) 3%
+  MiniGrid-DoorKey-8x8-v0 step   655360  train success(last100) 5%
+  MiniGrid-DoorKey-8x8-v0 step   696320  train success(last100) 9%
+  MiniGrid-DoorKey-8x8-v0 step   737280  train success(last100) 8%
+  MiniGrid-DoorKey-8x8-v0 step   778240  train success(last100) 8%
+  MiniGrid-DoorKey-8x8-v0 step   819200  train success(last100) 8%
+  MiniGrid-DoorKey-8x8-v0 step   860160  train success(last100) 5%
+  MiniGrid-DoorKey-8x8-v0 step   901120  train success(last100) 6%
+  MiniGrid-DoorKey-8x8-v0 step   942080  train success(last100) 12%
+  MiniGrid-DoorKey-8x8-v0 step   983040  train success(last100) 13%
+  eval after stage: {'DoorKey-8x8-v0': '11%'}
+saved results/runs/diag_noadvnorm_rnd0.1_DoorKey_seed102.json  (230s)
