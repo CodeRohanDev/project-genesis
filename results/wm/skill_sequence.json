@@ -1,0 +1,52 @@
+{
+ "1": {
+  "pickup_only": 0.0,
+  "correct": 0.23,
+  "wrong": 0.0
+ },
+ "2": {
+  "pickup_only": 0.0,
+  "correct": 0.31,
+  "wrong": 0.01
+ },
+ "3": {
+  "pickup_only": 0.0,
+  "correct": 0.16,
+  "wrong": 0.0
+ },
+ "4": {
+  "pickup_only": 0.0,
+  "correct": 0.16,
+  "wrong": 0.0
+ },
+ "5": {
+  "pickup_only": 0.0,
+  "correct": 0.52,
+  "wrong": 0.0
+ },
+ "6": {
+  "pickup_only": 0.0,
+  "correct": 0.15,
+  "wrong": 0.01
+ },
+ "7": {
+  "pickup_only": 0.0,
+  "correct": 0.19,
+  "wrong": 0.0
+ },
+ "8": {
+  "pickup_only": 0.0,
+  "correct": 0.16,
+  "wrong": 0.0
+ },
+ "9": {
+  "pickup_only": 0.0,
+  "correct": 0.33,
+  "wrong": 0.0
+ },
+ "10": {
+  "pickup_only": 0.0,
+  "correct": 0.37,
+  "wrong": 0.0
+ }
+}

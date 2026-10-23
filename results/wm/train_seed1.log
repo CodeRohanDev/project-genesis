@@ -1,0 +1,54 @@
+seed 1 epoch 1 loss 0.1521
+seed 1 epoch 2 loss 0.1258
+seed 1 epoch 3 loss 0.0495
+seed 1 epoch 4 loss 0.0652
+seed 1 epoch 5 loss 0.0342
+seed 1 epoch 6 loss 0.0279
+seed 1 epoch 7 loss 0.0394
+seed 1 epoch 8 loss 0.0548
+{
+ "seed": 1,
+ "epochs": 8,
+ "train_n": 849968,
+ "wall_seconds": 665.2859268188477,
+ "test": {
+  "model_cell_acc": 0.9940417408943176,
+  "model_exact_view": 0.7965611219406128,
+  "model_changed_cell_acc": 0.9633840968908659,
+  "copy_cell_acc": 0.8646941781044006,
+  "copy_exact_view": 0.34066668152809143,
+  "copy_changed_cell_acc": 0.0,
+  "probe_toggle_locked_door_with_key_n": 3366,
+  "probe_toggle_locked_door_with_key_model": 1.0,
+  "probe_toggle_locked_door_with_key_copy": 0.0,
+  "probe_toggle_locked_door_without_key_n": 75,
+  "probe_toggle_locked_door_without_key_model": 1.0,
+  "probe_toggle_locked_door_without_key_copy": 1.0,
+  "probe_pickup_facing_object_hands_empty_n": 9767,
+  "probe_pickup_facing_object_hands_empty_model": 0.9938568472862244,
+  "probe_pickup_facing_object_hands_empty_copy": 0.0,
+  "probe_forward_into_wall_n": 6401,
+  "probe_forward_into_wall_model": 1.0,
+  "probe_forward_into_wall_copy": 1.0
+ },
+ "new_worlds": {
+  "model_cell_acc": 0.9426666498184204,
+  "model_exact_view": 0.25459998846054077,
+  "model_changed_cell_acc": 0.7211943712900741,
+  "copy_cell_acc": 0.9180585741996765,
+  "copy_exact_view": 0.4891666769981384,
+  "copy_changed_cell_acc": 0.0,
+  "probe_toggle_locked_door_with_key_n": 495,
+  "probe_toggle_locked_door_with_key_model": 1.0,
+  "probe_toggle_locked_door_with_key_copy": 0.0,
+  "probe_toggle_locked_door_without_key_n": 872,
+  "probe_toggle_locked_door_without_key_model": 0.8589449524879456,
+  "probe_toggle_locked_door_without_key_copy": 1.0,
+  "probe_pickup_facing_object_hands_empty_n": 2671,
+  "probe_pickup_facing_object_hands_empty_model": 0.9221265316009521,
+  "probe_pickup_facing_object_hands_empty_copy": 0.0,
+  "probe_forward_into_wall_n": 18715,
+  "probe_forward_into_wall_model": 0.9666043519973755,
+  "probe_forward_into_wall_copy": 1.0
+ }
+}

@@ -108,6 +108,21 @@ the world responds to actions, and a way to search with it.
 
 All learned from random init, CPU-sized (small MLP/CNN), data collected by our own agents.
 
+### 3b revised design (2026-10-24, after 3a results; needs Rohan's go)
+3a showed: the world model is accurate for many steps in familiar worlds, weaker in new layouts. Step-by-step search
+over 20-40 actions with sparse success is unlikely to work. Plan over SKILLS instead (child-like: "get key, open
+door, then take the box"):
+- Skills = the goal-conditioned policy with a mission: "open the door", "pick up the key", "pick up the <c> box"...
+  (already learned in 2b; no new training).
+- Planner: for each short sequence of 1-3 candidate missions, imagine running each skill policy for up to N steps
+  inside the world model, starting from the current view. Success test in imagination: the target object appears in
+  the agent's own cell (holding it). Execute the first skill of the best sequence, then replan.
+- Honest setup: retrain the world model on component-only data (Unlock + Pickup envs, B_comp agents), so neither the
+  policy nor the model has ever seen UnlockPickup.
+- Test UnlockPickup zero-shot (policy alone: 0%). Controls: random skill order; hand-written correct order
+  (upper bound: shows whether failures come from planning or from skill execution).
+- Falsified if the planner is no better than random skill order.
+
 ## Decisions (made by Claude, Rohan delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.
