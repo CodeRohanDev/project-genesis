@@ -16,19 +16,64 @@ import minigrid  # noqa: F401  registers MiniGrid envs
 import numpy as np
 import torch
 import torch.nn as nn
-from minigrid.wrappers import ImgObsWrapper
 from torch.distributions import Categorical
 
 EVAL_SEED = 10**6  # eval layouts come from a seed range training never resets to
 
+# Mission words are just ids. The agent starts with random embeddings: no pretrained language, meaning comes from reward.
+VOCAB = ["<pad>", "<unk>", "go", "to", "the", "a", "pick", "up", "open", "door", "put", "next", "and", "then",
+         "after", "you", "object", "red", "green", "blue", "purple", "yellow", "grey", "ball", "box", "key"]
+WORD_ID = {w: i for i, w in enumerate(VOCAB)}
+MAX_WORDS = 16
+IMG_DIM = 7 * 7 * 3
+OBS_DIM = IMG_DIM + MAX_WORDS  # every observation: flattened 7x7x3 view + padded mission word ids
+
+
+class FlatObs(gym.ObservationWrapper):
+    """obs -> [image (147 values), mission word ids (16)]. Agents without goal input simply ignore the words."""
+
+    def __init__(self, env):
+        super().__init__(env)
+        self.observation_space = gym.spaces.Box(0, 255, (OBS_DIM,), np.uint8)
+
+    def observation(self, obs):
+        words = [WORD_ID.get(w, 1) for w in obs["mission"].lower().replace(",", "").split()][:MAX_WORDS]
+        return np.concatenate([obs["image"].reshape(-1), np.array(words + [0] * (MAX_WORDS - len(words)))]).astype(np.uint8)
+
+
+class MissionFilter(gym.Wrapper):
+    """Resample episodes until the mission target ('<colour>_<object>', last two words) is allowed.
+    Used to hold out word combinations from training and to test only on them."""
+
+    def __init__(self, env, exclude=(), only=()):
+        super().__init__(env)
+        self.exclude, self.only = set(exclude), set(only)
+
+    def ok(self):
+        pair = "_".join(self.env.unwrapped.mission.split()[-2:])
+        return pair not in self.exclude and (not self.only or pair in self.only)
+
+    def reset(self, seed=None, options=None):
+        out = self.env.reset(seed=seed, options=options)
+        k = 0
+        while not self.ok():
+            k += 1
+            out = self.env.reset(seed=None if seed is None else seed + 7919 * k)
+        return out
+
 
 def make_env(spec):
-    """spec: env id, optionally with a size override, e.g. 'MiniGrid-DoorKey-8x8-v0@size=7'."""
-    env_id, _, size = spec.partition("@size=")
-    kwargs = {"size": int(size)} if size else {}
+    """spec: env id plus optional '@key=value' options, e.g.
+    'MiniGrid-DoorKey-8x8-v0@size=7', 'BabyAI-GoToLocalS6N4-v0@exclude=red_ball+green_key', '...@only=red_ball'."""
+    env_id, *opts = spec.split("@")
+    opts = dict(o.split("=", 1) for o in opts)
+    kwargs = {"size": int(opts["size"])} if "size" in opts else {}
 
     def thunk():
-        env = ImgObsWrapper(gym.make(env_id, **kwargs))
+        env = gym.make(env_id, **kwargs)
+        if "exclude" in opts or "only" in opts:
+            env = MissionFilter(env, opts.get("exclude", "").split("+"), opts.get("only", "").split("+") if "only" in opts else ())
+        env = FlatObs(env)
         env.action_space = gym.spaces.Discrete(7)  # uniform; Dynamic-Obstacles (3 actions) maps extra ones to 'left'
         return env
 
@@ -36,15 +81,20 @@ def make_env(spec):
 
 
 def to_tensor(obs, device):
-    # (N, 7, 7, 3) uint8 grid codes -> (N, 3, 7, 7) float
-    return torch.as_tensor(obs, dtype=torch.float32, device=device).permute(0, 3, 1, 2) / 10.0
+    return torch.as_tensor(obs, dtype=torch.float32, device=device)  # (N, OBS_DIM)
+
+
+def image(x):
+    # (B, OBS_DIM) -> (B, 3, 7, 7) normalised grid codes
+    return x[:, :IMG_DIM].view(-1, 7, 7, 3).permute(0, 3, 1, 2) / 10.0
 
 
 class Agent(nn.Module):
     """Small CNN from rl-starter-files. Same obs/action space for all MiniGrid tasks.
-    memory=True adds an LSTM (working memory) between the CNN and the heads."""
+    memory=True adds an LSTM (working memory) between the CNN and the heads.
+    goal=True reads the mission words: GRU over learned word embeddings, which modulates the image features (FiLM)."""
 
-    def __init__(self, n_actions=7, memory=False):
+    def __init__(self, n_actions=7, memory=False, goal=False):
         super().__init__()
         self.body = nn.Sequential(
             nn.Conv2d(3, 16, 2), nn.ReLU(), nn.MaxPool2d(2),
@@ -53,6 +103,11 @@ class Agent(nn.Module):
             nn.Flatten(), nn.Linear(64, 64), nn.Tanh(),
         )
         self.lstm = nn.LSTM(64, 64) if memory else None
+        if goal:
+            self.words = nn.Embedding(len(VOCAB), 32, padding_idx=0)
+            self.sentence = nn.GRU(32, 64, batch_first=True)
+            self.film = nn.Linear(64, 128)
+        self.goal = goal
         self.actor = nn.Linear(64, n_actions)
         self.critic = nn.Linear(64, 1)
 
@@ -60,9 +115,16 @@ class Agent(nn.Module):
         return None if self.lstm is None else tuple(torch.zeros(1, n, 64, device=device) for _ in range(2))
 
     def forward(self, x, state=None, done=None):
-        """x: (T*N, 3, 7, 7) time-major. state: LSTM state for N envs. done: (T*N,) 1 where a new episode starts.
+        """x: (T*N, OBS_DIM) time-major. state: LSTM state for N envs. done: (T*N,) 1 where a new episode starts.
         Without memory, state/done are ignored. Returns (dist, value, new_state)."""
-        h = self.body(x)
+        h = self.body(image(x))
+        if self.goal:
+            ids = x[:, IMG_DIM:].long()
+            lengths = (ids > 0).sum(1).clamp(min=1).cpu()
+            packed = nn.utils.rnn.pack_padded_sequence(self.words(ids), lengths, batch_first=True, enforce_sorted=False)
+            _, m = self.sentence(packed)
+            gamma, beta = self.film(m[0]).chunk(2, -1)
+            h = h * (1 + gamma) + beta
         if self.lstm is not None:
             if state is None:
                 state = self.initial_state(len(x), x.device)
@@ -89,6 +151,7 @@ class RND(nn.Module):
         self.var = 1.0  # running variance of the bonus, for scale normalisation
 
     def bonus(self, x):
+        x = image(x)
         return (self.predictor(x) - self.target(x)).pow(2).mean(-1)
 
 
@@ -117,7 +180,7 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
     T, N = args.num_steps, args.num_envs
-    obs_buf = torch.zeros((T, N, 3, 7, 7), device=device)
+    obs_buf = torch.zeros((T, N, OBS_DIM), device=device)
     act_buf = torch.zeros((T, N), device=device)
     logp_buf = torch.zeros((T, N), device=device)
     rew_buf = torch.zeros((T, N), device=device)
@@ -229,7 +292,7 @@ class Life:
         self.agent, self.opt, self.args, self.batch = agent, opt, args, batch
         self.recent, self.mastered, self.step, self.events = [], False, 0, []
         self.cap, self.seen, self.size = args.reservoir, 0, 0
-        self.obs = torch.zeros((self.cap, 3, 7, 7), device=device)
+        self.obs = torch.zeros((self.cap, OBS_DIM), device=device)
         self.logits = torch.zeros((self.cap, 7), device=device)
 
     def update(self, outcomes, obs):
@@ -328,12 +391,19 @@ def on_task_switch(agent, opt, mode, lr):
             agent.critic.reset_parameters()
         return torch.optim.Adam(agent.parameters(), lr=lr, eps=1e-8)
     if mode == "shrink":  # shrink & perturb (Ash & Adams 2020): blend weights with a fresh random init
-        fresh = Agent(memory=agent.lstm is not None).to(next(agent.parameters()).device)
+        fresh = Agent(memory=agent.lstm is not None, goal=agent.goal).to(next(agent.parameters()).device)
         with torch.no_grad():
             for p, q in zip(agent.parameters(), fresh.parameters()):
                 p.mul_(0.8).add_(0.2 * q)
         return torch.optim.Adam(agent.parameters(), lr=lr, eps=1e-8)
     return opt
+
+
+def code_version():
+    """Git commit + whether ppo.py had uncommitted edits, so every result maps to the exact code that produced it."""
+    import subprocess
+    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=Path(__file__).parent).stdout.strip()
+    return {"commit": git("rev-parse", "HEAD"), "ppo_py_modified": bool(git("status", "--porcelain", "ppo.py"))}
 
 
 def main():
@@ -360,6 +430,7 @@ def main():
     p.add_argument("--task-switch", default="none", choices=["none", "adam", "heads", "shrink"],
                    help="adam: fresh optimizer; heads: + reinit actor/critic heads; shrink: shrink & perturb + fresh optimizer")
     p.add_argument("--memory", action="store_true", help="LSTM working memory")
+    p.add_argument("--goal", action="store_true", help="read mission words (learned from scratch)")
     p.add_argument("--retain", default="none", choices=["none", "distill", "ewc"])
     p.add_argument("--retain-coef", type=float, default=1.0)
     p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
@@ -377,7 +448,7 @@ def main():
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     device = torch.device(args.device)
-    agent = Agent(memory=args.memory).to(device)  # random init: the "newborn" starting point
+    agent = Agent(memory=args.memory, goal=args.goal).to(device)  # random init: the "newborn" starting point
     opt = torch.optim.Adam(agent.parameters(), lr=args.lr, eps=1e-8)
     rnd = RND().to(device) if args.rnd_coef > 0 else None
     rnd_opt = torch.optim.Adam(rnd.predictor.parameters(), lr=args.lr) if rnd else None
@@ -389,7 +460,8 @@ def main():
         life = retain = Life(agent, opt, args, mb, device)
 
     start = time.time()
-    result = {"config": vars(args), "tasks": tasks, "eval_tasks": eval_tasks, "train": [], "matrix": []}
+    result = {"config": vars(args), "tasks": tasks, "eval_tasks": eval_tasks, "train": [], "matrix": [],
+              "code": code_version(), "started": time.strftime("%Y-%m-%d %H:%M:%S")}
     for i, env_id in enumerate(tasks):
         print(f"[{name} seed {args.seed}] training on {env_id}", flush=True)
         if i > 0:

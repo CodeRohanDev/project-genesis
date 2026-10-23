@@ -3,7 +3,7 @@
 # Empty -> DoorKey -> Lava -> DynamicObstacles -> SimpleCrossing -> Unlock -> DoorKey (revisit) -> Lava (revisit)
 # KeyCorridor is never trained: zero-shot test of key/door skills on a new layout type.
 export OMP_NUM_THREADS=1
-# 6 parallel (~0.9 GB each). Launch via run_long_safe.sh for a hard 7 GB cap. Finished runs are skipped on restart.
+# 6 parallel (~0.9 GB each). Launch via ./safe_run.sh run_long.sh for a hard RAM cap. Finished runs are skipped on restart.
 M=MiniGrid
 E="$M-Empty-5x5-v0|$M-Empty-6x6-v0|$M-Empty-8x8-v0"
 D="$M-DoorKey-5x5-v0|$M-DoorKey-6x6-v0|$M-DoorKey-8x8-v0"

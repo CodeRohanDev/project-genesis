@@ -71,6 +71,24 @@ Baseline default: entropy coef 0.05.
 2. Longer sequence: 6+ tasks incl. new kinds and revisits, using best method from 1.
 3. Write results/overnight.md, commit + push to private repo.
 
+## Experiment 2 plan: goals + composition (DRAFT, 2026-10-23)
+Capability: understand a new goal and combine known skills to reach it (where everything scored 0%: KeyCorridor).
+
+Key observation: our agent only sees the image. KeyCorridor's goal ("pick up the purple ball") is in the mission
+text, which the agent never received. So it could not know what to do. First fix: give the agent its goal.
+
+Goal input = mission text split into words, each word a learned embedding from random init (no pretrained language).
+Words get meaning only from reward. This is the first step of Phase 5 (grounded language).
+Environments: BabyAI (ships with minigrid): GoToObj/GoToLocal, Pickup, Unlock/OpenDoor, UnlockPickup, KeyCorridor.
+
+- 2a Word grounding: GoToLocal. Hold out some colour+object pairs (e.g. "red ball") from training while "red key"
+  and "blue ball" are trained. Test the held-out pairs. Composition = held-out pairs ~ trained pairs.
+  Falsified if held-out pairs stay near chance while trained pairs are high (memorised phrases).
+- 2b Skill composition: train go-to, pick-up, unlock as separate tasks; test UnlockPickup / KeyCorridor never trained.
+  Compare with an agent trained directly on them (reference) and the no-goal agent (0% now).
+- 2c Put 2a/2b inside the blind continual learner (Life) so words and skills are learned over a sequence.
+Baselines: no-goal CNN; goal agent trained on everything incl. held-out (upper reference). 10 seeds, tuning seeds separate.
+
 ## Decisions (made by Claude, Rohan delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.
