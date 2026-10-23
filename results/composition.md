@@ -34,3 +34,26 @@ UnlockPickup training success >= 80%:
 ## Limits
 - Pickup component is only ~54% mastered; composition was measured on top of partial skill.
 - Both composite tasks share layouts/objects with components; no new object types or new verbs.
+
+---
+
+# 2c: same skills + composite task inside the blind continual learner (2026-10-24)
+
+Script run_2c.sh, seeds 1-10, code 745937b. One run per seed: stage 1 Unlock|Pickup mixed (5M) -> stage 2
+UnlockPickup (5M, longer than the 2M of B_finetuneUP, so a harsher retention test). Agent never told about the switch.
+Life: reservoir 8192, surprise reset, distill 0.3, mastery threshold 0.7 (0.8 would never trigger: the mixed stage
+plateaus at 63-81% because Pickup alone is ~55%).
+
+| Agent | Unlock | Pickup | UnlockPickup | KeyCorridor |
+|---|---|---|---|---|
+| after stage 1 (= components) | 100 ± 0 | 53 ± 2 | 0 ± 0 | 5 ± 3 |
+| after stage 2, Life (blind) | 100 ± 0 | **45 ± 3** | **100 ± 0** | 16 ± 8 |
+| B_finetuneUP (told nothing, no retention, only 2M) | 100 ± 0 | 29 ± 2 | 100 ± 0 | 8 ± 10 |
+
+- UnlockPickup learned 10/10 seeds, steps to 80%: 104k-565k (median ~122k), same speed as plain fine-tuning.
+- Hidden switch detected on every seed ~20-25k steps after it (one surprise each, no false alarms). Reservoir full.
+- Pickup forgetting cut from -25 points (B_finetuneUP, 2M) to -8 points (Life, 5M). Reduced, not eliminated: the
+  reservoir only holds Pickup behaviour at ~55% skill (consolidation is gated on the mixed stage's 70%).
+
+So the building blocks combine in one system: words (goal input) + skills + blind continual learning + transfer
+to a composite task. Zero-shot composition is still absent (0% after stage 1).
