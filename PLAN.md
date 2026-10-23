@@ -89,6 +89,25 @@ Environments: BabyAI (ships with minigrid): GoToObj/GoToLocal, Pickup, Unlock/Op
 - 2c Put 2a/2b inside the blind continual learner (Life) so words and skills are learned over a sequence.
 Baselines: no-goal CNN; goal agent trained on everything incl. held-out (upper reference). 10 seeds, tuning seeds separate.
 
+## Experiment 3 plan: world model + planning (DRAFT, 2026-10-24)
+Gap found in 2b: told "pick up the box", the agent never infers "first get the key, open the door". Learned skills
+made the task easy to LEARN, but nothing lets the agent work out the chain by itself. That needs a model of how
+the world responds to actions, and a way to search with it.
+
+- 3a World model (no planning yet). Learn to predict next observation, reward and episode end from (observation,
+  action), trained on experience the existing agents already generate. Test on held-out episodes:
+  one-step accuracy, accuracy several steps ahead, and targeted causal probes:
+  "toggle a locked door while carrying the right key -> opens; without key -> stays shut",
+  "pick up when facing an object -> carrying it". Baseline: "nothing changes" predictor.
+  Falsified if the model is no better than the baseline on the causal probes.
+- 3b Planning with the model. Before acting, imagine a few action sequences (policy-guided search) and pick the one
+  the model predicts leads to reward. Test zero-shot on UnlockPickup / KeyCorridor and on tasks where one wrong step
+  is fatal (Lava). Compare: policy alone vs policy + planning, same agent.
+- 3c Learning what skills achieve (effects of whole skills, e.g. "after unlock routine: door open"), then planning
+  over skills instead of single steps. Only if 3b shows single-step planning is too short-sighted.
+
+All learned from random init, CPU-sized (small MLP/CNN), data collected by our own agents.
+
 ## Decisions (made by Claude, Rohan delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.
