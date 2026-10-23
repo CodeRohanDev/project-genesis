@@ -7,6 +7,7 @@ Split: training data from agents 1-7 on training env seeds; test data from agent
 
     python worldmodel.py collect      # writes results/wm/data.npz
     python worldmodel.py train 1      # model seed 1 -> results/wm/model_seed1.pt + metrics JSON
+    python worldmodel.py train 1 persist   # same with the object-permanence prior -> model_persist_seed1.pt
 """
 import json
 import sys
@@ -59,8 +60,11 @@ def collect(agent_seeds, envs_spec, steps, env_seed, eps=0.3):
 class WorldModel(nn.Module):
     """MLP over the whole view (egocentric turns move every cell, so a global model is simpler than convs)."""
 
-    def __init__(self, hidden=512):
+    def __init__(self, hidden=512, persist=False):
         super().__init__()
+        # persist: "things stay as they are unless something changes them" built in (object permanence prior):
+        # the current view is added to the output logits, so the network only has to learn changes.
+        self.keep = nn.Parameter(torch.tensor(5.0)) if persist else None
         self.t, self.c, self.s = nn.Embedding(N_TYPE, 8), nn.Embedding(N_COLOR, 4), nn.Embedding(N_STATE, 4)
         self.a = nn.Embedding(7, 32)
         self.net = nn.Sequential(nn.Linear(49 * 16 + 32, hidden), nn.ReLU(), nn.Linear(hidden, hidden), nn.ReLU(),
@@ -70,6 +74,9 @@ class WorldModel(nn.Module):
         x = x.long().view(-1, 49, 3)
         h = torch.cat([self.t(x[..., 0]), self.c(x[..., 1]), self.s(x[..., 2])], -1).flatten(1)
         out = self.net(torch.cat([h, self.a(a.long())], -1)).view(-1, 49, N_TYPE + N_COLOR + N_STATE)
+        if self.keep is not None:
+            cur = torch.cat([nn.functional.one_hot(x[..., i], n) for i, n in enumerate((N_TYPE, N_COLOR, N_STATE))], -1)
+            out = out + self.keep * cur
         return out.split([N_TYPE, N_COLOR, N_STATE], -1)
 
     def predict(self, x, a):
@@ -90,6 +97,10 @@ def metrics(pred, x, a, y):
         m[f"{name}_cell_acc"] = (p == y).float().mean().item()
         m[f"{name}_exact_view"] = (p == y).all(1).float().mean().item()
         m[f"{name}_changed_cell_acc"] = ((p == y) & changed).sum().item() / max(1, changed.sum().item())
+        # pickup/drop/toggle keep the view geometry fixed, so every cell of the next view is predictable in principle
+        # (turns/moves reveal unseen cells, which no model can know)
+        fixed = (a == PICKUP) | (a == 4) | (a == TOGGLE)
+        m[f"{name}_exact_view_fixed_geometry"] = (p[fixed] == y[fixed]).all(1).float().mean().item()
     fr, ag = x[:, FRONT:FRONT + 3], x[:, AGENT:AGENT + 3]
     locked = (fr[:, 0] == 4) & (fr[:, 2] == 2) & (a == TOGGLE)
     has_key = (ag[:, 0] == 5) & (ag[:, 1] == fr[:, 1])
@@ -118,11 +129,12 @@ def evaluate(model, x, a, y, batch=8192):
     return metrics(preds, x.long(), a.long(), y.long())
 
 
-def train(seed, epochs=8, batch=512):
+def train(seed, persist=False, epochs=8, batch=512):
     torch.manual_seed(seed)
+    tag = "persist_" if persist else ""
     d = np.load(OUT / "data.npz")
     T = {k: torch.as_tensor(d[k]) for k in d.files}
-    model = WorldModel()
+    model = WorldModel(persist=persist)
     opt = torch.optim.Adam(model.parameters(), lr=1e-3)
     n = len(T["train_x"])
     start = time.time()
@@ -133,11 +145,11 @@ def train(seed, epochs=8, batch=512):
             loss = loss_fn(model, T["train_x"][idx], T["train_a"][idx], T["train_y"][idx])
             opt.zero_grad(); loss.backward(); opt.step()
         print(f"seed {seed} epoch {ep + 1} loss {loss.item():.4f}", flush=True)
-    res = {"seed": seed, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
+    res = {"seed": seed, "persist": persist, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
            "test": evaluate(model, T["test_x"], T["test_a"], T["test_y"]),
            "new_worlds": evaluate(model, T["new_x"], T["new_a"], T["new_y"])}
-    torch.save(model.state_dict(), OUT / f"model_seed{seed}.pt")
-    (OUT / f"metrics_seed{seed}.json").write_text(json.dumps(res, indent=1))
+    torch.save(model.state_dict(), OUT / f"model_{tag}seed{seed}.pt")
+    (OUT / f"metrics_{tag}seed{seed}.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1))
 
 
@@ -157,4 +169,4 @@ if __name__ == "__main__":
         np.savez_compressed(OUT / "data.npz", **{f"{p}_{k}": v for p, (x, a, y) in parts.items() for k, v in zip("xay", (x, a, y))})
         print({p: len(v[0]) for p, v in parts.items()})
     else:
-        train(int(sys.argv[2]))
+        train(int(sys.argv[2]), persist="persist" in sys.argv[3:])
