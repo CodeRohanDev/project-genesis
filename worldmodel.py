@@ -129,6 +129,30 @@ def evaluate(model, x, a, y, batch=8192):
     return metrics(preds, x.long(), a.long(), y.long())
 
 
+@torch.no_grad()
+def rollout_eval(model, x, a, y, ks=(1, 3, 5, 10, 20), n_env=16):
+    """Imagination test: start from a real view, feed the real actions, never look at real views again.
+    After k imagined steps, is the agent's own cell (what it is holding) right, and is the whole view right?
+    Data rows are time-major over 16 envs (row t*16+e), so row i+16 continues row i unless an episode ended."""
+    x, a, y = x.long(), a.long(), y.long()
+    cont = (y[:-n_env] == x[n_env:]).all(1)  # row i is followed by row i+16 in the same episode
+    out = {}
+    for k in ks:
+        starts = torch.arange(len(x) - k * n_env)
+        ok = torch.ones(len(starts), dtype=torch.bool)
+        for j in range(k - 1):
+            ok &= cont[starts + j * n_env]
+        starts = starts[ok][:20000]
+        cur = x[starts]
+        for j in range(k):
+            cur = model.predict(cur, a[starts + j * n_env]).long()
+        true = y[starts + (k - 1) * n_env]
+        out[f"k{k}_n"] = len(starts)
+        out[f"k{k}_holding_acc"] = (cur[:, AGENT:AGENT + 3] == true[:, AGENT:AGENT + 3]).all(1).float().mean().item()
+        out[f"k{k}_cell_acc"] = (cur == true).float().mean().item()
+    return out
+
+
 def train(seed, persist=False, epochs=8, batch=512):
     torch.manual_seed(seed)
     tag = "persist_" if persist else ""
