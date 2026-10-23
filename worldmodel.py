@@ -8,6 +8,7 @@ Split: training data from agents 1-7 on training env seeds; test data from agent
     python worldmodel.py collect      # writes results/wm/data.npz
     python worldmodel.py train 1      # model seed 1 -> results/wm/model_seed1.pt + metrics JSON
     python worldmodel.py train 1 persist   # same with the object-permanence prior -> model_persist_seed1.pt
+    python worldmodel.py train 1 conv      # locality prior (convolutions) + permanence -> model_conv_seed1.pt
 """
 import json
 import sys
@@ -84,6 +85,34 @@ class WorldModel(nn.Module):
         return torch.stack([t.argmax(-1), c.argmax(-1), s.argmax(-1)], -1).flatten(1)  # same flat layout as x
 
 
+class ConvWorldModel(WorldModel):
+    """Same interface, locality prior: a stack of 3x3 convolutions over the 7x7 view (same rule everywhere in the
+    view, cannot memorise where walls usually are). 6 layers give a 13x13 receptive field, enough for turns.
+    Always uses the persistence prior."""
+
+    def __init__(self, ch=64, layers=6):
+        nn.Module.__init__(self)
+        self.t, self.c, self.s = nn.Embedding(N_TYPE, 8), nn.Embedding(N_COLOR, 4), nn.Embedding(N_STATE, 4)
+        self.a = nn.Embedding(7, 8)
+        convs = [nn.Conv2d(16 + 8 + 2, ch, 3, padding=1), nn.ReLU()]
+        for _ in range(layers - 2):
+            convs += [nn.Conv2d(ch, ch, 3, padding=1), nn.ReLU()]
+        convs += [nn.Conv2d(ch, N_TYPE + N_COLOR + N_STATE, 3, padding=1)]
+        self.net = nn.Sequential(*convs)
+        self.keep = nn.Parameter(torch.tensor(5.0))
+        # fixed (x, y) coordinate planes: the agent always sits at the same spot of its own view
+        g = torch.linspace(-1, 1, 7)
+        self.register_buffer("coords", torch.stack(torch.meshgrid(g, g, indexing="ij")))
+
+    def forward(self, x, a):
+        x = x.long().view(-1, 49, 3)
+        h = torch.cat([self.t(x[..., 0]), self.c(x[..., 1]), self.s(x[..., 2])], -1).view(-1, 7, 7, 16).permute(0, 3, 1, 2)
+        act = self.a(a.long())[:, :, None, None].expand(-1, -1, 7, 7)
+        out = self.net(torch.cat([h, act, self.coords.expand(len(x), -1, -1, -1)], 1)).permute(0, 2, 3, 1).reshape(-1, 49, N_TYPE + N_COLOR + N_STATE)
+        cur = torch.cat([nn.functional.one_hot(x[..., i], n) for i, n in enumerate((N_TYPE, N_COLOR, N_STATE))], -1)
+        return (out + self.keep * cur).split([N_TYPE, N_COLOR, N_STATE], -1)
+
+
 def loss_fn(model, x, a, y):
     y = y.long().view(-1, 49, 3)
     return sum(nn.functional.cross_entropy(o.flatten(0, 1), y[..., i].flatten()) for i, o in enumerate(model(x, a)))
@@ -153,12 +182,12 @@ def rollout_eval(model, x, a, y, ks=(1, 3, 5, 10, 20), n_env=16):
     return out
 
 
-def train(seed, persist=False, epochs=8, batch=512):
+def train(seed, persist=False, conv=False, epochs=8, batch=512):
     torch.manual_seed(seed)
-    tag = "persist_" if persist else ""
+    tag = "conv_" if conv else "persist_" if persist else ""
     d = np.load(OUT / "data.npz")
     T = {k: torch.as_tensor(d[k]) for k in d.files}
-    model = WorldModel(persist=persist)
+    model = ConvWorldModel() if conv else WorldModel(persist=persist)
     opt = torch.optim.Adam(model.parameters(), lr=1e-3)
     n = len(T["train_x"])
     start = time.time()
@@ -169,7 +198,7 @@ def train(seed, persist=False, epochs=8, batch=512):
             loss = loss_fn(model, T["train_x"][idx], T["train_a"][idx], T["train_y"][idx])
             opt.zero_grad(); loss.backward(); opt.step()
         print(f"seed {seed} epoch {ep + 1} loss {loss.item():.4f}", flush=True)
-    res = {"seed": seed, "persist": persist, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
+    res = {"seed": seed, "persist": persist or conv, "conv": conv, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
            "test": evaluate(model, T["test_x"], T["test_a"], T["test_y"]),
            "new_worlds": evaluate(model, T["new_x"], T["new_a"], T["new_y"])}
     torch.save(model.state_dict(), OUT / f"model_{tag}seed{seed}.pt")
@@ -193,4 +222,4 @@ if __name__ == "__main__":
         np.savez_compressed(OUT / "data.npz", **{f"{p}_{k}": v for p, (x, a, y) in parts.items() for k, v in zip("xay", (x, a, y))})
         print({p: len(v[0]) for p, v in parts.items()})
     else:
-        train(int(sys.argv[2]), persist="persist" in sys.argv[3:])
+        train(int(sys.argv[2]), persist="persist" in sys.argv[3:], conv="conv" in sys.argv[3:])
