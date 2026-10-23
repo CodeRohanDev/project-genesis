@@ -31,7 +31,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 7 | Continual + generalisation together | run_combo.sh | C_none/heads/distill/joint | combined.md |
 | 8 | Blind continual learning (no task boundaries) | run_blind.sh | O_reset/replay/full | overnight_blind.md |
 | 9 | Long sequence, 8 stages, 6 task kinds | run_long.sh (via safe_run.sh) | L_none/blind/distill/joint | long_sequence.md |
-| 10 | Grounded words + held-out combinations (2a) | run_2a_pilot.sh, run_2a_nogoal.sh, run_2a_final.sh | p2a_* (pilot, tuning seeds), A_* | (pending) |
+| 10 | Grounded words + held-out combinations (2a) | run_2a_pilot.sh, run_2a_nogoal.sh, run_2a_final.sh | p2a_* (pilot, tuning seeds), A_goal, A_goal_all, A_nogoal | grounded_words.md |
 
 ## Code provenance (important for the paper)
 - Runs of experiments 0-7 were produced before the repo existed. Commit d79f702 holds the code as it was right
