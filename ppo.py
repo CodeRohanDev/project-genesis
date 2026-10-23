@@ -299,7 +299,7 @@ class Life:
         self.step += len(obs)
         self.recent = (self.recent + outcomes)[-100:]
         rate = float(np.mean(self.recent)) if self.recent else 0.0
-        if len(self.recent) >= 100 and rate >= 0.8:
+        if len(self.recent) >= 100 and rate >= self.args.master:
             self.mastered = True
             if self.cap:
                 self.consolidate(obs)
@@ -437,6 +437,7 @@ def main():
     p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
     p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
     p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
+    p.add_argument("--master", type=float, default=0.8, help="blind mode: own success rate counted as mastered (consolidate)")
     p.add_argument("--rnd-coef", type=float, default=0.0, help="curiosity bonus weight; 0 = off")
     args = p.parse_args()
 
