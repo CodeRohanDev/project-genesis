@@ -34,3 +34,7 @@ Lesson: wait on a PID (`wait`/`kill -0 PID`) or a result file, never on `pgrep -
 verify "running" by log files growing, not by process-name match.
 
 Phase 2 script (run_long.sh) is ready and smoke-tested. Estimated 2-2.5 hours.
+
+## Update 09:05: Phase 2 run in the morning instead (07:56-09:01, 6 parallel, 7 GB RAM cap)
+40/40 runs OK. Blind agent over 8 stages / 6 task kinds learned every stage and kept old skills; matched told-boundary
+distill and beat all-at-once joint on Crossing. Details: long_sequence.md.
