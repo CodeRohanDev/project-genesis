@@ -431,6 +431,7 @@ def main():
                    help="adam: fresh optimizer; heads: + reinit actor/critic heads; shrink: shrink & perturb + fresh optimizer")
     p.add_argument("--memory", action="store_true", help="LSTM working memory")
     p.add_argument("--goal", action="store_true", help="read mission words (learned from scratch)")
+    p.add_argument("--init", default=None, help="path to a saved .pt agent to start from instead of random init")
     p.add_argument("--retain", default="none", choices=["none", "distill", "ewc"])
     p.add_argument("--retain-coef", type=float, default=1.0)
     p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
@@ -449,6 +450,8 @@ def main():
     np.random.seed(args.seed)
     device = torch.device(args.device)
     agent = Agent(memory=args.memory, goal=args.goal).to(device)  # random init: the "newborn" starting point
+    if args.init:  # continue from a saved agent (fine-tuning / transfer tests)
+        agent.load_state_dict(torch.load(args.init, map_location=device))
     opt = torch.optim.Adam(agent.parameters(), lr=args.lr, eps=1e-8)
     rnd = RND().to(device) if args.rnd_coef > 0 else None
     rnd_opt = torch.optim.Adam(rnd.predictor.parameters(), lr=args.lr) if rnd else None
