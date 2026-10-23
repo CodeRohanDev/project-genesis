@@ -43,3 +43,13 @@ Lava learned to 80%: O_full 10/10 at ~73k steps, O_replay 10/10 at ~107k, C_dist
 - Detection relies on success collapsing. A new task that is easy from old skills never triggers it (fine here,
   but a subtly different task with a wrong old habit could go undetected).
 - Thresholds 80/30 picked by hand. Still one gridworld, 3 tasks. Long-sequence test running next (L1).
+
+## Check of hypothesis 5 (from existing entropy logs, no new runs)
+| Variant | entropy at end of DoorKey | Lava 1st rollout | Lava first 10 rollouts mean |
+|---|---|---|---|
+| C_none | 0.21 | 0.06 | 0.36 |
+| O_replay | 0.55 | 0.29 | 0.77 |
+| O_full | 0.53 | 0.25 | 1.02 |
+| C_heads / C_distill (explicit reset) | 0.22 | 1.86 | 1.83 / 1.59 |
+Reservoir replay keeps the policy ~2.5x less deterministic at the switch, and it reopens faster on the new task.
+Consistent with the hypothesis (correlation only; mechanism not isolated).
