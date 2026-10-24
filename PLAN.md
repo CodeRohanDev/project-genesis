@@ -123,6 +123,20 @@ door, then take the box"):
   (upper bound: shows whether failures come from planning or from skill execution).
 - Falsified if the planner is no better than random skill order.
 
+## Paper 1 plan (decided 2026-10-24): IEEE IJCNN 2027, deadline 31 Jan 2027 (backup: IEEE TCDS journal)
+Claim: an agent never told when the task changes detects it itself, keeps a fixed-size competence-gated replay
+memory, learns new tasks and keeps old ones, matches all-at-once training and beats CLEAR (8 stages, 6 task kinds).
+Status:
+1. Figures (paper/figs, figures.py) - DONE
+2. Published baseline CLEAR - DONE (results/baselines.md: +5.0 on 3 tasks, +25.9 on 8 stages)
+3. Second environment (answer "only MiniGrid?") - next
+4. Related work
+5. Writing (IEEE format, 6 pages + up to 4 paid pages)
+6. Review, fixes, submit
+Venue facts (searched 2026-10-24): IJCNN 2027 Cape Town 14-18 Jun 2027, notification 15 Mar, final + fee 12 Apr,
+extra pages $100 each; TCDS hybrid: no fee unless open access ($2,800), overlength $200/page beyond 10;
+IEEE Access APC $2,160; ICDL 2027 Campinas 21-24 Sep 2027, call for papers not yet out.
+
 ## Next research track (after 3b): child-like language, faster
 Rohan's goal (2026-10-24): the system should learn full English and Hindi the way a child does, but faster and more
 easily. Not solved anywhere; must be designed and measured (words/examples needed vs a child). Candidate parts:
