@@ -30,6 +30,8 @@ SKILLS = {"open": "open the door", "key": "pick up a key", "ball": "pick up a ba
 TYPE_ID = {"key": 5, "ball": 6, "box": 7}
 COLOR_ID = {c: i for i, c in enumerate(["red", "green", "blue", "purple", "yellow", "grey"])}
 K, H, SKILL_STEPS = 16, 40, 40
+VERSION = 2  # 1 = first run (results/wm/planner_v1.json), 2 = fairer score for the real mission
+EPISODE_OFFSET = 10_000  # v2 is evaluated on new episode seeds, not the ones used to diagnose v1
 
 
 def words(text):
@@ -71,10 +73,13 @@ def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target):
         done |= finished(cur, skill, real_target)
         if done.all():
             break
-    if skill == "real":
-        return done.float().mean().item()
     _, value, _ = agent(with_words(cur.float(), real_ids))
-    return (done.float() * value.clamp(min=0)).mean().item()
+    value = value.clamp(min=0)
+    if skill == "real":
+        if VERSION == 1:  # v1: only imagined success counted (unfair when the target is out of view)
+            return done.float().mean().item()
+        return torch.where(done, torch.ones_like(value), value).mean().item()  # v2: same yardstick as other skills
+    return (done.float() * value).mean().item()
 
 
 @torch.no_grad()
@@ -119,7 +124,7 @@ def run_seed(s, methods=("real_only", "random", "correct", "planner"), episodes=
         out = {}
         for m in methods:
             rng = np.random.default_rng(s)
-            eps = [episode(agent, wm, env, EVAL_SEED + ep, m, rng) for ep in range(episodes)]
+            eps = [episode(agent, wm, env, EVAL_SEED + EPISODE_OFFSET * (VERSION - 1) + ep, m, rng) for ep in range(episodes)]
             out[m] = {"success": float(np.mean([e[0] for e in eps])),
                       "first_skills": {k: sum(e[1][0] == k for e in eps) for k in ["open", "key", "ball", "real"]},
                       "example_plans": [e[1][:6] for e in eps[:5]]}
@@ -136,4 +141,4 @@ if __name__ == "__main__":
     for m in methods:
         xs = [res[s][m]["success"] for s in res]
         print(f"{m:10s} {np.mean(xs):.0%}", [round(x * 100) for x in xs])
-    json.dump(res, open("results/wm/planner.json", "w"), indent=1)
+    json.dump(res, open(f"results/wm/planner_v{VERSION}.json", "w"), indent=1)

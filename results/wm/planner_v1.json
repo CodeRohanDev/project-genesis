@@ -1,0 +1,1983 @@
+{
+ "1": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.06,
+   "first_skills": {
+    "open": 18,
+    "key": 36,
+    "ball": 25,
+    "real": 21
+   },
+   "example_plans": [
+    [
+     "key",
+     "ball",
+     "real",
+     "real",
+     "open",
+     "ball"
+    ],
+    [
+     "real",
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "ball",
+     "real",
+     "key",
+     "ball"
+    ],
+    [
+     "open",
+     "ball",
+     "real",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.16,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.05,
+   "first_skills": {
+    "open": 5,
+    "key": 62,
+    "ball": 28,
+    "real": 5
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "ball",
+     "open",
+     "ball",
+     "real",
+     "real"
+    ],
+    [
+     "ball",
+     "open",
+     "ball",
+     "key",
+     "real",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "2": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.19,
+   "first_skills": {
+    "open": 31,
+    "key": 22,
+    "ball": 29,
+    "real": 18
+   },
+   "example_plans": [
+    [
+     "real",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "ball",
+     "real",
+     "open",
+     "real",
+     "key"
+    ],
+    [
+     "ball",
+     "key",
+     "ball",
+     "open",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "key",
+     "open",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "ball",
+     "key",
+     "ball"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.33,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.09,
+   "first_skills": {
+    "open": 3,
+    "key": 93,
+    "ball": 3,
+    "real": 1
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "3": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.06,
+   "first_skills": {
+    "open": 27,
+    "key": 22,
+    "ball": 32,
+    "real": 19
+   },
+   "example_plans": [
+    [
+     "real",
+     "open",
+     "ball",
+     "key",
+     "ball",
+     "real"
+    ],
+    [
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball",
+     "key"
+    ],
+    [
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "real",
+     "ball"
+    ],
+    [
+     "ball",
+     "ball",
+     "open",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "ball",
+     "ball",
+     "ball",
+     "real",
+     "key",
+     "real"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.14,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.01,
+   "first_skills": {
+    "open": 0,
+    "key": 87,
+    "ball": 1,
+    "real": 12
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "ball",
+     "ball",
+     "ball",
+     "open",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "4": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.18,
+   "first_skills": {
+    "open": 26,
+    "key": 14,
+    "ball": 27,
+    "real": 33
+   },
+   "example_plans": [
+    [
+     "ball",
+     "real",
+     "real",
+     "ball",
+     "real",
+     "real"
+    ],
+    [
+     "ball",
+     "key",
+     "ball",
+     "ball",
+     "real",
+     "ball"
+    ],
+    [
+     "open",
+     "real",
+     "ball",
+     "real",
+     "key",
+     "ball"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "key",
+     "real"
+    ],
+    [
+     "ball",
+     "open",
+     "ball",
+     "ball",
+     "key",
+     "real"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.18,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.13,
+   "first_skills": {
+    "open": 9,
+    "key": 51,
+    "ball": 22,
+    "real": 18
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "ball",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "real",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "ball",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "5": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.17,
+   "first_skills": {
+    "open": 30,
+    "key": 24,
+    "ball": 26,
+    "real": 20
+   },
+   "example_plans": [
+    [
+     "ball",
+     "real",
+     "open",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "open",
+     "ball",
+     "real",
+     "key",
+     "real",
+     "real"
+    ],
+    [
+     "key",
+     "real",
+     "open",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "key",
+     "ball",
+     "real",
+     "ball",
+     "open",
+     "real"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.41,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.12,
+   "first_skills": {
+    "open": 3,
+    "key": 79,
+    "ball": 17,
+    "real": 1
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "6": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.06,
+   "first_skills": {
+    "open": 28,
+    "key": 17,
+    "ball": 29,
+    "real": 26
+   },
+   "example_plans": [
+    [
+     "key",
+     "ball",
+     "ball",
+     "ball",
+     "real",
+     "ball"
+    ],
+    [
+     "real",
+     "open",
+     "real",
+     "ball",
+     "real",
+     "real"
+    ],
+    [
+     "ball",
+     "key",
+     "open",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "ball",
+     "real",
+     "real",
+     "real",
+     "open"
+    ],
+    [
+     "ball",
+     "real",
+     "ball",
+     "key",
+     "ball",
+     "ball"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.13,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.1,
+   "first_skills": {
+    "open": 4,
+    "key": 89,
+    "ball": 1,
+    "real": 6
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "ball",
+     "open",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "7": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.06,
+   "first_skills": {
+    "open": 29,
+    "key": 19,
+    "ball": 21,
+    "real": 31
+   },
+   "example_plans": [
+    [
+     "real",
+     "ball",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "open",
+     "ball",
+     "ball",
+     "real",
+     "real",
+     "key"
+    ],
+    [
+     "real",
+     "open",
+     "ball",
+     "real",
+     "key",
+     "ball"
+    ],
+    [
+     "real",
+     "key",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "real",
+     "ball",
+     "ball",
+     "key",
+     "real",
+     "ball"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.16,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.05,
+   "first_skills": {
+    "open": 7,
+    "key": 49,
+    "ball": 28,
+    "real": 16
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "ball",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "ball",
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "real"
+    ]
+   ]
+  }
+ },
+ "8": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.11,
+   "first_skills": {
+    "open": 13,
+    "key": 29,
+    "ball": 26,
+    "real": 32
+   },
+   "example_plans": [
+    [
+     "ball",
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "real",
+     "open",
+     "ball",
+     "real",
+     "ball",
+     "ball"
+    ],
+    [
+     "open",
+     "real",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "real",
+     "real",
+     "real",
+     "ball"
+    ],
+    [
+     "ball",
+     "key",
+     "ball",
+     "ball",
+     "real",
+     "open"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.16,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.06,
+   "first_skills": {
+    "open": 3,
+    "key": 90,
+    "ball": 1,
+    "real": 6
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "real",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "9": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.14,
+   "first_skills": {
+    "open": 29,
+    "key": 33,
+    "ball": 21,
+    "real": 17
+   },
+   "example_plans": [
+    [
+     "key",
+     "real",
+     "real",
+     "open",
+     "ball",
+     "real"
+    ],
+    [
+     "ball",
+     "real",
+     "real",
+     "real",
+     "real",
+     "ball"
+    ],
+    [
+     "open",
+     "real",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "ball",
+     "real",
+     "key",
+     "ball",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.31,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.14,
+   "first_skills": {
+    "open": 4,
+    "key": 94,
+    "ball": 0,
+    "real": 2
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "ball",
+     "real",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "ball",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ },
+ "10": {
+  "real_only": {
+   "success": 0.0,
+   "first_skills": {
+    "open": 0,
+    "key": 0,
+    "ball": 0,
+    "real": 100
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ]
+   ]
+  },
+  "random": {
+   "success": 0.13,
+   "first_skills": {
+    "open": 28,
+    "key": 25,
+    "ball": 17,
+    "real": 30
+   },
+   "example_plans": [
+    [
+     "real",
+     "real",
+     "key",
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "ball",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "open",
+     "real",
+     "ball",
+     "ball",
+     "real"
+    ],
+    [
+     "real",
+     "real",
+     "real",
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "key",
+     "open",
+     "ball",
+     "real",
+     "real",
+     "ball"
+    ]
+   ]
+  },
+  "correct": {
+   "success": 0.35,
+   "first_skills": {
+    "open": 100,
+    "key": 0,
+    "ball": 0,
+    "real": 0
+   },
+   "example_plans": [
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real",
+     "real",
+     "real",
+     "real",
+     "real"
+    ],
+    [
+     "open",
+     "real"
+    ]
+   ]
+  },
+  "planner": {
+   "success": 0.18,
+   "first_skills": {
+    "open": 14,
+    "key": 39,
+    "ball": 37,
+    "real": 10
+   },
+   "example_plans": [
+    [
+     "key",
+     "open",
+     "real",
+     "real",
+     "real",
+     "ball"
+    ],
+    [
+     "real",
+     "key",
+     "open",
+     "ball",
+     "real"
+    ],
+    [
+     "ball",
+     "key",
+     "ball",
+     "real",
+     "ball",
+     "real"
+    ],
+    [
+     "key",
+     "ball",
+     "open",
+     "ball",
+     "ball",
+     "ball"
+    ],
+    [
+     "ball",
+     "key",
+     "open",
+     "real",
+     "ball",
+     "ball"
+    ]
+   ]
+  }
+ }
+}
