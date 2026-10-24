@@ -30,7 +30,10 @@ SKILLS = {"open": "open the door", "key": "pick up a key", "ball": "pick up a ba
 TYPE_ID = {"key": 5, "ball": 6, "box": 7}
 COLOR_ID = {c: i for i, c in enumerate(["red", "green", "blue", "purple", "yellow", "grey"])}
 K, H, SKILL_STEPS = 16, 40, 40
-VERSION = 4  # 4 = map memory (mapmem.py): imagine skills from views rendered at remembered objects; see episode_v4
+VERSION = int(__import__("os").environ.get("PLANNER_VERSION", 4))
+ENV_SPEC = __import__("os").environ.get("PLANNER_ENV", "MiniGrid-UnlockPickup-v0")
+# 5 = same as 4 under tighter step budgets (PLANNER_ENV=...@max_steps=N): wrong choices become costly
+# 4 = map memory (mapmem.py): imagine skills from views rendered at remembered objects; see episode_v4
 # 1 = first run (planner_v1.json), 2 = fairer score for the real mission (planner_v2.json),
 # 3 = curiosity rule: goal in sight -> go for it; otherwise do the most doable unfinished skill (imagined), to change
 #     the world and reveal more. A skill is only considered if its object (key / ball / door) has actually been seen
@@ -266,7 +269,7 @@ def run_seed(s, methods=("real_only", "random", "correct", "correct_map", "plann
         agent.load_state_dict(torch.load(f"results/runs/B_comp_seed{s}.pt"))
         wm = WorldModel(persist=True)
         wm.load_state_dict(torch.load(f"results/wm/model_comp_persist_seed{(s - 1) % 3 + 1}.pt"))
-        env = make_env("MiniGrid-UnlockPickup-v0")()
+        env = make_env(ENV_SPEC)()
         out = {}
         for m in methods:
             rng = np.random.default_rng(s)
@@ -289,5 +292,5 @@ if __name__ == "__main__":
     for m in methods:
         xs = [res[s][m]["success"] for s in res]
         print(f"{m:10s} {np.mean(xs):.0%}", [round(x * 100) for x in xs])
-    tag = "_" + "_".join(methods) if sys.argv[1:] else ""
+    tag = ("_" + "_".join(methods) if sys.argv[1:] else "") + ("_" + ENV_SPEC.split("@")[1] if "@" in ENV_SPEC else "")
     json.dump(res, open(f"results/wm/planner_v{VERSION}{tag}.json", "w"), indent=1)

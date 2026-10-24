@@ -67,7 +67,7 @@ def make_env(spec):
     'MiniGrid-DoorKey-8x8-v0@size=7', 'BabyAI-GoToLocalS6N4-v0@exclude=red_ball+green_key', '...@only=red_ball'."""
     env_id, *opts = spec.split("@")
     opts = dict(o.split("=", 1) for o in opts)
-    kwargs = {"size": int(opts["size"])} if "size" in opts else {}
+    kwargs = {k: int(opts[k]) for k in ("size", "max_steps") if k in opts}
 
     def thunk():
         env = gym.make(env_id, **kwargs)
