@@ -40,6 +40,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 16 | Map memory (path integration, map, navigation) | mapmem.py (self-test in __main__) | - | worldmodel.md (v4 section) |
 | 17 | Language L1: byte LM from scratch, grammar vs words seen | lm.py | results/lm/ | language.md |
 | 18 | Published baseline CLEAR on C1 and L1 | run_clear.sh (MODE=tune / final) | tuneCLEAR_*, C_clear, L_clear | baselines.md |
+| 19 | Language L2: BPE 8k, 13.8M params, 10 epochs on BabyLM 10M (62.0% BLiMP) | lm.py --bpe | results/lm/L2_* | language.md |
 | - | Paper figures (combined, long sequence, plasticity, generalisation) | figures.py | paper/figs/*.pdf,png | - |
 
 ## Code provenance (important for the paper)

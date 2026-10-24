@@ -44,5 +44,20 @@ Chance = 50%. BabyLM 2024 strict-small (10M) baselines ~70-74%, best ~81% (GPT-B
 - By phenomenon, BabyLM data helped most on NPI scope and determiner-noun agreement (+25-36 points) and hurt most on
   some question/ellipsis structures (-24-37 points).
 
+## L2 results (2026-10-24): bigger model + subword tokenizer + more passes
+Same BabyLM 10M data. Changes vs L1 (all at once, so the gain cannot be split between them):
+BPE tokenizer (vocab 8k, ByteLevel, learned from the training file only), 13.8M params (vs 4.9M), 10 epochs (vs 4).
+4.0 h on GTX 1050 Ti (sharing CPU with the MinAtar runs). Output: results/lm/L2_babylm10m_bpe8k_14M.{json,log,pt}.
+| Model | full BLiMP | fast BLiMP along training (words seen) |
+|---|---|---|
+| L1 bytes, 4.9M, 4 epochs | 56.8% | 56% @41M |
+| L2 BPE 8k, 13.8M, 10 epochs | **62.0%** | 53% @13M, 59% @36M, 61% @61M, 61% @102M |
+- +5.2 points. Better on 39/67 phenomena, worse on 13 (>2 points). Largest gains: only_npi_licensor_present +57,
+  irregular_past_participle_adjectives +47; largest losses: wh_questions_object_gap -20.
+- Curve flattens after ~60M words (6 passes): more passes alone will not close the gap to baselines (~70-74%).
+- Text samples: fluent dialogue-like English with grammatical errors and little coherence.
+- Still far below BabyLM baselines. Next suspects: size (baselines 30-100M+ params; does not fit training time on
+  the 4 GB GPU, a rented GPU would), context length, and the training objective.
+
 Next (language track): scale-up within the 4 GB GPU (larger model, subword tokenizer learned from the 10M words only,
 more passes), then the child-like ingredients (curriculum, feedback, grounding).

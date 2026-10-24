@@ -1,0 +1,182 @@
+{
+ "config": {
+  "name": "L2_babylm10m_bpe8k_14M",
+  "train": "data/babylm/train_10M.txt",
+  "valid": "data/babylm/valid.txt",
+  "epochs": 10.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 384,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1,
+  "bpe": 8000
+ },
+ "device": "cuda",
+ "train_tokens": 17825289,
+ "train_words": 10199908,
+ "params": 13817856,
+ "curve": [
+  {
+   "step": 72,
+   "words_seen": 337506.47948496096,
+   "val_loss": 25.935553073883057,
+   "blimp_fast": 0.5179104477611941,
+   "minutes": 0.8987335761388143
+  },
+  {
+   "step": 121,
+   "words_seen": 567198.3891344483,
+   "val_loss": 17.339263916015625,
+   "blimp_fast": 0.5282089552238807,
+   "minutes": 1.5343285878499349
+  },
+  {
+   "step": 203,
+   "words_seen": 951580.768547876,
+   "val_loss": 9.551043510437012,
+   "blimp_fast": 0.5423880597014926,
+   "minutes": 2.54058837890625
+  },
+  {
+   "step": 341,
+   "words_seen": 1598468.1875607178,
+   "val_loss": 7.206209182739258,
+   "blimp_fast": 0.5180597014925373,
+   "minutes": 4.210725025335948
+  },
+  {
+   "step": 574,
+   "words_seen": 2690676.6558939945,
+   "val_loss": 6.560602068901062,
+   "blimp_fast": 0.5328358208955224,
+   "minutes": 7.003427871068319
+  },
+  {
+   "step": 965,
+   "words_seen": 4523524.343097046,
+   "val_loss": 6.210645079612732,
+   "blimp_fast": 0.5217910447761194,
+   "minutes": 11.53224318822225
+  },
+  {
+   "step": 1622,
+   "words_seen": 7603270.968397315,
+   "val_loss": 5.629566311836243,
+   "blimp_fast": 0.5137313432835822,
+   "minutes": 19.0750545779864
+  },
+  {
+   "step": 2727,
+   "words_seen": 12783057.910492897,
+   "val_loss": 5.163086652755737,
+   "blimp_fast": 0.5343283582089552,
+   "minutes": 31.44136726061503
+  },
+  {
+   "step": 4583,
+   "words_seen": 21483224.937216334,
+   "val_loss": 4.809203743934631,
+   "blimp_fast": 0.5558208955223882,
+   "minutes": 51.50394177834193
+  },
+  {
+   "step": 7703,
+   "words_seen": 36108505.714897975,
+   "val_loss": 4.49416196346283,
+   "blimp_fast": 0.5917910447761194,
+   "minutes": 85.15884747505189
+  },
+  {
+   "step": 12946,
+   "words_seen": 60685540.04739312,
+   "val_loss": 4.276768803596497,
+   "blimp_fast": 0.6092537313432835,
+   "minutes": 141.877579275767
+  },
+  {
+   "step": 21759,
+   "words_seen": 101997270.6543509,
+   "val_loss": 4.170423984527588,
+   "blimp_fast": 0.6144776119402985,
+   "minutes": 239.3807215531667
+  }
+ ],
+ "blimp_full": 0.6196417910447761,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.669,
+  "anaphor_gender_agreement": 0.58,
+  "anaphor_number_agreement": 0.778,
+  "animate_subject_passive": 0.632,
+  "animate_subject_trans": 0.757,
+  "causative": 0.517,
+  "complex_NP_island": 0.476,
+  "coordinate_structure_constraint_complex_left_branch": 0.249,
+  "coordinate_structure_constraint_object_extraction": 0.529,
+  "determiner_noun_agreement_1": 0.856,
+  "determiner_noun_agreement_2": 0.807,
+  "determiner_noun_agreement_irregular_1": 0.671,
+  "determiner_noun_agreement_irregular_2": 0.772,
+  "determiner_noun_agreement_with_adj_2": 0.693,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.672,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.689,
+  "determiner_noun_agreement_with_adjective_1": 0.761,
+  "distractor_agreement_relational_noun": 0.307,
+  "distractor_agreement_relative_clause": 0.311,
+  "drop_argument": 0.745,
+  "ellipsis_n_bar_1": 0.402,
+  "ellipsis_n_bar_2": 0.728,
+  "existential_there_object_raising": 0.715,
+  "existential_there_quantifiers_1": 0.956,
+  "existential_there_quantifiers_2": 0.29,
+  "existential_there_subject_raising": 0.676,
+  "expletive_it_object_raising": 0.685,
+  "inchoative": 0.421,
+  "intransitive": 0.587,
+  "irregular_past_participle_adjectives": 0.925,
+  "irregular_past_participle_verbs": 0.788,
+  "irregular_plural_subject_verb_agreement_1": 0.634,
+  "irregular_plural_subject_verb_agreement_2": 0.705,
+  "left_branch_island_echo_question": 0.461,
+  "left_branch_island_simple_question": 0.332,
+  "matrix_question_npi_licensor_present": 0.085,
+  "npi_present_1": 0.45,
+  "npi_present_2": 0.421,
+  "only_npi_licensor_present": 0.996,
+  "only_npi_scope": 0.745,
+  "passive_1": 0.767,
+  "passive_2": 0.735,
+  "principle_A_c_command": 0.691,
+  "principle_A_case_1": 1.0,
+  "principle_A_case_2": 0.602,
+  "principle_A_domain_1": 0.986,
+  "principle_A_domain_2": 0.552,
+  "principle_A_domain_3": 0.51,
+  "principle_A_reconstruction": 0.349,
+  "regular_plural_subject_verb_agreement_1": 0.723,
+  "regular_plural_subject_verb_agreement_2": 0.699,
+  "sentential_negation_npi_licensor_present": 1.0,
+  "sentential_negation_npi_scope": 0.349,
+  "sentential_subject_island": 0.372,
+  "superlative_quantifiers_1": 0.418,
+  "superlative_quantifiers_2": 0.597,
+  "tough_vs_raising_1": 0.382,
+  "tough_vs_raising_2": 0.683,
+  "transitive": 0.658,
+  "wh_island": 0.422,
+  "wh_questions_object_gap": 0.538,
+  "wh_questions_subject_gap": 0.918,
+  "wh_questions_subject_gap_long_distance": 0.963,
+  "wh_vs_that_no_gap": 0.95,
+  "wh_vs_that_no_gap_long_distance": 0.977,
+  "wh_vs_that_with_gap": 0.138,
+  "wh_vs_that_with_gap_long_distance": 0.064
+ },
+ "minutes": 240.56495017210642,
+ "samples": [
+  "Once upon a time.\n\"Yes, we're at Athens, and the other girls are better, others,\" said the doctor. \"It isn't good, yet, Miss Sylvia, I can't keep back.\"\n\"Well, only I can't help you,\" said Evelyn. \"I know you want to give them a message, for the occupation of what you want to say. It is a good chance to do, and I like to see you.\"\n\"I hope it won't,\" said Evelyn, giving Evelyn to the angry tone. \"I must go away, Miss Sylvia.\"\n\"Then you will not let me get you up, and you may not,\" said Evelyn. \"I will do not think I'll find that you will not see any reply.\"\nMrs. Staunton said: \"I have given you a present. Miss Sylvia will not see you at you. She has so many things,\" said the doctor. \"I have arranged so odd. And you have taught me that you would not have to just went to see me if I have to be more comfortable, but I were telling you that you should be going to have to be discredit.\"\n\"Are you sure?\" asked her questions. \"Shirley, Sylvia will think you will possibly, you will see me again. I am sure you will be well a star in your heart. It will be a wise girl in her hand. If you endure yourself in a world to receive some",
+  "The little girl.\nJack was holding it when the guests were in the town on the fire.\n\"You're right, Mr. Mackworth,\" said Bert. \"They were not too late to be here. We'll find out, too.\"\n\"I'm going to get him right out,\" said Bert.\n\"But that's all right. But the last thing I ever saw in my sight. That's is why I'm going to get in, and they've got to be afraid, and there'll be no time for you. You can't let the babies get in to the fire.\"\n\"What do you think about the girls? The rest of them, it is odd.\"\n\"Air brands such as a lot,\" said Bert, standing up the whole, as the two little girls reluctantly. \"I can go now and take a look at the fire to see them. I do suppose they ought to be stealing the fire. You know how to live when you put the fire on my way, and the children are scared all the big lights are all the buying out.\"\n\"Have you ever even had anything to do with us?\"\n\"Yes, I think it will be necessary to get away, it will be great,\" said Bert.\n\"You see,\" said Bert, \"and the boy is all the opportunities of the buying the new children. They are the big children are simply useful to us, and they",
+  "Lily was sad because the boys were thinking of the missing news. The lot was about a party of military march. Both boys had expected some news, had been more\n\"They were theots,\" declared Jack. \"It's the boys with the boys; they're the boys, and the same as they were coming out of the trail. They have a lot of their legs, they'd make our way out. They're coming back to their day and the same way, that they do in their lives a lot of them. They do no more. And they do. 'Well, I guess they're coming off, and we're driving them all. I'll know the ragging the guys that have got a lot of their pigs and they're going to be quite well, for for me.' I don't think I never saw such troubles. And I'll tell you anything of them.\"\n\"I'm sure I will, if I've planned you to come home enough to think of that.\"\n\"I'll tell you what I was wrong, Jack,\" the lad replied; \"so you're in the bank.\"\n\"I guess you'll be a asser? Not so much, Jack. I can see the blue goats. And we'll all see you camp goats, and let you stay with us.\"\n\"Inger!\" Jack replied. \"Why don't you sit?\"\n\"We'll have to get to bring you home,\" Jack said.\n"
+ ]
+}
