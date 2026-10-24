@@ -237,7 +237,7 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
     next_done = torch.zeros(N, device=device)
     state = agent.initial_state(N, device)
     ep_ret = np.zeros(N)
-    recent, curve, entropy, steps_to_80, step = [], [], [], None, 0
+    recent, curve, entropy, dormant, steps_to_80, step = [], [], [], [], None, 0
 
     while step < args.steps:
         ent_sum, outcomes = 0.0, []
@@ -320,12 +320,16 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
                     rnd_loss.backward()
                     rnd_opt.step()
 
+        if args.redo_every and len(curve) % args.redo_every == 0:
+            dormant.append((step, redo(agent, opt, b_obs, args.redo_tau)))
+        elif len(curve) % 20 == 0:  # measure only (no change to the agent): dormant body units
+            dormant.append((step, redo(agent, opt, b_obs, args.redo_tau, apply=False)))
         if len(curve) % 20 == 0:
             print(f"  {env_id} step {step:>8d}  train success(last100) {rate:.0%}", flush=True)
 
     envs.close()
     # last rollout's observations: a sample of what this task looks like, for retention methods
-    return {"curve": curve, "entropy": entropy, "steps_to_80": steps_to_80}, obs_buf.flatten(0, 1).clone()
+    return {"curve": curve, "entropy": entropy, "dormant": dormant, "steps_to_80": steps_to_80}, obs_buf.flatten(0, 1).clone()
 
 
 class Life:
@@ -364,8 +368,13 @@ class Life:
             self.mastered = False
             self.events.append((self.step, "surprise"))
             if self.args.surprise_reset:
-                self.agent.actor.reset_parameters()
-                self.agent.critic.reset_parameters()
+                if self.args.reset_scope == "all":  # whole network; old skills come back only via reservoir distill
+                    for m in self.agent.modules():
+                        if m is not self.agent and hasattr(m, "reset_parameters"):
+                            m.reset_parameters()
+                else:
+                    self.agent.actor.reset_parameters()
+                    self.agent.critic.reset_parameters()
                 self.opt.state.clear()
 
     @torch.no_grad()
@@ -494,6 +503,37 @@ class Retention:
         return 0.0
 
 
+@torch.no_grad()
+def redo(agent, opt, obs, tau, apply=True):
+    """ReDo (Sokar et al. 2023). A body unit is dormant if its mean |activation| on obs is <= tau x its layer's
+    average. apply=True: re-initialise its incoming weights, zero its outgoing weights and the Adam moments of both.
+    Returns the fraction of body units that were dormant (before resetting)."""
+    layers = [m for m in agent.body if isinstance(m, (nn.Conv2d, nn.Linear))]
+    acts = []
+    hooks = [m.register_forward_hook(lambda m, i, o: acts.append(o)) for m in agent.body if isinstance(m, (nn.ReLU, nn.Tanh))]
+    agent.body(image(obs))
+    for h in hooks:
+        h.remove()
+    masks = [(s <= tau * s.mean()) for s in (a.abs().mean([d for d in range(a.dim()) if d != 1]) for a in acts)]
+    if apply and any(m.any() for m in masks):
+        assert agent.lstm is None and not agent.goal, "ReDo: body -> heads only"
+        fresh = [m for m in Agent(agent.actor.out_features).to(obs.device).body if isinstance(m, (nn.Conv2d, nn.Linear))]
+        st = lambda p, k: opt.state.get(p, {}).get(k)
+        for k, (L, F, mask) in enumerate(zip(layers, fresh, masks)):
+            L.weight[mask], L.bias[mask] = F.weight[mask], F.bias[mask]
+            for key in ("exp_avg", "exp_avg_sq"):
+                for p in (L.weight, L.bias):
+                    if st(p, key) is not None:
+                        st(p, key)[mask] = 0
+            for N in ([layers[k + 1]] if k + 1 < len(layers) else [agent.actor, agent.critic]):
+                cols = mask.repeat_interleave(N.weight.shape[1] // mask.numel())  # Flatten is channel-major
+                N.weight[:, cols] = 0
+                for key in ("exp_avg", "exp_avg_sq"):
+                    if st(N.weight, key) is not None:
+                        st(N.weight, key)[:, cols] = 0
+    return float(torch.cat(masks).float().mean())
+
+
 def on_task_switch(agent, opt, mode, lr):
     """Plasticity interventions applied before each new task (not before the first). Returns the optimizer."""
     if mode in ("adam", "heads"):
@@ -550,6 +590,9 @@ def main():
     p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
     p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
     p.add_argument("--master", type=float, default=0.8, help="blind mode: own success rate counted as mastered (consolidate)")
+    p.add_argument("--reset-scope", default="heads", choices=["heads", "all"], help="blind mode: what a surprise resets")
+    p.add_argument("--redo-every", type=int, default=0, help="ReDo every K rollouts (Sokar 2023); 0 = off")
+    p.add_argument("--redo-tau", type=float, default=0.1, help="ReDo dormancy threshold (x layer mean |activation|)")
     p.add_argument("--rnd-coef", type=float, default=0.0, help="curiosity bonus weight; 0 = off")
     args = p.parse_args()
 
