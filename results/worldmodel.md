@@ -124,7 +124,7 @@ Fresh episodes (eval seeds + 20,000), 100 per agent, 10 agents.
 | **planner v3** | **16%** (per agent: 6 18 14 10 23 7 9 19 29 29) |
 | hand-written correct order | 26% |
 
-Paired over agents: planner - random = +3.7 ± 6.1 points (not significant); planner - correct = -10 points.
+Paired over agents: planner - random = +3.7 ± 6.2 points (not significant); planner - correct = -9.8 ± 4.1 points.
 First skill chosen (1000 episodes): pick up key 65%, real mission 29% (key/door not yet seen), open door 6%, ball 0%.
 
 Reading: the planner now discovers the right first step on its own and never wastes time on the absent ball, but the
