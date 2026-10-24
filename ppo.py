@@ -27,6 +27,42 @@ WORD_ID = {w: i for i, w in enumerate(VOCAB)}
 MAX_WORDS = 16
 IMG_DIM = 7 * 7 * 3
 OBS_DIM = IMG_DIM + MAX_WORDS  # every observation: flattened 7x7x3 view + padded mission word ids
+MODE = "minigrid"  # "minatar": 10x10x10 binary screens, scores instead of success (set_mode, chosen from --tasks)
+
+
+def set_mode(mode):
+    global MODE, OBS_DIM
+    MODE = mode
+    OBS_DIM = 10 * 10 * 10 if mode == "minatar" else IMG_DIM + MAX_WORDS
+
+
+class MinAtarEnv(gym.Env):
+    """MinAtar game (Young & Tian 2019) as a gymnasium env: flat 10x10x10 binary screen (channels zero-padded to 10),
+    full 6-action set, episode cut at max_steps."""
+
+    def __init__(self, game, max_steps=2000):
+        from minatar import Environment
+        self.game, self.max_steps = Environment(game, sticky_action_prob=0.1), max_steps
+        self.observation_space = gym.spaces.Box(0, 1, (1000,), np.uint8)
+        self.action_space = gym.spaces.Discrete(6)
+
+    def obs(self):
+        st = self.game.state()
+        out = np.zeros((10, 10, 10), np.uint8)
+        out[..., :st.shape[-1]] = st
+        return out.reshape(-1)
+
+    def reset(self, seed=None, options=None):
+        if seed is not None:
+            self.game.seed(seed)
+        self.game.reset()
+        self.t = 0
+        return self.obs(), {}
+
+    def step(self, a):
+        r, done = self.game.act(int(a))
+        self.t += 1
+        return self.obs(), float(r), bool(done), self.t >= self.max_steps, {}
 
 
 class FlatObs(gym.ObservationWrapper):
@@ -67,6 +103,8 @@ def make_env(spec):
     'MiniGrid-DoorKey-8x8-v0@size=7', 'BabyAI-GoToLocalS6N4-v0@exclude=red_ball+green_key', '...@only=red_ball'."""
     env_id, *opts = spec.split("@")
     opts = dict(o.split("=", 1) for o in opts)
+    if env_id.startswith("MinAtar-"):
+        return lambda: MinAtarEnv(env_id[len("MinAtar-"):], int(opts.get("max_steps", 2000)))
     kwargs = {k: int(opts[k]) for k in ("size", "max_steps") if k in opts}
 
     def thunk():
@@ -85,6 +123,8 @@ def to_tensor(obs, device):
 
 
 def image(x):
+    if MODE == "minatar":
+        return x.view(-1, 10, 10, 10).permute(0, 3, 1, 2)
     # (B, OBS_DIM) -> (B, 3, 7, 7) normalised grid codes
     return x[:, :IMG_DIM].view(-1, 7, 7, 3).permute(0, 3, 1, 2) / 10.0
 
@@ -94,13 +134,18 @@ class Agent(nn.Module):
     memory=True adds an LSTM (working memory) between the CNN and the heads.
     goal=True reads the mission words: GRU over learned word embeddings, which modulates the image features (FiLM)."""
 
-    def __init__(self, n_actions=7, memory=False, goal=False):
+    def __init__(self, n_actions=None, memory=False, goal=False):
         super().__init__()
+        n_actions = n_actions or (6 if MODE == "minatar" else 7)
         self.body = nn.Sequential(
             nn.Conv2d(3, 16, 2), nn.ReLU(), nn.MaxPool2d(2),
             nn.Conv2d(16, 32, 2), nn.ReLU(),
             nn.Conv2d(32, 64, 2), nn.ReLU(),
             nn.Flatten(), nn.Linear(64, 64), nn.Tanh(),
+        ) if MODE != "minatar" else nn.Sequential(  # 10x10x10 MinAtar screens
+            nn.Conv2d(10, 16, 3, padding=1), nn.ReLU(),
+            nn.Conv2d(16, 32, 3), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Flatten(), nn.Linear(32 * 4 * 4, 64), nn.Tanh(),
         )
         self.lstm = nn.LSTM(64, 64) if memory else None
         if goal:
@@ -150,7 +195,7 @@ class RND(nn.Module):
         self.target.requires_grad_(False)
         self.var = 1.0  # running variance of the bonus, for scale normalisation
 
-    def bonus(self, x):
+    def bonus(self, x):  # MiniGrid only
         x = image(x)
         return (self.predictor(x) - self.target(x)).pow(2).mean(-1)
 
@@ -161,12 +206,12 @@ def evaluate(agent, env_id, episodes, device):
     wins = 0
     for ep in range(episodes):
         obs, _ = env.reset(seed=EVAL_SEED + ep)
-        done, state = False, agent.initial_state(1, device)
+        done, state, ret = False, agent.initial_state(1, device), 0.0
         while not done:
             dist, _, state = agent(to_tensor(obs[None], device), state)
             obs, reward, term, trunc, _ = env.step(dist.sample().item())
-            done = term or trunc
-        wins += reward > 0
+            done, ret = term or trunc, ret + reward
+        wins += ret if MODE == "minatar" else ret > 0  # MinAtar: score; MiniGrid: success
     env.close()
     return wins / episodes
 
@@ -191,6 +236,7 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
     next_obs = to_tensor(obs, device)
     next_done = torch.zeros(N, device=device)
     state = agent.initial_state(N, device)
+    ep_ret = np.zeros(N)
     recent, curve, entropy, steps_to_80, step = [], [], [], None, 0
 
     while step < args.steps:
@@ -208,7 +254,9 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
             rew_buf[t] = torch.as_tensor(reward, device=device)
             next_obs = to_tensor(obs, device)
             next_done = torch.as_tensor(done, dtype=torch.float32, device=device)
-            outcomes.extend((reward[done] > 0).tolist())
+            ep_ret += reward
+            outcomes.extend((ep_ret[done] if MODE == "minatar" else ep_ret[done] > 0).tolist())  # score / success
+            ep_ret[done] = 0
         recent.extend(outcomes)  # per-task, for measurement only; the agent never sees task identity
         step += T * N
         if life is not None:
@@ -292,20 +340,27 @@ class Life:
 
     def __init__(self, agent, opt, args, batch, device):
         self.agent, self.opt, self.args, self.batch = agent, opt, args, batch
-        self.recent, self.mastered, self.step, self.events = [], False, 0, []
+        self.recent, self.mastered, self.step, self.events, self.best = [], False, 0, [], 0.0
         self.cap, self.seen, self.size = args.reservoir, 0, 0
         self.obs = torch.zeros((self.cap, OBS_DIM), device=device)
-        self.logits = torch.zeros((self.cap, 7), device=device)
+        self.logits = torch.zeros((self.cap, agent.actor.out_features), device=device)
 
     def update(self, outcomes, obs):
         self.step += len(obs)
         self.recent = (self.recent + outcomes)[-100:]
         rate = float(np.mean(self.recent)) if self.recent else 0.0
-        if len(self.recent) >= 100 and rate >= self.args.master:
+        if MODE == "minatar":  # scores: competence relative to own best since the last surprise
+            if len(self.recent) >= 100:
+                self.best = max(self.best, rate)
+            level = rate / self.best if self.best > 0 else 0.0
+        else:
+            level = rate
+        if len(self.recent) >= 100 and level >= self.args.master:
             self.mastered = True
             if self.cap:
                 self.consolidate(obs)
-        elif self.mastered and rate < 0.3:
+        elif self.mastered and level < 0.3:
+            self.best = rate
             self.mastered = False
             self.events.append((self.step, "surprise"))
             if self.args.surprise_reset:
@@ -350,7 +405,7 @@ class Clear:
         self.agent, self.args, self.batch = agent, args, batch
         self.cap, self.seen, self.size = args.reservoir, 0, 0
         self.obs = torch.zeros((self.cap, OBS_DIM), device=device)
-        self.logits = torch.zeros((self.cap, 7), device=device)
+        self.logits = torch.zeros((self.cap, agent.actor.out_features), device=device)
         self.act = torch.zeros(self.cap, dtype=torch.long, device=device)
         self.val = torch.zeros(self.cap, device=device)
         self.adv = torch.zeros(self.cap, device=device)
@@ -507,6 +562,7 @@ def main():
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     device = torch.device(args.device)
+    set_mode("minatar" if tasks[0].startswith("MinAtar-") else "minigrid")
     agent = Agent(memory=args.memory, goal=args.goal).to(device)  # random init: the "newborn" starting point
     if args.init:  # continue from a saved agent (fine-tuning / transfer tests)
         agent.load_state_dict(torch.load(args.init, map_location=device))
@@ -536,7 +592,7 @@ def main():
         result["train"].append(res)
         row = [evaluate(agent, e, args.eval_episodes, device) for e in eval_tasks]
         result["matrix"].append(row)
-        print("  eval after stage:", {e.removeprefix("MiniGrid-"): f"{s:.0%}" for e, s in zip(eval_tasks, row)})
+        print("  eval after stage:", {e.removeprefix("MiniGrid-"): (f"{s:.2f}" if MODE == "minatar" else f"{s:.0%}") for e, s in zip(eval_tasks, row)})
     if life:
         result["life_events"], result["reservoir_size"] = life.events, life.size
     result["wall_seconds"] = time.time() - start
