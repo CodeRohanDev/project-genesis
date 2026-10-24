@@ -73,3 +73,39 @@ object; "drop the key" was never trained as a skill, so it must stumble on it.
 - UnlockPickup trajectories were in the world-model training data (from B_finetuneUP). For a fair zero-shot planning
   test the model must be retrained on component-only data (planned in 3b).
 - 5 model seeds; probe counts for "without key" in familiar data are small (75).
+
+---
+
+# 3b: planning over skills with the world model (2026-10-24) -> NEGATIVE
+
+Setup (planner.py): B_comp agents (seeds 1-10, never trained on UnlockPickup). World model retrained on component-only
+data (`collect_comp`: B_comp agents in Unlock + Pickup worlds; UnlockPickup never seen), persist MLP, 3 model seeds,
+trained on the GPU (3.5 min for 3 models vs ~25 min on CPU). On UnlockPickup transitions (unseen) this model is
+accurate: changed cells 96%, fixed-geometry views 99%, all causal probes 98-100%.
+Skills: "open the door", "pick up a key", "pick up a ball" (irrelevant), real mission. Completion read from the
+agent's own view; the agent remembers which skills it completed in the episode.
+Planner: per decision, each unfinished skill imagined K=16 times for H=40 steps in the world model; score uses the
+imagined outcome and the agent's own critic (value) for the real mission. 100 episodes x 10 agents per method.
+
+| Method | v1 (episodes 1e6+) | v2 (fresh episodes 1e6+1e4+) |
+|---|---|---|
+| real mission only (zero-shot) | 0% | 0% |
+| random skill choice | 12% | 12% |
+| hand-written correct order | 23% | 21% |
+| **planner** | **9%** | **4%** |
+v1 score: real mission = imagined success rate; other skills = completed x critic(real mission | imagined end state).
+v2 score: real mission also scored with the critic when not completed in imagination (same yardstick).
+
+Falsification criterion (planner must beat random) is met: hypothesis rejected for this planner.
+
+Diagnosis:
+- v1 got the first steps right: "pick up a key" first in ~75% of episodes, then "open the door". It then picked the
+  irrelevant "pick up a ball" over the real mission. The box is in the unseen room, so the real mission never succeeds
+  in imagination (score ~0), while any small critic value beats 0.
+- v2 picks the real mission first in ~98% of episodes: the critic rates "pick up the box" from the start state higher
+  than after fetching the key.
+- Root cause: the critic only knows situations from training (box visible, single room). For a goal hidden behind
+  unexplored space it gives meaningless values, and the world model cannot imagine what it has not seen.
+  Planning needs a way to value progress toward a goal that is out of sight (subgoals / preconditions, or exploring
+  to make the unknown visible). A good world model of local physics is not enough.
+- Not iterated further on purpose: more scoring tweaks evaluated on these agents would fit the test.

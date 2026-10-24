@@ -1,0 +1,61 @@
+seed 1 epoch 1 loss 0.0826
+seed 1 epoch 2 loss 0.0576
+seed 1 epoch 3 loss 0.0506
+seed 1 epoch 4 loss 0.0599
+seed 1 epoch 5 loss 0.0581
+seed 1 epoch 6 loss 0.0503
+seed 1 epoch 7 loss 0.0613
+seed 1 epoch 8 loss 0.0579
+{
+ "seed": 1,
+ "device": "cuda",
+ "persist": true,
+ "conv": false,
+ "epochs": 8,
+ "train_n": 849920,
+ "wall_seconds": 206.95143580436707,
+ "test": {
+  "model_cell_acc": 0.9945618510246277,
+  "model_exact_view": 0.8133400082588196,
+  "model_changed_cell_acc": 0.9627067952298458,
+  "model_exact_view_fixed_geometry": 0.9968477487564087,
+  "copy_cell_acc": 0.8742635250091553,
+  "copy_exact_view": 0.36493998765945435,
+  "copy_changed_cell_acc": 0.0,
+  "copy_exact_view_fixed_geometry": 0.7382799983024597,
+  "probe_toggle_locked_door_with_key_n": 1774,
+  "probe_toggle_locked_door_with_key_model": 1.0,
+  "probe_toggle_locked_door_with_key_copy": 0.0,
+  "probe_toggle_locked_door_without_key_n": 49,
+  "probe_toggle_locked_door_without_key_model": 1.0,
+  "probe_toggle_locked_door_without_key_copy": 1.0,
+  "probe_pickup_facing_object_hands_empty_n": 6075,
+  "probe_pickup_facing_object_hands_empty_model": 0.998353898525238,
+  "probe_pickup_facing_object_hands_empty_copy": 0.0,
+  "probe_forward_into_wall_n": 1535,
+  "probe_forward_into_wall_model": 1.0,
+  "probe_forward_into_wall_copy": 1.0
+ },
+ "new_worlds": {
+  "model_cell_acc": 0.9917759299278259,
+  "model_exact_view": 0.7127799987792969,
+  "model_changed_cell_acc": 0.961169981262341,
+  "model_exact_view_fixed_geometry": 0.9913093447685242,
+  "copy_cell_acc": 0.8515122532844543,
+  "copy_exact_view": 0.33337000012397766,
+  "copy_changed_cell_acc": 0.0,
+  "copy_exact_view_fixed_geometry": 0.9866971373558044,
+  "probe_toggle_locked_door_with_key_n": 17,
+  "probe_toggle_locked_door_with_key_model": 1.0,
+  "probe_toggle_locked_door_with_key_copy": 0.0,
+  "probe_toggle_locked_door_without_key_n": 134,
+  "probe_toggle_locked_door_without_key_model": 1.0,
+  "probe_toggle_locked_door_without_key_copy": 1.0,
+  "probe_pickup_facing_object_hands_empty_n": 173,
+  "probe_pickup_facing_object_hands_empty_model": 1.0,
+  "probe_pickup_facing_object_hands_empty_copy": 0.0,
+  "probe_forward_into_wall_n": 3355,
+  "probe_forward_into_wall_model": 0.9809240102767944,
+  "probe_forward_into_wall_copy": 1.0
+ }
+}

@@ -36,6 +36,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 12 | Skills + composite inside blind continual learner (2c) | run_2c.sh | C2_life | composition.md (2c section) |
 | 13 | Learned world model: causal probes, priors, imagination (3a) | worldmodel.py, wm_rollouts.py | results/wm/ (data.npz, model_*seed*.pt, metrics_*.json, rollout.json) | worldmodel.md |
 | 14 | Skill-order feasibility for planning | skill_sequence.py | results/wm/skill_sequence.json | worldmodel.md |
+| 15 | Planning over skills with world model (3b) -> negative | planner.py, worldmodel.py collect_comp | results/wm/planner_v1.json, planner_v2.json, model_comp_persist_seed*.pt | worldmodel.md (3b section) |
 
 ## Code provenance (important for the paper)
 - Runs of experiments 0-7 were produced before the repo existed. Commit d79f702 holds the code as it was right
