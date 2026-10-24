@@ -109,3 +109,33 @@ Diagnosis:
   Planning needs a way to value progress toward a goal that is out of sight (subgoals / preconditions, or exploring
   to make the unknown visible). A good world model of local physics is not enough.
 - Not iterated further on purpose: more scoring tweaks evaluated on these agents would fit the test.
+
+## 3b v3: curiosity rule (2026-10-24)
+Rule fixed before the run: if the target has been seen this episode -> real mission; otherwise run the unfinished skill
+that is most doable in imagination (completion rate over K=16 imagined runs, threshold 0.2), counting only skills
+whose object (door / key / ball) the agent has actually seen this episode. The seen-object condition was added after a
+smoke test on non-evaluation episodes (seeds 5-12) showed the world model imagining a ball that did not exist.
+Fresh episodes (eval seeds + 20,000), 100 per agent, 10 agents.
+
+| Method | UnlockPickup |
+|---|---|
+| real mission only | 0% |
+| random skill choice | 13% |
+| **planner v3** | **16%** (per agent: 6 18 14 10 23 7 9 19 29 29) |
+| hand-written correct order | 26% |
+
+Paired over agents: planner - random = +3.7 ± 6.1 points (not significant); planner - correct = -10 points.
+First skill chosen (1000 episodes): pick up key 65%, real mission 29% (key/door not yet seen), open door 6%, ball 0%.
+
+Reading: the planner now discovers the right first step on its own and never wastes time on the absent ball, but the
+gain over random choice is small and not significant. Frequent pattern "key -> real mission" (door skipped): once the
+door is out of the current view, imagining "open the door" from there rarely completes within 40 steps, so the
+doable-score falls under the threshold. Imagination is local to what is in view; it does not plan routes to things
+remembered but not visible.
+
+## 3b overall conclusion
+A learned world model that is accurate on local physics, plus learned skills, plus simple planning rules, is not
+enough for reliable zero-shot composition here. Missing pieces identified by these runs:
+1. memory of where things are (a map), so the agent can imagine going back to a remembered door;
+2. a way to value progress toward goals that are out of sight (subgoals / preconditions);
+3. a "drop" skill (only one object can be carried) - hypothesis for the 26% ceiling of the correct order.
