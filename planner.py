@@ -30,7 +30,8 @@ SKILLS = {"open": "open the door", "key": "pick up a key", "ball": "pick up a ba
 TYPE_ID = {"key": 5, "ball": 6, "box": 7}
 COLOR_ID = {c: i for i, c in enumerate(["red", "green", "blue", "purple", "yellow", "grey"])}
 K, H, SKILL_STEPS = 16, 40, 40
-VERSION = 3  # 1 = first run (planner_v1.json), 2 = fairer score for the real mission (planner_v2.json),
+VERSION = 4  # 4 = map memory (mapmem.py): imagine skills from views rendered at remembered objects; see episode_v4
+# 1 = first run (planner_v1.json), 2 = fairer score for the real mission (planner_v2.json),
 # 3 = curiosity rule: goal in sight -> go for it; otherwise do the most doable unfinished skill (imagined), to change
 #     the world and reveal more. A skill is only considered if its object (key / ball / door) has actually been seen
 #     in this episode: the world model sometimes imagines objects that are not there. Threshold 0.2.
@@ -71,11 +72,11 @@ def target_visible(view, real_target):
 
 
 @torch.no_grad()
-def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target, doable_only=False):
+def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target, doable_only=False, horizon=H):
     """K imagined runs of one skill from the current real view. Returns the plan score."""
     cur = view[None, :IMG_DIM].repeat(K, 1).long()
     done = torch.zeros(K, dtype=torch.bool)
-    for _ in range(H):
+    for _ in range(horizon):
         dist, _, _ = agent(with_words(cur.float(), skill_ids))
         nxt = wm.predict(cur, dist.sample()).long()
         cur = torch.where(done[:, None], cur, nxt)
@@ -133,7 +134,127 @@ def episode(agent, wm, env, seed, method, rng):
     return float(reward > 0), chosen
 
 
-def run_seed(s, methods=("real_only", "random", "correct", "planner"), episodes=100):
+DROP = 4
+
+
+@torch.no_grad()
+def episode_v4(agent, wm, env, seed, method):
+    """Planner with map memory. method: 'planner' (decides by imagination) or 'correct_map' (hand-written order,
+    same map/navigation machinery: key -> open -> explore until box seen -> drop if holding -> real)."""
+    from mapmem import Map
+    obs, _ = env.reset(seed=seed)
+    real_ids = [int(t) for t in obs[IMG_DIM:] if t]
+    real_target = target_of(real_ids)
+    ids = {**{k: words(v) for k, v in SKILLS.items()}, "real": real_ids}
+    m, chosen = Map(), []
+    m.observe(obs)
+    state = {"obs": obs, "done": False, "reward": 0.0, "steps": 0}
+
+    def act(a):
+        before = state["obs"]
+        state["obs"], r, term, trunc, _ = env.step(a)
+        m.step(a, before)
+        m.observe(state["obs"])
+        state["done"], state["reward"], state["steps"] = term or trunc, r, state["steps"] + 1
+
+    def hand():
+        return tuple(int(v) for v in state["obs"][AGENT:AGENT + 3])
+
+    def run_skill(skill, n):
+        for _ in range(n):
+            if state["done"]:
+                return
+            dist, _, _ = agent(with_words(torch.as_tensor(state["obs"][None], dtype=torch.float32), ids[skill]))
+            act(dist.sample().item())
+            if finished(torch.as_tensor(state["obs"][None]).long(), skill, real_target)[0]:
+                return
+
+    def go_face(cell):
+        for _ in range(60):
+            if state["done"]:
+                return False
+            path = m.path_to_face(cell)
+            if path is None:
+                return False
+            if not path:
+                return True
+            act(path[0])
+        return False
+
+    def drop():
+        """Put the held object down; needs an empty cell in front, so turn until there is one (max 4 turns)."""
+        for _ in range(4):
+            if state["done"]:
+                return
+            if int(state["obs"][FRONT]) == 1:
+                act(DROP)
+                return
+            act(0)
+
+    def facing_view(cell, h):
+        """Rendered view from the end of the path to `cell`, with hand h; None if unreachable."""
+        path = m.path_to_face(cell)
+        if path is None:
+            return None
+        pos, d = m.pos.copy(), m.dir
+        for a in path:
+            if a == 0: d = (d - 1) % 4
+            elif a == 1: d = (d + 1) % 4
+            else: pos = pos + np.array(__import__("mapmem").DIRS[d])
+        return torch.as_tensor(m.render(pos, d, h), dtype=torch.float32)
+
+    def doable(view, skill):
+        return imagine(agent, wm, view, ids[skill], skill, real_ids, real_target, doable_only=True, horizon=10)
+
+    while not state["done"]:
+        t, c = real_target
+        boxes = [b for b in m.find(t, c) if tuple(b) != tuple(m.pos)]
+        h = hand()
+        if method == "correct_map":
+            keys, doors = m.find(5), [d for d in m.find(4) if m.cells[d[0], d[1], 2] != 0]
+            if boxes:
+                if h[0] != 1:
+                    chosen.append("drop"); drop(); continue
+                chosen.append("real"); go_face(boxes[0]); run_skill("real", 10)
+            elif h[0] != 5 and keys:
+                chosen.append("key"); go_face(keys[0]); run_skill("key", 20)
+            elif h[0] == 5 and doors:
+                chosen.append("open"); go_face(doors[0]); run_skill("open", 20)
+            else:
+                chosen.append("explore"); run_skill("real", 40)
+            continue
+        # planner: decide by imagination from views rendered at remembered objects
+        if boxes:
+            v = facing_view(boxes[0], h)
+            empty_hand = tuple(int(x) for x in wm.predict(torch.as_tensor(state["obs"][None, :IMG_DIM]).long(),
+                                                        torch.tensor([DROP]))[0, AGENT:AGENT + 3])
+            vd = facing_view(boxes[0], empty_hand) if h[0] != 1 else None
+            s_real = doable(v, "real") if v is not None else 0.0
+            s_drop = doable(vd, "real") if vd is not None else -1.0
+            if s_drop > s_real:
+                chosen.append("drop"); drop()
+            else:
+                chosen.append("real"); go_face(boxes[0]); run_skill("real", 10)
+            continue
+        cands = {}
+        for skill, ty in (("key", 5), ("open", 4), ("ball", 6)):
+            for cell in m.find(ty):
+                if skill == "open" and m.cells[cell[0], cell[1], 2] == 0:
+                    continue  # already open
+                if skill == "key" and h[0] == 5:
+                    continue  # already holding a key
+                v = facing_view(cell, h)
+                if v is not None:
+                    cands[(skill, tuple(cell))] = doable(v, skill)
+        best = max(cands, key=cands.get) if cands else None
+        if best is not None and cands[best] >= 0.2:
+            chosen.append(best[0]); go_face(best[1]); run_skill(best[0], 20)
+        else:
+            chosen.append("explore"); run_skill("real", 40)
+    return float(state["reward"] > 0), chosen
+
+
+def run_seed(s, methods=("real_only", "random", "correct", "correct_map", "planner"), episodes=100):
     torch.set_num_threads(1)
     if True:
         agent = Agent(goal=True)
@@ -144,9 +265,11 @@ def run_seed(s, methods=("real_only", "random", "correct", "planner"), episodes=
         out = {}
         for m in methods:
             rng = np.random.default_rng(s)
-            eps = [episode(agent, wm, env, EVAL_SEED + EPISODE_OFFSET * (VERSION - 1) + ep, m, rng) for ep in range(episodes)]
+            ep_fn = (lambda sd: episode_v4(agent, wm, env, sd, m)) if m in ("planner", "correct_map") and VERSION >= 4 \
+                else (lambda sd: episode(agent, wm, env, sd, m, rng))
+            eps = [ep_fn(EVAL_SEED + EPISODE_OFFSET * (VERSION - 1) + ep) for ep in range(episodes)]
             out[m] = {"success": float(np.mean([e[0] for e in eps])),
-                      "first_skills": {k: sum(e[1][0] == k for e in eps) for k in ["open", "key", "ball", "real"]},
+                      "first_skills": {k: sum(e[1][0] == k for e in eps) for k in ["open", "key", "ball", "real", "drop", "explore"]},
                       "example_plans": [e[1][:6] for e in eps[:5]]}
         print(s, {m: out[m]["success"] for m in methods}, "planner first choices:",
               out.get("planner", {}).get("first_skills"), flush=True)
@@ -155,7 +278,7 @@ def run_seed(s, methods=("real_only", "random", "correct", "planner"), episodes=
 
 if __name__ == "__main__":
     from multiprocessing import Pool
-    methods = sys.argv[1:] or ["real_only", "random", "correct", "planner"]
+    methods = sys.argv[1:] or ["real_only", "random", "correct", "correct_map", "planner"]
     with Pool(10) as pool:
         res = dict(pool.starmap(run_seed, [(s, methods) for s in range(1, 11)]))
     for m in methods:
