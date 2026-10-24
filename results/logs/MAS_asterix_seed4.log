@@ -1,0 +1,52 @@
+[MAS_asterix seed 4] training on MinAtar-asterix
+WARNING:root:Cannot import matplotlib and/or seaborn.Will not be able to render the environment.
+  MinAtar-asterix step    40960  train success(last100) 60%
+  MinAtar-asterix step    81920  train success(last100) 83%
+  MinAtar-asterix step   122880  train success(last100) 127%
+  MinAtar-asterix step   163840  train success(last100) 141%
+  MinAtar-asterix step   204800  train success(last100) 175%
+  MinAtar-asterix step   245760  train success(last100) 281%
+  MinAtar-asterix step   286720  train success(last100) 469%
+  MinAtar-asterix step   327680  train success(last100) 491%
+  MinAtar-asterix step   368640  train success(last100) 484%
+  MinAtar-asterix step   409600  train success(last100) 553%
+  MinAtar-asterix step   450560  train success(last100) 675%
+  MinAtar-asterix step   491520  train success(last100) 864%
+  MinAtar-asterix step   532480  train success(last100) 795%
+  MinAtar-asterix step   573440  train success(last100) 994%
+  MinAtar-asterix step   614400  train success(last100) 824%
+  MinAtar-asterix step   655360  train success(last100) 934%
+  MinAtar-asterix step   696320  train success(last100) 920%
+  MinAtar-asterix step   737280  train success(last100) 931%
+  MinAtar-asterix step   778240  train success(last100) 982%
+  MinAtar-asterix step   819200  train success(last100) 951%
+  MinAtar-asterix step   860160  train success(last100) 1043%
+  MinAtar-asterix step   901120  train success(last100) 1075%
+  MinAtar-asterix step   942080  train success(last100) 1239%
+  MinAtar-asterix step   983040  train success(last100) 1340%
+  MinAtar-asterix step  1024000  train success(last100) 1146%
+  MinAtar-asterix step  1064960  train success(last100) 1397%
+  MinAtar-asterix step  1105920  train success(last100) 1287%
+  MinAtar-asterix step  1146880  train success(last100) 1261%
+  MinAtar-asterix step  1187840  train success(last100) 1492%
+  MinAtar-asterix step  1228800  train success(last100) 1340%
+  MinAtar-asterix step  1269760  train success(last100) 1355%
+  MinAtar-asterix step  1310720  train success(last100) 1362%
+  MinAtar-asterix step  1351680  train success(last100) 1432%
+  MinAtar-asterix step  1392640  train success(last100) 1321%
+  MinAtar-asterix step  1433600  train success(last100) 1485%
+  MinAtar-asterix step  1474560  train success(last100) 1417%
+  MinAtar-asterix step  1515520  train success(last100) 1306%
+  MinAtar-asterix step  1556480  train success(last100) 1437%
+  MinAtar-asterix step  1597440  train success(last100) 1644%
+  MinAtar-asterix step  1638400  train success(last100) 1578%
+  MinAtar-asterix step  1679360  train success(last100) 1891%
+  MinAtar-asterix step  1720320  train success(last100) 1853%
+  MinAtar-asterix step  1761280  train success(last100) 1557%
+  MinAtar-asterix step  1802240  train success(last100) 1446%
+  MinAtar-asterix step  1843200  train success(last100) 1688%
+  MinAtar-asterix step  1884160  train success(last100) 1901%
+  MinAtar-asterix step  1925120  train success(last100) 1802%
+  MinAtar-asterix step  1966080  train success(last100) 1456%
+  eval after stage: {'MinAtar-breakout': '0.23', 'MinAtar-space_invaders': '0.07', 'MinAtar-freeway': '1.20', 'MinAtar-asterix': '13.07', 'MinAtar-seaquest': '0.07'}
+saved results/runs/MAS_asterix_seed4.json  (711s)

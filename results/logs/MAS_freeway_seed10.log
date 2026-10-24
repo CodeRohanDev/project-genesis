@@ -1,0 +1,52 @@
+[MAS_freeway seed 10] training on MinAtar-freeway
+WARNING:root:Cannot import matplotlib and/or seaborn.Will not be able to render the environment.
+  MinAtar-freeway step    40960  train success(last100) 0%
+  MinAtar-freeway step    81920  train success(last100) 3%
+  MinAtar-freeway step   122880  train success(last100) 4%
+  MinAtar-freeway step   163840  train success(last100) 10%
+  MinAtar-freeway step   204800  train success(last100) 16%
+  MinAtar-freeway step   245760  train success(last100) 23%
+  MinAtar-freeway step   286720  train success(last100) 33%
+  MinAtar-freeway step   327680  train success(last100) 76%
+  MinAtar-freeway step   368640  train success(last100) 189%
+  MinAtar-freeway step   409600  train success(last100) 399%
+  MinAtar-freeway step   450560  train success(last100) 934%
+  MinAtar-freeway step   491520  train success(last100) 1240%
+  MinAtar-freeway step   532480  train success(last100) 1585%
+  MinAtar-freeway step   573440  train success(last100) 1878%
+  MinAtar-freeway step   614400  train success(last100) 2360%
+  MinAtar-freeway step   655360  train success(last100) 2617%
+  MinAtar-freeway step   696320  train success(last100) 2842%
+  MinAtar-freeway step   737280  train success(last100) 3090%
+  MinAtar-freeway step   778240  train success(last100) 3177%
+  MinAtar-freeway step   819200  train success(last100) 3242%
+  MinAtar-freeway step   860160  train success(last100) 3203%
+  MinAtar-freeway step   901120  train success(last100) 3174%
+  MinAtar-freeway step   942080  train success(last100) 3211%
+  MinAtar-freeway step   983040  train success(last100) 3228%
+  MinAtar-freeway step  1024000  train success(last100) 3285%
+  MinAtar-freeway step  1064960  train success(last100) 3313%
+  MinAtar-freeway step  1105920  train success(last100) 3350%
+  MinAtar-freeway step  1146880  train success(last100) 3370%
+  MinAtar-freeway step  1187840  train success(last100) 3351%
+  MinAtar-freeway step  1228800  train success(last100) 3352%
+  MinAtar-freeway step  1269760  train success(last100) 3332%
+  MinAtar-freeway step  1310720  train success(last100) 3322%
+  MinAtar-freeway step  1351680  train success(last100) 3290%
+  MinAtar-freeway step  1392640  train success(last100) 3289%
+  MinAtar-freeway step  1433600  train success(last100) 3313%
+  MinAtar-freeway step  1474560  train success(last100) 3366%
+  MinAtar-freeway step  1515520  train success(last100) 3445%
+  MinAtar-freeway step  1556480  train success(last100) 3513%
+  MinAtar-freeway step  1597440  train success(last100) 3568%
+  MinAtar-freeway step  1638400  train success(last100) 3642%
+  MinAtar-freeway step  1679360  train success(last100) 3679%
+  MinAtar-freeway step  1720320  train success(last100) 3711%
+  MinAtar-freeway step  1761280  train success(last100) 3719%
+  MinAtar-freeway step  1802240  train success(last100) 3724%
+  MinAtar-freeway step  1843200  train success(last100) 3755%
+  MinAtar-freeway step  1884160  train success(last100) 3804%
+  MinAtar-freeway step  1925120  train success(last100) 3811%
+  MinAtar-freeway step  1966080  train success(last100) 3801%
+  eval after stage: {'MinAtar-breakout': '0.40', 'MinAtar-space_invaders': '0.90', 'MinAtar-freeway': '39.33', 'MinAtar-asterix': '0.77', 'MinAtar-seaquest': '0.07'}
+saved results/runs/MAS_freeway_seed10.json  (570s)

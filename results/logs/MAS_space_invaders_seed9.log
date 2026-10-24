@@ -1,0 +1,52 @@
+[MAS_space_invaders seed 9] training on MinAtar-space_invaders
+WARNING:root:Cannot import matplotlib and/or seaborn.Will not be able to render the environment.
+  MinAtar-space_invaders step    40960  train success(last100) 819%
+  MinAtar-space_invaders step    81920  train success(last100) 1922%
+  MinAtar-space_invaders step   122880  train success(last100) 2040%
+  MinAtar-space_invaders step   163840  train success(last100) 2432%
+  MinAtar-space_invaders step   204800  train success(last100) 2471%
+  MinAtar-space_invaders step   245760  train success(last100) 2701%
+  MinAtar-space_invaders step   286720  train success(last100) 2747%
+  MinAtar-space_invaders step   327680  train success(last100) 3174%
+  MinAtar-space_invaders step   368640  train success(last100) 3224%
+  MinAtar-space_invaders step   409600  train success(last100) 3287%
+  MinAtar-space_invaders step   450560  train success(last100) 2675%
+  MinAtar-space_invaders step   491520  train success(last100) 3269%
+  MinAtar-space_invaders step   532480  train success(last100) 4018%
+  MinAtar-space_invaders step   573440  train success(last100) 3925%
+  MinAtar-space_invaders step   614400  train success(last100) 4071%
+  MinAtar-space_invaders step   655360  train success(last100) 5727%
+  MinAtar-space_invaders step   696320  train success(last100) 4857%
+  MinAtar-space_invaders step   737280  train success(last100) 5038%
+  MinAtar-space_invaders step   778240  train success(last100) 3977%
+  MinAtar-space_invaders step   819200  train success(last100) 3905%
+  MinAtar-space_invaders step   860160  train success(last100) 4535%
+  MinAtar-space_invaders step   901120  train success(last100) 5810%
+  MinAtar-space_invaders step   942080  train success(last100) 4955%
+  MinAtar-space_invaders step   983040  train success(last100) 4366%
+  MinAtar-space_invaders step  1024000  train success(last100) 4401%
+  MinAtar-space_invaders step  1064960  train success(last100) 4262%
+  MinAtar-space_invaders step  1105920  train success(last100) 4852%
+  MinAtar-space_invaders step  1146880  train success(last100) 3307%
+  MinAtar-space_invaders step  1187840  train success(last100) 4451%
+  MinAtar-space_invaders step  1228800  train success(last100) 4272%
+  MinAtar-space_invaders step  1269760  train success(last100) 5221%
+  MinAtar-space_invaders step  1310720  train success(last100) 5663%
+  MinAtar-space_invaders step  1351680  train success(last100) 4431%
+  MinAtar-space_invaders step  1392640  train success(last100) 5808%
+  MinAtar-space_invaders step  1433600  train success(last100) 7046%
+  MinAtar-space_invaders step  1474560  train success(last100) 6257%
+  MinAtar-space_invaders step  1515520  train success(last100) 4732%
+  MinAtar-space_invaders step  1556480  train success(last100) 4907%
+  MinAtar-space_invaders step  1597440  train success(last100) 4911%
+  MinAtar-space_invaders step  1638400  train success(last100) 4970%
+  MinAtar-space_invaders step  1679360  train success(last100) 4680%
+  MinAtar-space_invaders step  1720320  train success(last100) 5021%
+  MinAtar-space_invaders step  1761280  train success(last100) 5856%
+  MinAtar-space_invaders step  1802240  train success(last100) 5117%
+  MinAtar-space_invaders step  1843200  train success(last100) 5216%
+  MinAtar-space_invaders step  1884160  train success(last100) 5367%
+  MinAtar-space_invaders step  1925120  train success(last100) 6300%
+  MinAtar-space_invaders step  1966080  train success(last100) 5560%
+  eval after stage: {'MinAtar-breakout': '0.43', 'MinAtar-space_invaders': '58.00', 'MinAtar-freeway': '0.00', 'MinAtar-asterix': '0.63', 'MinAtar-seaquest': '0.03'}
+saved results/runs/MAS_space_invaders_seed9.json  (729s)

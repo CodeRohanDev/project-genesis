@@ -132,7 +132,27 @@ def fig_generalisation():
     save(fig, "fig_generalisation")
 
 
+def fig_minatar():
+    """Experiment 20: MinAtar, score per game after all 5 games, divided by the 2M-step scratch score."""
+    games = ["breakout", "space_invaders", "freeway", "asterix", "seaquest"]
+    scratch = np.array([np.mean([r["matrix"][-1][i] for r in runs(f"MAS_{g}")]) for i, g in enumerate(games)])
+    methods = [("MA_none", "No protection", MUTED, ""), ("MA_clear", "CLEAR (replay all)", MAGENTA, "xx"),
+               ("MA_blind", "Blind (ours)", BLUE, ""), ("MA_joint", "Joint (all at once)", ORANGE, "\\\\")]
+    fig, ax = plt.subplots(figsize=(3.4, 2.1))
+    x = np.arange(6)
+    w = 0.2
+    for k, (p, label, color, hatch) in enumerate(methods):
+        fin = np.array([r["matrix"][-1] for r in runs(p)]) / scratch
+        vals = [mci(fin[:, i]) for i in range(5)] + [mci(fin.mean(1))]
+        ax.bar(x + (k - 1.5) * w, [v[0] for v in vals], w * 0.9, yerr=[v[1] for v in vals], color=color, label=label,
+               hatch=hatch, edgecolor="white", linewidth=0, error_kw={"elinewidth": 0.8, "ecolor": INK, "capsize": 1.5})
+    ax.set_xticks(x, ["Breakout", "Space Inv.", "Freeway", "Asterix", "Seaquest", "Mean"], rotation=30, ha="right")
+    ax.set_ylabel("Score after all games\n(% of scratch)")
+    ax.legend(ncol=2, fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, 1.3))
+    save(fig, "fig_minatar")
+
+
 if __name__ == "__main__":
-    for f in (fig_combined, fig_long, fig_plasticity, fig_generalisation):
+    for f in (fig_combined, fig_long, fig_plasticity, fig_generalisation, fig_minatar):
         f()
         print("ok", f.__name__)

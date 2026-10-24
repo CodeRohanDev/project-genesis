@@ -1,0 +1,52 @@
+[MAS_seaquest seed 7] training on MinAtar-seaquest
+WARNING:root:Cannot import matplotlib and/or seaborn.Will not be able to render the environment.
+  MinAtar-seaquest step    40960  train success(last100) 81%
+  MinAtar-seaquest step    81920  train success(last100) 92%
+  MinAtar-seaquest step   122880  train success(last100) 109%
+  MinAtar-seaquest step   163840  train success(last100) 105%
+  MinAtar-seaquest step   204800  train success(last100) 129%
+  MinAtar-seaquest step   245760  train success(last100) 140%
+  MinAtar-seaquest step   286720  train success(last100) 157%
+  MinAtar-seaquest step   327680  train success(last100) 204%
+  MinAtar-seaquest step   368640  train success(last100) 266%
+  MinAtar-seaquest step   409600  train success(last100) 305%
+  MinAtar-seaquest step   450560  train success(last100) 303%
+  MinAtar-seaquest step   491520  train success(last100) 340%
+  MinAtar-seaquest step   532480  train success(last100) 296%
+  MinAtar-seaquest step   573440  train success(last100) 340%
+  MinAtar-seaquest step   614400  train success(last100) 373%
+  MinAtar-seaquest step   655360  train success(last100) 369%
+  MinAtar-seaquest step   696320  train success(last100) 412%
+  MinAtar-seaquest step   737280  train success(last100) 393%
+  MinAtar-seaquest step   778240  train success(last100) 411%
+  MinAtar-seaquest step   819200  train success(last100) 380%
+  MinAtar-seaquest step   860160  train success(last100) 408%
+  MinAtar-seaquest step   901120  train success(last100) 437%
+  MinAtar-seaquest step   942080  train success(last100) 450%
+  MinAtar-seaquest step   983040  train success(last100) 474%
+  MinAtar-seaquest step  1024000  train success(last100) 459%
+  MinAtar-seaquest step  1064960  train success(last100) 538%
+  MinAtar-seaquest step  1105920  train success(last100) 574%
+  MinAtar-seaquest step  1146880  train success(last100) 575%
+  MinAtar-seaquest step  1187840  train success(last100) 683%
+  MinAtar-seaquest step  1228800  train success(last100) 657%
+  MinAtar-seaquest step  1269760  train success(last100) 655%
+  MinAtar-seaquest step  1310720  train success(last100) 646%
+  MinAtar-seaquest step  1351680  train success(last100) 829%
+  MinAtar-seaquest step  1392640  train success(last100) 867%
+  MinAtar-seaquest step  1433600  train success(last100) 1027%
+  MinAtar-seaquest step  1474560  train success(last100) 898%
+  MinAtar-seaquest step  1515520  train success(last100) 785%
+  MinAtar-seaquest step  1556480  train success(last100) 939%
+  MinAtar-seaquest step  1597440  train success(last100) 947%
+  MinAtar-seaquest step  1638400  train success(last100) 1144%
+  MinAtar-seaquest step  1679360  train success(last100) 845%
+  MinAtar-seaquest step  1720320  train success(last100) 1214%
+  MinAtar-seaquest step  1761280  train success(last100) 1302%
+  MinAtar-seaquest step  1802240  train success(last100) 1200%
+  MinAtar-seaquest step  1843200  train success(last100) 1279%
+  MinAtar-seaquest step  1884160  train success(last100) 938%
+  MinAtar-seaquest step  1925120  train success(last100) 1239%
+  MinAtar-seaquest step  1966080  train success(last100) 1180%
+  eval after stage: {'MinAtar-breakout': '0.47', 'MinAtar-space_invaders': '0.73', 'MinAtar-freeway': '0.13', 'MinAtar-asterix': '0.40', 'MinAtar-seaquest': '11.23'}
+saved results/runs/MAS_seaquest_seed7.json  (783s)

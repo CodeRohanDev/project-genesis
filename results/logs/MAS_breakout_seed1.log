@@ -1,0 +1,52 @@
+[MAS_breakout seed 1] training on MinAtar-breakout
+WARNING:root:Cannot import matplotlib and/or seaborn.Will not be able to render the environment.
+  MinAtar-breakout step    40960  train success(last100) 302%
+  MinAtar-breakout step    81920  train success(last100) 498%
+  MinAtar-breakout step   122880  train success(last100) 584%
+  MinAtar-breakout step   163840  train success(last100) 601%
+  MinAtar-breakout step   204800  train success(last100) 602%
+  MinAtar-breakout step   245760  train success(last100) 735%
+  MinAtar-breakout step   286720  train success(last100) 811%
+  MinAtar-breakout step   327680  train success(last100) 789%
+  MinAtar-breakout step   368640  train success(last100) 1004%
+  MinAtar-breakout step   409600  train success(last100) 1105%
+  MinAtar-breakout step   450560  train success(last100) 1247%
+  MinAtar-breakout step   491520  train success(last100) 1117%
+  MinAtar-breakout step   532480  train success(last100) 1128%
+  MinAtar-breakout step   573440  train success(last100) 1112%
+  MinAtar-breakout step   614400  train success(last100) 1063%
+  MinAtar-breakout step   655360  train success(last100) 1066%
+  MinAtar-breakout step   696320  train success(last100) 1058%
+  MinAtar-breakout step   737280  train success(last100) 1154%
+  MinAtar-breakout step   778240  train success(last100) 1078%
+  MinAtar-breakout step   819200  train success(last100) 1195%
+  MinAtar-breakout step   860160  train success(last100) 1152%
+  MinAtar-breakout step   901120  train success(last100) 1197%
+  MinAtar-breakout step   942080  train success(last100) 1157%
+  MinAtar-breakout step   983040  train success(last100) 1155%
+  MinAtar-breakout step  1024000  train success(last100) 1099%
+  MinAtar-breakout step  1064960  train success(last100) 1128%
+  MinAtar-breakout step  1105920  train success(last100) 1082%
+  MinAtar-breakout step  1146880  train success(last100) 1113%
+  MinAtar-breakout step  1187840  train success(last100) 1276%
+  MinAtar-breakout step  1228800  train success(last100) 1137%
+  MinAtar-breakout step  1269760  train success(last100) 1079%
+  MinAtar-breakout step  1310720  train success(last100) 1207%
+  MinAtar-breakout step  1351680  train success(last100) 995%
+  MinAtar-breakout step  1392640  train success(last100) 1172%
+  MinAtar-breakout step  1433600  train success(last100) 1075%
+  MinAtar-breakout step  1474560  train success(last100) 1221%
+  MinAtar-breakout step  1515520  train success(last100) 1073%
+  MinAtar-breakout step  1556480  train success(last100) 998%
+  MinAtar-breakout step  1597440  train success(last100) 970%
+  MinAtar-breakout step  1638400  train success(last100) 1090%
+  MinAtar-breakout step  1679360  train success(last100) 1061%
+  MinAtar-breakout step  1720320  train success(last100) 1106%
+  MinAtar-breakout step  1761280  train success(last100) 1290%
+  MinAtar-breakout step  1802240  train success(last100) 1319%
+  MinAtar-breakout step  1843200  train success(last100) 1301%
+  MinAtar-breakout step  1884160  train success(last100) 1204%
+  MinAtar-breakout step  1925120  train success(last100) 1398%
+  MinAtar-breakout step  1966080  train success(last100) 1414%
+  eval after stage: {'MinAtar-breakout': '12.43', 'MinAtar-space_invaders': '1.43', 'MinAtar-freeway': '0.00', 'MinAtar-asterix': '0.47', 'MinAtar-seaquest': '0.13'}
+saved results/runs/MAS_breakout_seed1.json  (952s)
