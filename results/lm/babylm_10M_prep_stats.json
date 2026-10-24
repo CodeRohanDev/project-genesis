@@ -1,0 +1,21 @@
+{
+ "train_words": 10199908,
+ "valid_words": 512086,
+ "train_docs": 13998,
+ "train_words_by_category": {
+  "child-directed-speech": 2858743,
+  "child-wiki": 1507051,
+  "padding-opensubtitles": 2032102,
+  "child-books": 2759237,
+  "padding-wikipedia": 103865,
+  "child-available-speech": 938910
+ },
+ "full_corpus_words_by_category": {
+  "child-directed-speech": 27712538,
+  "child-wiki": 14609286,
+  "padding-opensubtitles": 19699367,
+  "child-books": 26748028,
+  "padding-wikipedia": 1006936,
+  "child-available-speech": 9102166
+ }
+}

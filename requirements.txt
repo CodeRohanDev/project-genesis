@@ -42,6 +42,7 @@ nvidia-nvshmem-cu12==3.4.5
 nvidia-nvshmem-cu13==3.4.5
 nvidia-nvtx==13.0.85
 nvidia-nvtx-cu12==12.6.77
+pyarrow==26.0.0
 pygame-ce==2.5.8
 setuptools==84.2.1
 sympy==1.14.0
