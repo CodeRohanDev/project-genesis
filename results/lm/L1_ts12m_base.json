@@ -1,0 +1,181 @@
+{
+ "config": {
+  "name": "L1_ts12m_base",
+  "train": "data/tinystories/train_head.txt",
+  "valid": "data/tinystories/valid.txt",
+  "epochs": 4.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 256,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1
+ },
+ "device": "cuda",
+ "train_bytes": 62000001,
+ "train_words": 12221071,
+ "params": 4870144,
+ "curve": [
+  {
+   "step": 100,
+   "words_seen": 161475.82583426088,
+   "val_loss": 2.771200716495514,
+   "blimp_fast": 0.5443283582089552,
+   "minutes": 0.7070866624514262
+  },
+  {
+   "step": 168,
+   "words_seen": 271279.3874015583,
+   "val_loss": 2.897994577884674,
+   "blimp_fast": 0.522089552238806,
+   "minutes": 1.239237415790558
+  },
+  {
+   "step": 282,
+   "words_seen": 455361.82885261567,
+   "val_loss": 2.5818349719047546,
+   "blimp_fast": 0.5331343283582091,
+   "minutes": 2.0106520811716715
+  },
+  {
+   "step": 474,
+   "words_seen": 765395.4144543965,
+   "val_loss": 2.2770735025405884,
+   "blimp_fast": 0.5326865671641792,
+   "minutes": 3.19973494609197
+  },
+  {
+   "step": 798,
+   "words_seen": 1288577.0901574017,
+   "val_loss": 1.7842074930667877,
+   "blimp_fast": 0.5108955223880597,
+   "minutes": 5.085826051235199
+  },
+  {
+   "step": 1341,
+   "words_seen": 2165390.8244374385,
+   "val_loss": 1.3549976348876953,
+   "blimp_fast": 0.4771641791044777,
+   "minutes": 8.135051051775614
+  },
+  {
+   "step": 2255,
+   "words_seen": 3641279.8725625826,
+   "val_loss": 1.0640732645988464,
+   "blimp_fast": 0.4871641791044776,
+   "minutes": 13.163271824518839
+  },
+  {
+   "step": 3791,
+   "words_seen": 6121548.55737683,
+   "val_loss": 0.8878353983163834,
+   "blimp_fast": 0.48671641791044773,
+   "minutes": 21.6171377102534
+  },
+  {
+   "step": 6373,
+   "words_seen": 10290854.380417446,
+   "val_loss": 0.7674778997898102,
+   "blimp_fast": 0.5061194029850746,
+   "minutes": 35.79238149325053
+  },
+  {
+   "step": 10714,
+   "words_seen": 17300519.97988271,
+   "val_loss": 0.6925407648086548,
+   "blimp_fast": 0.5310447761194029,
+   "minutes": 59.28920848369599
+  },
+  {
+   "step": 18009,
+   "words_seen": 29080181.474492043,
+   "val_loss": 0.6378235220909119,
+   "blimp_fast": 0.5367164179104478,
+   "minutes": 98.99323377609252
+  },
+  {
+   "step": 30273,
+   "words_seen": 48883576.754805796,
+   "val_loss": 0.6060536801815033,
+   "blimp_fast": 0.5532835820895522,
+   "minutes": 164.93936834335327
+  }
+ ],
+ "blimp_full": 0.562955223880597,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.547,
+  "anaphor_gender_agreement": 0.801,
+  "anaphor_number_agreement": 0.733,
+  "animate_subject_passive": 0.448,
+  "animate_subject_trans": 0.51,
+  "causative": 0.514,
+  "complex_NP_island": 0.483,
+  "coordinate_structure_constraint_complex_left_branch": 0.254,
+  "coordinate_structure_constraint_object_extraction": 0.545,
+  "determiner_noun_agreement_1": 0.661,
+  "determiner_noun_agreement_2": 0.619,
+  "determiner_noun_agreement_irregular_1": 0.486,
+  "determiner_noun_agreement_irregular_2": 0.557,
+  "determiner_noun_agreement_with_adj_2": 0.538,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.537,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.557,
+  "determiner_noun_agreement_with_adjective_1": 0.594,
+  "distractor_agreement_relational_noun": 0.408,
+  "distractor_agreement_relative_clause": 0.436,
+  "drop_argument": 0.695,
+  "ellipsis_n_bar_1": 0.436,
+  "ellipsis_n_bar_2": 0.631,
+  "existential_there_object_raising": 0.61,
+  "existential_there_quantifiers_1": 0.837,
+  "existential_there_quantifiers_2": 0.377,
+  "existential_there_subject_raising": 0.429,
+  "expletive_it_object_raising": 0.626,
+  "inchoative": 0.427,
+  "intransitive": 0.566,
+  "irregular_past_participle_adjectives": 0.691,
+  "irregular_past_participle_verbs": 0.942,
+  "irregular_plural_subject_verb_agreement_1": 0.562,
+  "irregular_plural_subject_verb_agreement_2": 0.534,
+  "left_branch_island_echo_question": 0.636,
+  "left_branch_island_simple_question": 0.394,
+  "matrix_question_npi_licensor_present": 0.024,
+  "npi_present_1": 0.392,
+  "npi_present_2": 0.397,
+  "only_npi_licensor_present": 0.327,
+  "only_npi_scope": 0.148,
+  "passive_1": 0.668,
+  "passive_2": 0.672,
+  "principle_A_c_command": 0.35,
+  "principle_A_case_1": 0.999,
+  "principle_A_case_2": 0.68,
+  "principle_A_domain_1": 0.996,
+  "principle_A_domain_2": 0.48,
+  "principle_A_domain_3": 0.494,
+  "principle_A_reconstruction": 0.416,
+  "regular_plural_subject_verb_agreement_1": 0.759,
+  "regular_plural_subject_verb_agreement_2": 0.563,
+  "sentential_negation_npi_licensor_present": 0.87,
+  "sentential_negation_npi_scope": 0.458,
+  "sentential_subject_island": 0.469,
+  "superlative_quantifiers_1": 0.512,
+  "superlative_quantifiers_2": 0.566,
+  "tough_vs_raising_1": 0.627,
+  "tough_vs_raising_2": 0.394,
+  "transitive": 0.613,
+  "wh_island": 0.638,
+  "wh_questions_object_gap": 0.702,
+  "wh_questions_subject_gap": 0.846,
+  "wh_questions_subject_gap_long_distance": 0.932,
+  "wh_vs_that_no_gap": 0.944,
+  "wh_vs_that_no_gap_long_distance": 0.969,
+  "wh_vs_that_with_gap": 0.133,
+  "wh_vs_that_with_gap_long_distance": 0.059
+ },
+ "minutes": 166.60742756525676,
+ "samples": [
+  "Once upon a time, there was a little girl named Lily. She had a big box. She loved to play with her toys and take her toys inside. One day, she saw her friend, Tom the squirrel. Tom thought it would be fun to play with Lily and Tom.\nLily wanted to help Tom, so she thought he could be fun to play with him. So, she d",
+  "The little girl was getting ready to get hurt. She hugged Tim and said, \"That was a nice hurt, Tim!\" So, they played together in the park all day long.\n<|endoftext|>\nOnce upon a time, there was a shy cat named Lily. She liked to play with her toy car in the park. One day, Lily met a boy named Tweet. Tweet said, \"I",
+  "Lily was sad because she wanted to help her mom put the sandwich in the sandwich. She asked her mom, \u201cCan we help the sandwich song?\u201d Her mom smiled and said, \u201cYes, please!\"\nLily was happy to help her mom. She knew something unexpected happened. A tiny bird flew up with a big hug and picked up the sandwich. The b"
+ ]
+}
