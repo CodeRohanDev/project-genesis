@@ -39,6 +39,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 15 | Planning over skills with world model (3b, v1-v4 + map memory, ablations) | planner.py, worldmodel.py collect_comp | results/wm/planner_v1-v4 json, planner_v4_map_random.json, model_comp_persist_seed*.pt | worldmodel.md (3b section) |
 | 16 | Map memory (path integration, map, navigation) | mapmem.py (self-test in __main__) | - | worldmodel.md (v4 section) |
 | 17 | Language L1: byte LM from scratch, grammar vs words seen | lm.py | results/lm/ | language.md |
+| 18 | Published baseline CLEAR on C1 and L1 | run_clear.sh (MODE=tune / final) | tuneCLEAR_*, C_clear, L_clear | baselines.md |
 | - | Paper figures (combined, long sequence, plasticity, generalisation) | figures.py | paper/figs/*.pdf,png | - |
 
 ## Code provenance (important for the paper)

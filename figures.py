@@ -17,7 +17,7 @@ from summarize import ci
 OUT = Path("paper/figs")
 # validated categorical palette (dataviz skill, light mode); slots 3-4 are low-contrast on white, so every series
 # also has its own marker / line style and a legend (secondary encoding for print and colour-blind readers)
-BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
+BLUE, ORANGE, AQUA, YELLOW, MAGENTA = "#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"
 INK, MUTED, GRID = "#222222", "#6b6b6b", "#e4e4e0"
 plt.rcParams.update({"font.size": 8, "font.family": "serif", "axes.edgecolor": MUTED, "axes.labelcolor": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "axes.spines.top": False, "axes.spines.right": False,
@@ -43,25 +43,25 @@ def save(fig, name):
 
 def fig_combined():
     """Experiments 7-8: final success after Empty -> DoorKey -> Lava, training sizes vs unseen sizes."""
-    methods = [("C_none", "No protection", MUTED, "o"), ("C_heads", "Head reset", YELLOW, "v"),
-               ("C_distill", "Told + distill", AQUA, "s"), ("O_full", "Blind (ours)", BLUE, "D"),
-               ("C_joint", "Joint (all at once)", ORANGE, "^")]
+    methods = [("C_none", "No protection", MUTED, ""), ("C_heads", "Head reset", YELLOW, "//"),
+               ("C_distill", "Told + distill", AQUA, ".."), ("C_clear", "CLEAR (replay all)", MAGENTA, "xx"),
+               ("O_full", "Blind (ours)", BLUE, ""), ("C_joint", "Joint (all at once)", ORANGE, "\\\\")]
     rs0 = runs("C_none")[0]
     evals = rs0["eval_tasks"]
     unseen = [i for i, e in enumerate(evals) if "size=" in e]
     seen = [i for i in range(len(evals)) if i not in unseen]
     fig, ax = plt.subplots(figsize=(3.4, 2.1))
     x = np.arange(2)
-    w = 0.16
-    for k, (p, label, color, _) in enumerate(methods):
+    w = 0.135
+    for k, (p, label, color, hatch) in enumerate(methods):
         rs = runs(p)
         vals = [mci([np.mean([r["matrix"][-1][i] for i in idx]) for r in rs]) for idx in (seen, unseen)]
-        ax.bar(x + (k - 2) * w, [v[0] for v in vals], w * 0.9, yerr=[v[1] for v in vals], color=color, label=label,
-               error_kw={"elinewidth": 0.8, "ecolor": INK, "capsize": 1.5})
+        ax.bar(x + (k - 2.5) * w, [v[0] for v in vals], w * 0.9, yerr=[v[1] for v in vals], color=color, label=label,
+               hatch=hatch, edgecolor="white", linewidth=0, error_kw={"elinewidth": 0.8, "ecolor": INK, "capsize": 1.5})
     ax.set_xticks(x, ["Training sizes", "Unseen sizes"])
     ax.set_ylabel("Success after all tasks (%)")
     ax.set_ylim(0, 105)
-    ax.legend(ncol=2, fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, 1.32))
+    ax.legend(ncol=3, fontsize=6, loc="upper center", bbox_to_anchor=(0.5, 1.3))
     save(fig, "fig_combined")
 
 
@@ -71,6 +71,7 @@ def fig_long():
     order = ["E", "D", "L", "O", "X", "U", "D", "L"]
     fig, ax = plt.subplots(figsize=(3.4, 2.1))
     for p, label, color, marker, ls in [("L_none", "No protection", MUTED, "o", ":"),
+                                        ("L_clear", "CLEAR (replay all)", MAGENTA, "P", (0, (3, 1, 1, 1))),
                                         ("L_distill", "Told + distill", AQUA, "s", "--"),
                                         ("L_blind", "Blind (ours)", BLUE, "D", "-")]:
         rs = runs(p)
