@@ -177,3 +177,29 @@ planner - correct_map = -14.9 ± 9.1.
   before pick-up when needed), but sensible is not the same as better than random under cheap retries.
 - Hand-designed components now carry much of the performance (map, path integration, navigation, drop turning).
   They are generic, not task-specific, but they are not learned.
+
+## 3b v5: costly mistakes (tighter step budgets), fresh episodes (eval seeds + 40,000)
+| Budget (max steps) | map_random | planner (imagination + map) | correct order + map |
+|---|---|---|---|
+| 60 | 47% | 44% | 74% |
+| 90 | 76% | 75% | 97% |
+| 120 | 86% | 80% | 98% |
+Planner - map_random (paired over 10 agents): -3.0 ± 8.1 (60), -1.0 ± 11.3 (90), -6.9 ± 11.0 (120).
+Right decisions matter (correct order is +27 points at budget 60), but the planner does not deliver them.
+
+Diagnostic (non-evaluation episodes 200-219, agents 3/6 good, 7/8 poor): mean imagined doability per skill & hand
+| | open, hand empty | open, holding key | pick up box, holding key | pick up box, hand empty | key, hand empty |
+|---|---|---|---|---|---|
+| agent 3 (20/20 wins) | 0.13 | 1.00 | 0.09 | 0.96 | 1.00 |
+| agent 8 (12/20 wins) | 0.19 | 1.00 | 0.01 (117 evaluations) | 0.93 | 1.00 |
+The world model's judgements are correct for every agent: a door does not open without the key, it does with the key;
+a box cannot be picked up while holding the key. Poor agents evaluate "pick up box while holding key" over and over:
+after dropping the key, their weak pick-up skill (component Pickup ~54%) picks the key up again -> loop.
+The "open without key" score (0.13-0.19) also sits close to the 0.2 threshold, so noise sometimes sends the agent to
+the door without the key.
+
+## 3b final reading
+- Learned causal knowledge is correct and usable (diagnostic above).
+- Success is limited by memory/navigation (fixed by the map) and by skill execution (weak pick-up skill), not by
+  the decision rule. With reliable execution, even random choices do well because retries are cheap.
+- To show the value of imagination, the next test needs (a) reliable skills and (b) irreversible mistakes.
