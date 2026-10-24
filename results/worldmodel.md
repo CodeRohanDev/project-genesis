@@ -203,3 +203,28 @@ the door without the key.
 - Success is limited by memory/navigation (fixed by the map) and by skill execution (weak pick-up skill), not by
   the decision rule. With reliable execution, even random choices do well because retries are cheap.
 - To show the value of imagination, the next test needs (a) reliable skills and (b) irreversible mistakes.
+
+## 3b v6: stronger skills (S_comp15 = B_comp + 10M steps on the same mix; Pickup 54% -> 73 ± 6%)
+Same v4 planner and map, fresh episodes (eval seeds + 50,000), 10 agents x 100 episodes.
+| Budget | real only | map_random | planner | correct order + map |
+|---|---|---|---|---|
+| 60 | 0% | 47% | 38% | 83% |
+| 90 | 0% | 74% | 59% | 96% |
+| 288 | 0% | 84% | 64% | 98% |
+Paired: planner - map_random = -9.2 ± 12.0 (60), -14.4 ± 12.4 (90), -20.7 ± 13.1 (288).
+Stronger skills widened the gap between correct decisions and the planner, and the planner fell below random.
+
+Diagnostic (non-evaluation episodes 300-319): with strong agents the planner chooses "pick up the key" about twice
+as often and drops rarely. Two design flaws of the v4 rule, not bugs:
+1. "Most doable" is not "useful": a strong agent can always pick up the key (doability 1.0), so while the box is
+   unseen the rule keeps re-taking the key, even after the door is already open.
+2. Imagined "drop" is evaluated from the current pose; facing a wall the world model correctly predicts the drop
+   fails, while the executed drop first turns to a free cell. Imagination and execution use different macros.
+
+## 3b closed (for now)
+Fixing these means adding more hand-written rules (usefulness of a skill, consistent macros). We stop here to avoid
+engineering the planner to this one task. Conclusions for a paper:
+- learned causal world model: correct (probes, diagnostics);
+- memory + navigation: the main enabler (25% -> 93-98% with the map);
+- simple imagination-based decision rules: not better than random choice when retries are cheap, and worse when a
+  doable action is not useful. Valuing usefulness (progress toward the goal) is the missing ingredient.
