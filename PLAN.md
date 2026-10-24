@@ -123,6 +123,11 @@ door, then take the box"):
   (upper bound: shows whether failures come from planning or from skill execution).
 - Falsified if the planner is no better than random skill order.
 
+## Next research track (after 3b): child-like language, faster
+Rohan's goal (2026-10-24): the system should learn full English and Hindi the way a child does, but faster and more
+easily. Not solved anywhere; must be designed and measured (words/examples needed vs a child). Candidate parts:
+reading from scratch (small LM, child-level text), grounding words in the gridworld agent, a teacher curriculum.
+
 ## Decisions (made by Claude, Rohan delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.

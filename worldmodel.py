@@ -9,6 +9,8 @@ Split: training data from agents 1-7 on training env seeds; test data from agent
     python worldmodel.py train 1      # model seed 1 -> results/wm/model_seed1.pt + metrics JSON
     python worldmodel.py train 1 persist   # same with the object-permanence prior -> model_persist_seed1.pt
     python worldmodel.py train 1 conv      # locality prior (convolutions) + permanence -> model_conv_seed1.pt
+    python worldmodel.py collect_comp      # component-only data (B_comp agents, no UnlockPickup) -> data_comp.npz
+    python worldmodel.py train 1 persist comp   # model for the planning test -> model_comp_persist_seed1.pt
 """
 import json
 import sys
@@ -31,13 +33,13 @@ TOGGLE, PICKUP, FORWARD = 5, 3, 2
 
 
 @torch.no_grad()
-def collect(agent_seeds, envs_spec, steps, env_seed, eps=0.3):
+def collect(agent_seeds, envs_spec, steps, env_seed, eps=0.3, agents="B_finetuneUP"):
     """Roll out saved agents with eps-random actions; return (obs, action, next_obs) as uint8 arrays."""
     specs = envs_spec.split("|")
     xs, acts, ys = [], [], []
     for a_seed in agent_seeds:
         agent = Agent(goal=True)
-        agent.load_state_dict(torch.load(f"results/runs/B_finetuneUP_seed{a_seed}.pt"))
+        agent.load_state_dict(torch.load(f"results/runs/{agents}_seed{a_seed}.pt"))
         envs = gym.vector.SyncVectorEnv([make_env(specs[i % len(specs)]) for i in range(16)],
                                         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP)
         rng = np.random.default_rng(env_seed + a_seed)
@@ -182,10 +184,10 @@ def rollout_eval(model, x, a, y, ks=(1, 3, 5, 10, 20), n_env=16):
     return out
 
 
-def train(seed, persist=False, conv=False, epochs=8, batch=512):
+def train(seed, persist=False, conv=False, comp=False, epochs=8, batch=512):
     torch.manual_seed(seed)
-    tag = "conv_" if conv else "persist_" if persist else ""
-    d = np.load(OUT / "data.npz")
+    tag = ("comp_" if comp else "") + ("conv_" if conv else "persist_" if persist else "")
+    d = np.load(OUT / ("data_comp.npz" if comp else "data.npz"))
     T = {k: torch.as_tensor(d[k]) for k in d.files}
     model = ConvWorldModel() if conv else WorldModel(persist=persist)
     opt = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -209,7 +211,17 @@ def train(seed, persist=False, conv=False, epochs=8, batch=512):
 if __name__ == "__main__":
     torch.set_num_threads(2)
     OUT.mkdir(parents=True, exist_ok=True)
-    if sys.argv[1] == "collect":
+    if sys.argv[1] == "collect_comp":
+        # for the planning test (3b): only component skills (B_comp agents) in component worlds, UnlockPickup never seen
+        cat = lambda *ps: tuple(np.concatenate(z) for z in zip(*ps))
+        comp = "MiniGrid-Unlock-v0|BabyAI-PickupDistDebug-v0"
+        parts = {"train": cat(collect(range(1, 11), comp, 700_000, 0, agents="B_comp"),
+                              collect(range(1, 11), comp, 150_000, 500_000, eps=1.0, agents="B_comp")),
+                 "test": collect(range(1, 11), comp, 100_000, EVAL_SEED, agents="B_comp"),
+                 "new": collect(range(1, 11), "MiniGrid-UnlockPickup-v0", 100_000, EVAL_SEED, agents="B_comp")}
+        np.savez_compressed(OUT / "data_comp.npz", **{f"{p}_{k}": v for p, (x, a, y) in parts.items() for k, v in zip("xay", (x, a, y))})
+        print({p: len(v[0]) for p, v in parts.items()})
+    elif sys.argv[1] == "collect":
         # agents rarely touch a locked door without the key, so part of the data is fully random play (eps=1),
         # which supplies failed actions (counterexamples) for the causal probes
         cat = lambda *ps: tuple(np.concatenate(z) for z in zip(*ps))
@@ -222,4 +234,5 @@ if __name__ == "__main__":
         np.savez_compressed(OUT / "data.npz", **{f"{p}_{k}": v for p, (x, a, y) in parts.items() for k, v in zip("xay", (x, a, y))})
         print({p: len(v[0]) for p, v in parts.items()})
     else:
-        train(int(sys.argv[2]), persist="persist" in sys.argv[3:], conv="conv" in sys.argv[3:])
+        flags = sys.argv[3:]
+        train(int(sys.argv[2]), persist="persist" in flags, conv="conv" in flags, comp="comp" in flags)
