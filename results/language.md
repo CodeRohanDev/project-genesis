@@ -27,3 +27,22 @@ No Hindi child-directed corpus was found (results/lm/DATA_SOURCES.md); a gap to 
 3. Grounding: words tied to objects/actions in the gridworld agent (from experiment 2a), vs text only.
 Metric: words needed to reach a given BLiMP level, and BLiMP at a fixed budget.
 Caveat: TinyStories is GPT-generated, not real child input; BabyLM data needed for claims about child-like input.
+
+## L1 results (2026-10-24)
+Same model and settings for both corpora (4.9M params, byte-level, 4 epochs, GPU). Full BLiMP = all 67,000 pairs.
+| Corpus | words | full BLiMP | grammar along training (fast BLiMP at words seen) |
+|---|---|---|---|
+| TinyStories (synthetic children's stories) | 12.2M | 56.3% | 49% @6M, 51% @10M, 53% @17M, 55% @49M (4 passes) |
+| BabyLM English (real child-directed speech, children's books, simple wiki, subtitles), category-balanced 10M subset | 10.2M | 56.8% | 50% @5M, 52% @9M, 54% @14M, 56% @41M (4 passes) |
+Chance = 50%. BabyLM 2024 strict-small (10M) baselines ~70-74%, best ~81% (GPT-BERT).
+
+- TinyStories model writes fluent simple stories; the BabyLM model's text is less fluent (more varied input,
+  same tiny model).
+- Grammar emerges slowly and stays far below published baselines. Main suspects (to test, not assumed):
+  model size (4.9M vs tens of millions of parameters in BabyLM baselines), byte-level input (longer sequences, sums
+  over more positions), only 4 passes (baselines often 10-20), context 256 bytes.
+- By phenomenon, BabyLM data helped most on NPI scope and determiner-noun agreement (+25-36 points) and hurt most on
+  some question/ellipsis structures (-24-37 points).
+
+Next (language track): scale-up within the 4 GB GPU (larger model, subword tokenizer learned from the 10M words only,
+more passes), then the child-like ingredients (curriculum, feedback, grounding).

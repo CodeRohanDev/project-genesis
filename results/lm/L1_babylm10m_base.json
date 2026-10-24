@@ -1,0 +1,181 @@
+{
+ "config": {
+  "name": "L1_babylm10m_base",
+  "train": "data/babylm/train_10M.txt",
+  "valid": "data/babylm/valid.txt",
+  "epochs": 4.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 256,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1
+ },
+ "device": "cuda",
+ "train_bytes": 55695045,
+ "train_words": 10199908,
+ "params": 4870144,
+ "curve": [
+  {
+   "step": 90,
+   "words_seen": 135024.3665345813,
+   "val_loss": 3.238866150379181,
+   "blimp_fast": 0.5361194029850745,
+   "minutes": 0.6443108836809794
+  },
+  {
+   "step": 151,
+   "words_seen": 226540.88163024196,
+   "val_loss": 3.020447850227356,
+   "blimp_fast": 0.5243283582089553,
+   "minutes": 1.1328452388445536
+  },
+  {
+   "step": 254,
+   "words_seen": 381068.76777537394,
+   "val_loss": 2.8110365867614746,
+   "blimp_fast": 0.5038805970149254,
+   "minutes": 1.845563284556071
+  },
+  {
+   "step": 427,
+   "words_seen": 640615.6056696246,
+   "val_loss": 2.607572078704834,
+   "blimp_fast": 0.5034328358208956,
+   "minutes": 2.9307379523913064
+  },
+  {
+   "step": 718,
+   "words_seen": 1077194.3907981042,
+   "val_loss": 2.4738340377807617,
+   "blimp_fast": 0.5046268656716417,
+   "minutes": 4.6439898689587915
+  },
+  {
+   "step": 1206,
+   "words_seen": 1809326.5115633896,
+   "val_loss": 2.1264111399650574,
+   "blimp_fast": 0.48567164179104466,
+   "minutes": 7.406397008895874
+  },
+  {
+   "step": 2028,
+   "words_seen": 3042549.0592458984,
+   "val_loss": 1.8926211893558502,
+   "blimp_fast": 0.48492537313432826,
+   "minutes": 11.945311212539673
+  },
+  {
+   "step": 3408,
+   "words_seen": 5112922.679442813,
+   "val_loss": 1.7132353484630585,
+   "blimp_fast": 0.49582089552238806,
+   "minutes": 19.457797614733376
+  },
+  {
+   "step": 5728,
+   "words_seen": 8593550.794556463,
+   "val_loss": 1.5865534842014313,
+   "blimp_fast": 0.516268656716418,
+   "minutes": 31.97146180868149
+  },
+  {
+   "step": 9627,
+   "words_seen": 14443106.406982379,
+   "val_loss": 1.4989031553268433,
+   "blimp_fast": 0.5392537313432836,
+   "minutes": 52.89443090756734
+  },
+  {
+   "step": 16180,
+   "words_seen": 24274380.561439175,
+   "val_loss": 1.430831104516983,
+   "blimp_fast": 0.5468656716417911,
+   "minutes": 88.19968640406927
+  },
+  {
+   "step": 27194,
+   "words_seen": 40798362.48379338,
+   "val_loss": 1.3911232650279999,
+   "blimp_fast": 0.5598507462686567,
+   "minutes": 148.1608930150668
+  }
+ ],
+ "blimp_full": 0.5678656716417911,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.73,
+  "anaphor_gender_agreement": 0.623,
+  "anaphor_number_agreement": 0.725,
+  "animate_subject_passive": 0.582,
+  "animate_subject_trans": 0.667,
+  "causative": 0.435,
+  "complex_NP_island": 0.418,
+  "coordinate_structure_constraint_complex_left_branch": 0.248,
+  "coordinate_structure_constraint_object_extraction": 0.408,
+  "determiner_noun_agreement_1": 0.911,
+  "determiner_noun_agreement_2": 0.818,
+  "determiner_noun_agreement_irregular_1": 0.566,
+  "determiner_noun_agreement_irregular_2": 0.668,
+  "determiner_noun_agreement_with_adj_2": 0.709,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.617,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.596,
+  "determiner_noun_agreement_with_adjective_1": 0.881,
+  "distractor_agreement_relational_noun": 0.296,
+  "distractor_agreement_relative_clause": 0.343,
+  "drop_argument": 0.754,
+  "ellipsis_n_bar_1": 0.172,
+  "ellipsis_n_bar_2": 0.807,
+  "existential_there_object_raising": 0.72,
+  "existential_there_quantifiers_1": 0.869,
+  "existential_there_quantifiers_2": 0.147,
+  "existential_there_subject_raising": 0.571,
+  "expletive_it_object_raising": 0.685,
+  "inchoative": 0.369,
+  "intransitive": 0.521,
+  "irregular_past_participle_adjectives": 0.451,
+  "irregular_past_participle_verbs": 0.741,
+  "irregular_plural_subject_verb_agreement_1": 0.572,
+  "irregular_plural_subject_verb_agreement_2": 0.547,
+  "left_branch_island_echo_question": 0.27,
+  "left_branch_island_simple_question": 0.219,
+  "matrix_question_npi_licensor_present": 0.031,
+  "npi_present_1": 0.379,
+  "npi_present_2": 0.393,
+  "only_npi_licensor_present": 0.427,
+  "only_npi_scope": 0.512,
+  "passive_1": 0.691,
+  "passive_2": 0.678,
+  "principle_A_c_command": 0.501,
+  "principle_A_case_1": 1.0,
+  "principle_A_case_2": 0.557,
+  "principle_A_domain_1": 0.998,
+  "principle_A_domain_2": 0.547,
+  "principle_A_domain_3": 0.511,
+  "principle_A_reconstruction": 0.265,
+  "regular_plural_subject_verb_agreement_1": 0.706,
+  "regular_plural_subject_verb_agreement_2": 0.641,
+  "sentential_negation_npi_licensor_present": 0.985,
+  "sentential_negation_npi_scope": 0.442,
+  "sentential_subject_island": 0.394,
+  "superlative_quantifiers_1": 0.254,
+  "superlative_quantifiers_2": 0.553,
+  "tough_vs_raising_1": 0.425,
+  "tough_vs_raising_2": 0.654,
+  "transitive": 0.609,
+  "wh_island": 0.494,
+  "wh_questions_object_gap": 0.736,
+  "wh_questions_subject_gap": 0.942,
+  "wh_questions_subject_gap_long_distance": 0.948,
+  "wh_vs_that_no_gap": 0.984,
+  "wh_vs_that_no_gap_long_distance": 0.983,
+  "wh_vs_that_with_gap": 0.109,
+  "wh_vs_that_with_gap_long_distance": 0.042
+ },
+ "minutes": 149.96560124953587,
+ "samples": [
+  "Once upon a time in public of leave leaving of unreas.\nAny boys have looked at the time would out for their hands, and commits up their heads down their suffered. The hands is called their mother one of their stations and a voice of my eyes of support, or as well didn't we have commits for a little time that we can",
+  "The little girl with the highest touch in this which he came back at the time they ain't he?\n*CHI:\tno.\n*CHI:\tthank you.\n*CHI:\tit nice did it nice did it?\n*CHI:\tand then the girl and then then he came over there.\n*CHI:\tand then there it goes in the little girl.\n*CHI:\tand then the pocket.\n*CHI:\tsweet it is.\n*CHI:\ttw",
+  "Lily was sad because he had been despinion on his father and he because he was baled face, and the brought to mentioned to the mention of the through of the same was large.\n\"I don't think it all you will told me about me,\" she said. \"I read that I will have a lot of laughwards around that not to me though for a of hand"
+ ]
+}
