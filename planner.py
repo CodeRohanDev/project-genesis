@@ -30,7 +30,10 @@ SKILLS = {"open": "open the door", "key": "pick up a key", "ball": "pick up a ba
 TYPE_ID = {"key": 5, "ball": 6, "box": 7}
 COLOR_ID = {c: i for i, c in enumerate(["red", "green", "blue", "purple", "yellow", "grey"])}
 K, H, SKILL_STEPS = 16, 40, 40
-VERSION = 2  # 1 = first run (results/wm/planner_v1.json), 2 = fairer score for the real mission
+VERSION = 3  # 1 = first run (planner_v1.json), 2 = fairer score for the real mission (planner_v2.json),
+# 3 = curiosity rule: goal in sight -> go for it; otherwise do the most doable unfinished skill (imagined), to change
+#     the world and reveal more. A skill is only considered if its object (key / ball / door) has actually been seen
+#     in this episode: the world model sometimes imagines objects that are not there. Threshold 0.2.
 EPISODE_OFFSET = 10_000  # v2 is evaluated on new episode seeds, not the ones used to diagnose v1
 
 
@@ -61,8 +64,14 @@ def with_words(img, ids):
     return out
 
 
+def target_visible(view, real_target):
+    t, c = real_target
+    cells = view[:IMG_DIM].long().view(49, 3)
+    return bool(((cells[:, 0] == t) & ((cells[:, 1] == c) if c is not None else True)).any())
+
+
 @torch.no_grad()
-def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target):
+def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target, doable_only=False):
     """K imagined runs of one skill from the current real view. Returns the plan score."""
     cur = view[None, :IMG_DIM].repeat(K, 1).long()
     done = torch.zeros(K, dtype=torch.bool)
@@ -73,6 +82,8 @@ def imagine(agent, wm, view, skill_ids, skill, real_ids, real_target):
         done |= finished(cur, skill, real_target)
         if done.all():
             break
+    if doable_only:
+        return done.float().mean().item()
     _, value, _ = agent(with_words(cur.float(), real_ids))
     value = value.clamp(min=0)
     if skill == "real":
@@ -89,7 +100,8 @@ def episode(agent, wm, env, seed, method, rng):
     real_target = target_of(real_ids)
     ids = {**{k: words(v) for k, v in SKILLS.items()}, "real": real_ids}
     order = ["open", "real"]  # hand-written correct order (only used by method 'correct')
-    reward, done, chosen, completed = 0.0, False, [], set()  # completed: skills the agent remembers finishing
+    reward, done, chosen, completed, seen = 0.0, False, [], set(), False
+    seen_types = set()  # object types the agent has really seen this episode  # completed: skills the agent remembers finishing
     while not done:
         view = torch.as_tensor(obs, dtype=torch.float32)
         open_ = [s for s in ids if s not in completed and not finished(view[None].long(), s, real_target)[0]] or ["real"]
@@ -99,7 +111,15 @@ def episode(agent, wm, env, seed, method, rng):
             skill = open_[rng.integers(len(open_))]
         elif method == "correct":
             skill = next((s for s in order if s in open_), "real")
-        else:  # planner
+        elif VERSION == 3:  # planner, curiosity rule
+            seen = seen or target_visible(view, real_target)
+            seen_types |= set(view[:IMG_DIM].long().view(49, 3)[:, 0].tolist())
+            needs = {"open": 4, "key": 5, "ball": 6}
+            others = [s for s in open_ if s != "real" and needs[s] in seen_types]
+            doable = {s: imagine(agent, wm, view, ids[s], s, real_ids, real_target, doable_only=True) for s in others}
+            best = max(doable, key=doable.get) if doable else None
+            skill = "real" if seen or best is None or doable[best] < 0.2 else best
+        else:  # planner v1/v2
             scores = {s: imagine(agent, wm, view, ids[s], s, real_ids, real_target) for s in open_}
             skill = max(scores, key=scores.get)
         chosen.append(skill)
