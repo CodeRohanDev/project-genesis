@@ -32,6 +32,7 @@ COLOR_ID = {c: i for i, c in enumerate(["red", "green", "blue", "purple", "yello
 K, H, SKILL_STEPS = 16, 40, 40
 VERSION = int(__import__("os").environ.get("PLANNER_VERSION", 4))
 ENV_SPEC = __import__("os").environ.get("PLANNER_ENV", "MiniGrid-UnlockPickup-v0")
+AGENTS = __import__("os").environ.get("PLANNER_AGENTS", "B_comp")  # 6: S_comp15 = stronger skills (+10M steps)
 # 5 = same as 4 under tighter step budgets (PLANNER_ENV=...@max_steps=N): wrong choices become costly
 # 4 = map memory (mapmem.py): imagine skills from views rendered at remembered objects; see episode_v4
 # 1 = first run (planner_v1.json), 2 = fairer score for the real mission (planner_v2.json),
@@ -266,7 +267,7 @@ def run_seed(s, methods=("real_only", "random", "correct", "correct_map", "plann
     torch.set_num_threads(1)
     if True:
         agent = Agent(goal=True)
-        agent.load_state_dict(torch.load(f"results/runs/B_comp_seed{s}.pt"))
+        agent.load_state_dict(torch.load(f"results/runs/{AGENTS}_seed{s}.pt"))
         wm = WorldModel(persist=True)
         wm.load_state_dict(torch.load(f"results/wm/model_comp_persist_seed{(s - 1) % 3 + 1}.pt"))
         env = make_env(ENV_SPEC)()
@@ -292,5 +293,6 @@ if __name__ == "__main__":
     for m in methods:
         xs = [res[s][m]["success"] for s in res]
         print(f"{m:10s} {np.mean(xs):.0%}", [round(x * 100) for x in xs])
-    tag = ("_" + "_".join(methods) if sys.argv[1:] else "") + ("_" + ENV_SPEC.split("@")[1] if "@" in ENV_SPEC else "")
+    tag = ("_" + "_".join(methods) if sys.argv[1:] else "") + ("_" + ENV_SPEC.split("@")[1] if "@" in ENV_SPEC else "") \
+        + (f"_{AGENTS}" if AGENTS != "B_comp" else "")
     json.dump(res, open(f"results/wm/planner_v{VERSION}{tag}.json", "w"), indent=1)
