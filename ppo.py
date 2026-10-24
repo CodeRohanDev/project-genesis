@@ -238,6 +238,8 @@ def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, r
                 delta = rew_buf[t] + args.gamma * nv * nonterm - val_buf[t]
                 adv[t] = last = delta + args.gamma * args.gae_lambda * nonterm * last
             ret = adv + val_buf
+        if life is not None and hasattr(life, "store"):  # CLEAR baseline keeps whole transitions
+            life.store(obs_buf.flatten(0, 1), act_buf.flatten(), val_buf.flatten(), adv.flatten())
 
         b_obs, b_act, b_logp = obs_buf.flatten(0, 1), act_buf.flatten(), logp_buf.flatten()
         b_adv, b_ret, b_done = adv.flatten(), ret.flatten(), done_buf.flatten()
@@ -332,6 +334,60 @@ class Life:
         dist, _, _ = self.agent(self.obs[idx])
         old = self.logits[idx]
         return self.args.retain_coef * (old.exp() * (old - dist.logits)).sum(-1).mean()
+
+
+class Clear:
+    """Baseline: CLEAR (Rolnick et al. 2019, "Experience Replay for Continual Learning"), adapted to PPO.
+    Needs no task boundaries. A fixed-size reservoir keeps ALL past experience (no competence gating): observation,
+    action, the behaviour policy's action probabilities and value, and the advantage. Every PPO minibatch adds
+    replay losses on a random replay batch:
+      off-policy policy gradient with clipped importance ratio on the stored advantage (stands in for V-trace),
+      + coef * KL(behaviour || current)   (policy cloning)
+      + coef * (V - V_behaviour)^2        (value cloning)
+    Same memory budget as Life (args.reservoir)."""
+
+    def __init__(self, agent, args, batch, device):
+        self.agent, self.args, self.batch = agent, args, batch
+        self.cap, self.seen, self.size = args.reservoir, 0, 0
+        self.obs = torch.zeros((self.cap, OBS_DIM), device=device)
+        self.logits = torch.zeros((self.cap, 7), device=device)
+        self.act = torch.zeros(self.cap, dtype=torch.long, device=device)
+        self.val = torch.zeros(self.cap, device=device)
+        self.adv = torch.zeros(self.cap, device=device)
+        self.events = []
+
+    def update(self, outcomes, obs):
+        pass  # interface shared with Life; CLEAR does not look at its own success
+
+    @torch.no_grad()
+    def store(self, obs, act, val, adv, k=256):
+        idx = torch.randperm(len(obs), device=obs.device)[:k]
+        dist, _, _ = self.agent(obs[idx])
+        for j, i in enumerate(idx):
+            if self.size < self.cap:
+                slot = self.size
+                self.size += 1
+            else:
+                slot = int(torch.randint(self.seen + 1, ()).item())
+            self.seen += 1
+            if slot < self.cap:
+                self.obs[slot], self.logits[slot] = obs[i], dist.logits[j]
+                self.act[slot], self.val[slot], self.adv[slot] = act[i], val[i], adv[i]
+
+    def __call__(self):
+        if self.size == 0:
+            return 0.0
+        idx = torch.randint(self.size, (self.batch,), device=self.obs.device)
+        dist, value, _ = self.agent(self.obs[idx])
+        old = self.logits[idx]
+        a = self.adv[idx]
+        a = (a - a.mean()) / (a.std() + 1e-8)
+        old_logp = torch.distributions.Categorical(logits=old).log_prob(self.act[idx])
+        ratio = (dist.log_prob(self.act[idx]) - old_logp).exp()
+        pg = -torch.min(ratio * a, ratio.clamp(1 - self.args.clip, 1 + self.args.clip) * a).mean()
+        kl = (old.exp() * (old - dist.logits)).sum(-1).mean()
+        vclone = (value - self.val[idx]).pow(2).mean()
+        return pg + self.args.retain_coef * (kl + vclone)
 
 
 class Retention:
@@ -434,6 +490,7 @@ def main():
     p.add_argument("--init", default=None, help="path to a saved .pt agent to start from instead of random init")
     p.add_argument("--retain", default="none", choices=["none", "distill", "ewc"])
     p.add_argument("--retain-coef", type=float, default=1.0)
+    p.add_argument("--clear", action="store_true", help="CLEAR baseline (replay of all experience, no boundaries)")
     p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
     p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
     p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
@@ -459,6 +516,9 @@ def main():
     mb = args.num_envs * args.num_steps // args.minibatches
     retain = Retention(agent, args.retain, args.retain_coef, mb) if args.retain != "none" else None
     life = None
+    if args.clear:
+        assert args.task_switch == "none" and args.retain == "none" and not args.blind
+        life = retain = Clear(agent, args, mb, device)
     if args.blind:
         assert args.task_switch == "none" and args.retain == "none", "blind mode: no boundary-based interventions"
         life = retain = Life(agent, opt, args, mb, device)
