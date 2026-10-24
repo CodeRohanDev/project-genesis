@@ -156,7 +156,8 @@ def metrics(pred, x, a, y):
 
 @torch.no_grad()
 def evaluate(model, x, a, y, batch=8192):
-    preds = torch.cat([model.predict(x[i:i + batch], a[i:i + batch]) for i in range(0, len(x), batch)])
+    dev = next(model.parameters()).device
+    preds = torch.cat([model.predict(x[i:i + batch].to(dev), a[i:i + batch].to(dev)).cpu() for i in range(0, len(x), batch)])
     return metrics(preds, x.long(), a.long(), y.long())
 
 
@@ -189,7 +190,8 @@ def train(seed, persist=False, conv=False, comp=False, epochs=8, batch=512):
     tag = ("comp_" if comp else "") + ("conv_" if conv else "persist_" if persist else "")
     d = np.load(OUT / ("data_comp.npz" if comp else "data.npz"))
     T = {k: torch.as_tensor(d[k]) for k in d.files}
-    model = ConvWorldModel() if conv else WorldModel(persist=persist)
+    dev = "cuda" if torch.cuda.is_available() else "cpu"  # GTX 1050 Ti: ~8x faster than CPU for this model
+    model = (ConvWorldModel() if conv else WorldModel(persist=persist)).to(dev)
     opt = torch.optim.Adam(model.parameters(), lr=1e-3)
     n = len(T["train_x"])
     start = time.time()
@@ -197,10 +199,11 @@ def train(seed, persist=False, conv=False, comp=False, epochs=8, batch=512):
         perm = torch.randperm(n)
         for i in range(0, n, batch):
             idx = perm[i:i + batch]
-            loss = loss_fn(model, T["train_x"][idx], T["train_a"][idx], T["train_y"][idx])
+            loss = loss_fn(model, T["train_x"][idx].to(dev), T["train_a"][idx].to(dev), T["train_y"][idx].to(dev))
             opt.zero_grad(); loss.backward(); opt.step()
         print(f"seed {seed} epoch {ep + 1} loss {loss.item():.4f}", flush=True)
-    res = {"seed": seed, "persist": persist or conv, "conv": conv, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
+    model = model.cpu()
+    res = {"seed": seed, "device": dev, "persist": persist or conv, "conv": conv, "epochs": epochs, "train_n": n, "wall_seconds": time.time() - start,
            "test": evaluate(model, T["test_x"], T["test_a"], T["test_y"]),
            "new_worlds": evaluate(model, T["new_x"], T["new_a"], T["new_y"])}
     torch.save(model.state_dict(), OUT / f"model_{tag}seed{seed}.pt")
