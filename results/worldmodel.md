@@ -139,3 +139,41 @@ enough for reliable zero-shot composition here. Missing pieces identified by the
 1. memory of where things are (a map), so the agent can imagine going back to a remembered door;
 2. a way to value progress toward goals that are out of sight (subgoals / preconditions);
 3. a "drop" skill (only one object can be carried) - hypothesis for the 26% ceiling of the correct order.
+
+## 3b v4: map memory (2026-10-24)
+mapmem.py (hand-designed, declared): path integration from own actions + whether the cell ahead was free; top-down
+map of everything seen; shortest-path navigation over remembered free cells; rendering the view the agent would see
+from a remembered spot. Tested against the true game state: 0 pose errors and 0 wrong wall/door/empty cells over
+30 random-play episodes (1107 cells); navigation to a remembered key 15/15; rendered view = real view 30/30.
+Planner v4 (rule fixed before the run): if the target box is in the map -> imagine "pick up" from the rendered view
+in front of it with the current hand and with the hand the world model predicts after "drop"; do whichever is more
+doable. Otherwise, for every remembered key / closed door / ball, render the view in front of it, imagine that skill
+there (K=16, 10 steps) and do the most doable one (>= 0.2), else explore with the real-mission policy for 40 steps.
+Execution detail shared by all map methods: to drop, turn until the cell ahead is empty (found in smoke tests on
+non-evaluation episodes 5-14: dropping against a wall silently fails).
+Fresh episodes (eval seeds + 30,000), 100 per agent, 10 agents.
+
+| Method | UnlockPickup |
+|---|---|
+| real mission only | 0% |
+| random skill choice, no map | 13% |
+| correct order, no map | 25% |
+| **planner v4 (imagination + map)** | **83%** (97 89 93 90 76 98 62 57 87 82) |
+| **map_random: same map/navigation/candidates, choices at random** | **93%** (100 95 87 93 83 97 92 92 93 100) |
+| correct order + map (hand-written) | 98% |
+
+Paired over agents: planner - random(no map) = +70.3 ± 10.9; planner - map_random = **-10.1 ± 9.5**;
+planner - correct_map = -14.9 ± 9.1.
+
+## What v4 actually shows (read this before citing the 83%)
+- The large gain comes from MEMORY + NAVIGATION, not from imagination: with the map, even random choices reach 93%.
+  Without the map, the correct order reaches only 25%. The bottleneck in 3b was finding and returning to things,
+  not deciding what to do.
+- Imagination-based choice is not better than random choice here (slightly worse). In this task there are only 2-3
+  candidate skills, failed attempts are cheap, and the agent can retry many times within 288 steps, so random search
+  with reliable execution works. A test where wrong choices are costly or irreversible is needed to measure the value
+  of thinking ahead.
+- The planner does make sensible choices (key first in ~50% of episodes, explore otherwise; door after key; drop
+  before pick-up when needed), but sensible is not the same as better than random under cheap retries.
+- Hand-designed components now carry much of the performance (map, path integration, navigation, drop turning).
+  They are generic, not task-specific, but they are not learned.
