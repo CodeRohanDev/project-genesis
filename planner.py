@@ -138,9 +138,11 @@ DROP = 4
 
 
 @torch.no_grad()
-def episode_v4(agent, wm, env, seed, method):
+def episode_v4(agent, wm, env, seed, method, rng=None):
     """Planner with map memory. method: 'planner' (decides by imagination) or 'correct_map' (hand-written order,
-    same map/navigation machinery: key -> open -> explore until box seen -> drop if holding -> real)."""
+    same map/navigation machinery: key -> open -> explore until box seen -> drop if holding -> real),
+    or 'map_random' (ablation: same machinery and candidates as the planner, but choices made at random instead of
+    by imagination)."""
     from mapmem import Map
     obs, _ = env.reset(seed=seed)
     real_ids = [int(t) for t in obs[IMG_DIM:] if t]
@@ -229,8 +231,11 @@ def episode_v4(agent, wm, env, seed, method):
             empty_hand = tuple(int(x) for x in wm.predict(torch.as_tensor(state["obs"][None, :IMG_DIM]).long(),
                                                         torch.tensor([DROP]))[0, AGENT:AGENT + 3])
             vd = facing_view(boxes[0], empty_hand) if h[0] != 1 else None
-            s_real = doable(v, "real") if v is not None else 0.0
-            s_drop = doable(vd, "real") if vd is not None else -1.0
+            if method == "map_random":
+                s_real, s_drop = rng.random(), (rng.random() if h[0] != 1 else -1.0)
+            else:
+                s_real = doable(v, "real") if v is not None else 0.0
+                s_drop = doable(vd, "real") if vd is not None else -1.0
             if s_drop > s_real:
                 chosen.append("drop"); drop()
             else:
@@ -245,7 +250,7 @@ def episode_v4(agent, wm, env, seed, method):
                     continue  # already holding a key
                 v = facing_view(cell, h)
                 if v is not None:
-                    cands[(skill, tuple(cell))] = doable(v, skill)
+                    cands[(skill, tuple(cell))] = rng.random() if method == "map_random" else doable(v, skill)
         best = max(cands, key=cands.get) if cands else None
         if best is not None and cands[best] >= 0.2:
             chosen.append(best[0]); go_face(best[1]); run_skill(best[0], 20)
@@ -265,7 +270,7 @@ def run_seed(s, methods=("real_only", "random", "correct", "correct_map", "plann
         out = {}
         for m in methods:
             rng = np.random.default_rng(s)
-            ep_fn = (lambda sd: episode_v4(agent, wm, env, sd, m)) if m in ("planner", "correct_map") and VERSION >= 4 \
+            ep_fn = (lambda sd: episode_v4(agent, wm, env, sd, m, rng)) if m in ("planner", "correct_map", "map_random") and VERSION >= 4 \
                 else (lambda sd: episode(agent, wm, env, sd, m, rng))
             eps = [ep_fn(EVAL_SEED + EPISODE_OFFSET * (VERSION - 1) + ep) for ep in range(episodes)]
             out[m] = {"success": float(np.mean([e[0] for e in eps])),
@@ -284,4 +289,5 @@ if __name__ == "__main__":
     for m in methods:
         xs = [res[s][m]["success"] for s in res]
         print(f"{m:10s} {np.mean(xs):.0%}", [round(x * 100) for x in xs])
-    json.dump(res, open(f"results/wm/planner_v{VERSION}.json", "w"), indent=1)
+    tag = "_" + "_".join(methods) if sys.argv[1:] else ""
+    json.dump(res, open(f"results/wm/planner_v{VERSION}{tag}.json", "w"), indent=1)
