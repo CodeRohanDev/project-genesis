@@ -129,8 +129,8 @@ memory, learns new tasks and keeps old ones, matches all-at-once training and be
 Status:
 1. Figures (paper/figs, figures.py) - DONE
 2. Published baseline CLEAR - DONE (results/baselines.md: +5.0 on 3 tasks, +25.9 on 8 stages)
-3. Second environment (answer "only MiniGrid?") - next
-4. Related work
+3. Second environment (answer "only MiniGrid?") - MinAtar running (run_minatar.sh)
+4. Related work - draft 1 in paper/related_work.md (26 refs, each verified online)
 5. Writing (IEEE format, 6 pages + up to 4 paid pages)
 6. Review, fixes, submit
 Venue facts (searched 2026-10-24): IJCNN 2027 Cape Town 14-18 Jun 2027, notification 15 Mar, final + fee 12 Apr,
