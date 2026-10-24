@@ -19,19 +19,39 @@ import torch.nn.functional as F
 
 BLIMP = Path("data/blimp")
 OUT = Path("results/lm")
+TOK = None  # optional subword tokenizer, learned ONLY from the training text (--bpe); None = raw bytes
+
+
+def encode(text):
+    return TOK.encode(text).ids if TOK else list(text.encode("utf-8"))
+
+
+def decode(ids):
+    return TOK.decode(ids) if TOK else bytes(ids).decode("utf-8", errors="replace")
+
+
+def train_bpe(path, vocab, out):
+    """Byte-level BPE trained from scratch on the training file; nothing pretrained."""
+    from tokenizers import Tokenizer, decoders, models, pre_tokenizers, trainers
+    tok = Tokenizer(models.BPE())
+    tok.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
+    tok.decoder = decoders.ByteLevel()
+    tok.train([str(path)], trainers.BpeTrainer(vocab_size=vocab, initial_alphabet=pre_tokenizers.ByteLevel.alphabet()))
+    tok.save(str(out))
+    return tok
 
 
 class GPT(nn.Module):
-    def __init__(self, layers=6, dim=256, heads=8, ctx=256):
+    def __init__(self, layers=6, dim=256, heads=8, ctx=256, vocab=256):
         super().__init__()
         self.ctx = ctx
-        self.tok = nn.Embedding(256, dim)
+        self.tok = nn.Embedding(vocab, dim)
         self.pos = nn.Embedding(ctx, dim)
         block = nn.TransformerEncoderLayer(dim, heads, 4 * dim, dropout=0.1, activation="gelu",
                                            batch_first=True, norm_first=True)
         self.blocks = nn.TransformerEncoder(block, layers, enable_nested_tensor=False)
         self.norm = nn.LayerNorm(dim)
-        self.head = nn.Linear(dim, 256, bias=False)
+        self.head = nn.Linear(dim, vocab, bias=False)
         self.head.weight = self.tok.weight  # tied input/output byte embeddings
         self.register_buffer("mask", nn.Transformer.generate_square_subsequent_mask(ctx), persistent=False)
 
@@ -42,8 +62,12 @@ class GPT(nn.Module):
         return self.head(self.norm(h))
 
 
-def load_bytes(path):
-    return np.frombuffer(Path(path).read_bytes(), dtype=np.uint8)
+def load_ids(path):
+    if TOK is None:
+        return np.frombuffer(Path(path).read_bytes(), dtype=np.uint8)
+    lines = Path(path).read_text().splitlines(keepends=True)
+    ids = [i for enc in TOK.encode_batch(lines) for i in enc.ids]
+    return np.array(ids, dtype=np.uint16)
 
 
 def batch(data, n, ctx, device):
@@ -58,7 +82,7 @@ def sentence_logprob(model, sentences, device, bs=128):
     """Total log-probability of each sentence's bytes, given a leading newline (start of text). Batched, padded."""
     out = []
     for i in range(0, len(sentences), bs):
-        seqs = [list(b"\n" + s.encode("utf-8"))[: model.ctx + 1] for s in sentences[i:i + bs]]
+        seqs = [encode("\n" + s)[: model.ctx + 1] for s in sentences[i:i + bs]]
         L = max(map(len, seqs))
         x = torch.zeros(len(seqs), L, dtype=torch.long, device=device)
         m = torch.zeros(len(seqs), L - 1, device=device)
@@ -99,12 +123,12 @@ def val_loss(model, data, ctx, device, n=64):
 @torch.no_grad()
 def sample(model, prompt, device, n=300, temp=0.8):
     model.eval()
-    x = torch.as_tensor(list(prompt.encode()), device=device)[None]
+    x = torch.as_tensor(encode(prompt), device=device)[None]
     for _ in range(n):
         p = F.softmax(model(x[:, -model.ctx:])[:, -1] / temp, -1)
         x = torch.cat([x, torch.multinomial(p, 1)], 1)
     model.train()
-    return bytes(x[0].tolist()).decode("utf-8", errors="replace")
+    return decode(x[0].tolist())
 
 
 def main():
@@ -120,19 +144,24 @@ def main():
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--evals", type=int, default=12, help="number of checkpoints with BLiMP (fast subset)")
     p.add_argument("--seed", type=int, default=1)
+    p.add_argument("--bpe", type=int, default=0, help="subword vocab size learned from the training text; 0 = bytes")
     args = p.parse_args()
 
     torch.manual_seed(args.seed); np.random.seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    train, valid = load_bytes(args.train), load_bytes(args.valid)
+    global TOK
+    OUT.mkdir(parents=True, exist_ok=True)
+    if args.bpe:
+        TOK = train_bpe(args.train, args.bpe, OUT / f"{args.name}_tokenizer.json")
+    train, valid = load_ids(args.train), load_ids(args.valid)
     words = len(Path(args.train).read_text(errors="ignore").split())
-    model = GPT(args.layers, args.dim, ctx=args.ctx).to(device)
+    model = GPT(args.layers, args.dim, ctx=args.ctx, vocab=args.bpe or 256).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.1, betas=(0.9, 0.95))
     tokens_per_step = args.batch * args.ctx
     steps = int(args.epochs * len(train) / tokens_per_step)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda s: min(1, s / 200) * 0.5 * (1 + math.cos(math.pi * min(1, s / steps))))
     eval_at = set(np.unique(np.geomspace(max(1, steps // 300), steps, args.evals).astype(int)))
-    log = {"config": vars(args), "device": device, "train_bytes": len(train), "train_words": words,
+    log = {"config": vars(args), "device": device, "train_tokens": len(train), "train_words": words,
            "params": sum(p.numel() for p in model.parameters()), "curve": []}
     OUT.mkdir(parents=True, exist_ok=True)
     print(f"{log['params']/1e6:.1f}M params, {steps} steps, {words/1e6:.1f}M words x {args.epochs} epochs", flush=True)
