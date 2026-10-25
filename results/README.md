@@ -45,6 +45,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 20 | Second environment MinAtar: 5 games in sequence, blind vs CLEAR vs none vs joint, 10 seeds | run_minatar.sh | MA_*, MAS_* | minatar.md, fig_minatar |
 | 21 | Plasticity fix tuning (seeds 101-105): full reset on surprise adopted (+15 MinAtar, MiniGrid same); ReDo, CLEAR coef 0.3/0.1 not | run_fix_tune.sh | TL_*, TMA_* | plasticity_fix.md |
 | 21f | Plasticity fix final (seeds 1-10): MinAtar, MiniGrid 8-stage, 3-task | run_fix_final.sh | MA_blind_all, L_blind_all, O_full_all | plasticity_fix.md, fig_minatar (MinAtar 42.7% vs heads-reset 28.1%, joint 31.8%, 10/10; MiniGrid same) |
+| 23 | Robustness (MinAtar): no-memory ablation, reversed order, 2x joint; MiniGrid no-memory | run_robust.sh | MA_reset_all, MAR_*, MA_joint20M, O_reset_all | robustness.md |
 | - | Paper figures (combined, long sequence, plasticity, generalisation) | figures.py | paper/figs/*.pdf,png | - |
 
 ## Code provenance (important for the paper)
