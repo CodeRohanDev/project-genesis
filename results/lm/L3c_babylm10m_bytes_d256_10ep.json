@@ -1,0 +1,182 @@
+{
+ "config": {
+  "name": "L3c_babylm10m_bytes_d256_10ep",
+  "train": "data/babylm/train_10M.txt",
+  "valid": "data/babylm/valid.txt",
+  "epochs": 10.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 256,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1,
+  "bpe": 0
+ },
+ "device": "cuda",
+ "train_tokens": 55695045,
+ "train_words": 10199908,
+ "params": 4870144,
+ "curve": [
+  {
+   "step": 226,
+   "words_seen": 339061.1870757264,
+   "val_loss": 2.980094254016876,
+   "blimp_fast": 0.5049253731343284,
+   "minutes": 1.3711375792821248
+  },
+  {
+   "step": 379,
+   "words_seen": 568602.6101845145,
+   "val_loss": 2.6912171244621277,
+   "blimp_fast": 0.4855223880597015,
+   "minutes": 2.357083050409953
+  },
+  {
+   "step": 637,
+   "words_seen": 955672.4609169811,
+   "val_loss": 2.5448617935180664,
+   "blimp_fast": 0.4865671641791045,
+   "minutes": 3.8999569098154705
+  },
+  {
+   "step": 1071,
+   "words_seen": 1606789.9617615175,
+   "val_loss": 2.189091444015503,
+   "blimp_fast": 0.49149253731343273,
+   "minutes": 6.3687619050343836
+  },
+  {
+   "step": 1800,
+   "words_seen": 2700487.3306916263,
+   "val_loss": 1.9348835349082947,
+   "blimp_fast": 0.4856716417910448,
+   "minutes": 10.408995274702708
+  },
+  {
+   "step": 3024,
+   "words_seen": 4536818.715561932,
+   "val_loss": 1.750199794769287,
+   "blimp_fast": 0.4998507462686567,
+   "minutes": 17.0735835591952
+  },
+  {
+   "step": 5080,
+   "words_seen": 7621375.355507478,
+   "val_loss": 1.6155121326446533,
+   "blimp_fast": 0.5059701492537314,
+   "minutes": 28.149358280499776
+  },
+  {
+   "step": 8535,
+   "words_seen": 12804810.759696128,
+   "val_loss": 1.5306172668933868,
+   "blimp_fast": 0.5364179104477612,
+   "minutes": 46.64107835690181
+  },
+  {
+   "step": 14339,
+   "words_seen": 21512382.130437348,
+   "val_loss": 1.4631529450416565,
+   "blimp_fast": 0.5398507462686566,
+   "minutes": 77.60124715964
+  },
+  {
+   "step": 24089,
+   "words_seen": 36140021.838350326,
+   "val_loss": 1.4011440873146057,
+   "blimp_fast": 0.5582089552238805,
+   "minutes": 129.48217140436174
+  },
+  {
+   "step": 40469,
+   "words_seen": 60714456.54764412,
+   "val_loss": 1.3390704989433289,
+   "blimp_fast": 0.587910447761194,
+   "minutes": 216.48129076957701
+  },
+  {
+   "step": 67987,
+   "words_seen": 101998906.750962,
+   "val_loss": 1.2999981045722961,
+   "blimp_fast": 0.613731343283582,
+   "minutes": 362.401584092776
+  }
+ ],
+ "blimp_full": 0.6218656716417911,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.684,
+  "anaphor_gender_agreement": 0.63,
+  "anaphor_number_agreement": 0.837,
+  "animate_subject_passive": 0.587,
+  "animate_subject_trans": 0.718,
+  "causative": 0.479,
+  "complex_NP_island": 0.392,
+  "coordinate_structure_constraint_complex_left_branch": 0.233,
+  "coordinate_structure_constraint_object_extraction": 0.498,
+  "determiner_noun_agreement_1": 0.971,
+  "determiner_noun_agreement_2": 0.939,
+  "determiner_noun_agreement_irregular_1": 0.678,
+  "determiner_noun_agreement_irregular_2": 0.734,
+  "determiner_noun_agreement_with_adj_2": 0.869,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.695,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.673,
+  "determiner_noun_agreement_with_adjective_1": 0.942,
+  "distractor_agreement_relational_noun": 0.418,
+  "distractor_agreement_relative_clause": 0.362,
+  "drop_argument": 0.733,
+  "ellipsis_n_bar_1": 0.474,
+  "ellipsis_n_bar_2": 0.858,
+  "existential_there_object_raising": 0.724,
+  "existential_there_quantifiers_1": 0.906,
+  "existential_there_quantifiers_2": 0.171,
+  "existential_there_subject_raising": 0.554,
+  "expletive_it_object_raising": 0.697,
+  "inchoative": 0.371,
+  "intransitive": 0.494,
+  "irregular_past_participle_adjectives": 0.887,
+  "irregular_past_participle_verbs": 0.873,
+  "irregular_plural_subject_verb_agreement_1": 0.736,
+  "irregular_plural_subject_verb_agreement_2": 0.854,
+  "left_branch_island_echo_question": 0.186,
+  "left_branch_island_simple_question": 0.411,
+  "matrix_question_npi_licensor_present": 0.06,
+  "npi_present_1": 0.262,
+  "npi_present_2": 0.317,
+  "only_npi_licensor_present": 0.619,
+  "only_npi_scope": 0.577,
+  "passive_1": 0.765,
+  "passive_2": 0.74,
+  "principle_A_c_command": 0.57,
+  "principle_A_case_1": 1.0,
+  "principle_A_case_2": 0.757,
+  "principle_A_domain_1": 1.0,
+  "principle_A_domain_2": 0.522,
+  "principle_A_domain_3": 0.471,
+  "principle_A_reconstruction": 0.427,
+  "regular_plural_subject_verb_agreement_1": 0.874,
+  "regular_plural_subject_verb_agreement_2": 0.811,
+  "sentential_negation_npi_licensor_present": 0.997,
+  "sentential_negation_npi_scope": 0.227,
+  "sentential_subject_island": 0.495,
+  "superlative_quantifiers_1": 0.363,
+  "superlative_quantifiers_2": 0.604,
+  "tough_vs_raising_1": 0.352,
+  "tough_vs_raising_2": 0.693,
+  "transitive": 0.66,
+  "wh_island": 0.481,
+  "wh_questions_object_gap": 0.673,
+  "wh_questions_subject_gap": 0.932,
+  "wh_questions_subject_gap_long_distance": 0.978,
+  "wh_vs_that_no_gap": 0.974,
+  "wh_vs_that_no_gap_long_distance": 0.987,
+  "wh_vs_that_with_gap": 0.147,
+  "wh_vs_that_with_gap_long_distance": 0.062
+ },
+ "minutes": 364.0560502489408,
+ "samples": [
+  "Once upon a time in the Xironic Team.\n\nLimen is a commune. It is found in the region Pays de la Loire in the Pays de la Loire in the Vietnam de la Limen in the Pays de la Loire in the Pays de la Loire in the Pays de la Loire in the Pays. It is a part of the founding number of the Pays de la la Loire in the 1991s.\nI",
+  "The little girl with the highest touch in this way, when you want to pay them to your head to the end; we have only gone to them and I can stay with them all. Oh, we'll make a head quiet and look sharp like that. The little bad girl is going to go with them and have to stay here and go with them.\"\n\"We shall go and",
+  "Lily was sad because he had been a general on his father and he became a bad thing. That was how they had been, and the old beam stretched back to him against his cow. His cow did not promise him, met by the white ship in the house. He ran to see his house father and turned the rough fraction on the Confederates. Good-"
+ ]
+}

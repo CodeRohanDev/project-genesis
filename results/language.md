@@ -59,5 +59,25 @@ BPE tokenizer (vocab 8k, ByteLevel, learned from the training file only), 13.8M 
 - Still far below BabyLM baselines. Next suspects: size (baselines 30-100M+ params; does not fit training time on
   the 4 GB GPU, a rented GPU would), context length, and the training objective.
 
+## L3 results (2026-10-25): which of L2's three changes gave the +5.2?
+L2 changed passes, tokenizer and size at once. L3 adds the missing steps (run_lm_ablate.sh, code 8cebd4e, one seed
+each, GTX 1050 Ti):
+| Model | tokens | params | epochs | full BLiMP | time |
+|---|---|---|---|---|---|
+| L1 | bytes | 4.9M | 4 | 56.8% | 2.5 h |
+| L3c | bytes | 4.9M | 10 | **62.2%** | 6.1 h |
+| L3b | BPE 8k | 6.9M | 10 | 60.2% | 2.4 h |
+| L2 | BPE 8k | 13.8M | 10 | 62.0% | 4.0 h |
+Decomposition (path L1 -> L3c -> L3b -> L2): more passes **+5.4**, BPE tokenizer -2.0, bigger model +1.8.
+Phenomena better/worse (>0.5 point): passes 45/17, tokenizer 21/39, size 36/23.
+- The whole L2 gain comes from more passes over the same 10M words. Tokenizer and size effects (~2 points, opposite
+  signs) are within single-seed noise; we do not claim either.
+- L3c's fast-BLiMP curve is still rising at 102M words (59% @61M, 61% @102M); L2's had flattened. Bytes need more
+  passes but are not worse in the end.
+- Cost: bytes are ~2.5x slower per pass on this GPU (longer sequences).
+- Correction to L2 reading: "BPE + size helped" is NOT supported; repetition (seeing the same data many times,
+  as a child hears the same words daily) is what helped.
+- Next: more passes on bytes (20 epochs) is the cheapest test; seeds 2-3 for L3b/L3c if tokenizer/size claims matter.
+
 Next (language track): scale-up within the 4 GB GPU (larger model, subword tokenizer learned from the 10M words only,
 more passes), then the child-like ingredients (curriculum, feedback, grounding).

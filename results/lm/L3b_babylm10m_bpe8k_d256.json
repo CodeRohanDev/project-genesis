@@ -1,0 +1,182 @@
+{
+ "config": {
+  "name": "L3b_babylm10m_bpe8k_d256",
+  "train": "data/babylm/train_10M.txt",
+  "valid": "data/babylm/valid.txt",
+  "epochs": 10.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 256,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1,
+  "bpe": 8000
+ },
+ "device": "cuda",
+ "train_tokens": 17825289,
+ "train_words": 10199908,
+ "params": 6852608,
+ "curve": [
+  {
+   "step": 72,
+   "words_seen": 337506.47948496096,
+   "val_loss": 24.909072399139404,
+   "blimp_fast": 0.47776119402985084,
+   "minutes": 0.5419398665428161
+  },
+  {
+   "step": 121,
+   "words_seen": 567198.3891344483,
+   "val_loss": 17.25416326522827,
+   "blimp_fast": 0.4961194029850747,
+   "minutes": 0.9285863240559896
+  },
+  {
+   "step": 203,
+   "words_seen": 951580.768547876,
+   "val_loss": 9.561105966567993,
+   "blimp_fast": 0.522686567164179,
+   "minutes": 1.5252689162890116
+  },
+  {
+   "step": 341,
+   "words_seen": 1598468.1875607178,
+   "val_loss": 6.999770402908325,
+   "blimp_fast": 0.5150746268656716,
+   "minutes": 2.490873169898987
+  },
+  {
+   "step": 574,
+   "words_seen": 2690676.6558939945,
+   "val_loss": 6.612176537513733,
+   "blimp_fast": 0.511044776119403,
+   "minutes": 4.056139282385508
+  },
+  {
+   "step": 965,
+   "words_seen": 4523524.343097046,
+   "val_loss": 6.2520869970321655,
+   "blimp_fast": 0.5147761194029851,
+   "minutes": 6.634372242291769
+  },
+  {
+   "step": 1622,
+   "words_seen": 7603270.968397315,
+   "val_loss": 5.766404509544373,
+   "blimp_fast": 0.5013432835820895,
+   "minutes": 10.919968704382578
+  },
+  {
+   "step": 2727,
+   "words_seen": 12783057.910492897,
+   "val_loss": 5.319132208824158,
+   "blimp_fast": 0.5232835820895523,
+   "minutes": 18.104595176378886
+  },
+  {
+   "step": 4583,
+   "words_seen": 21483224.937216334,
+   "val_loss": 5.002304673194885,
+   "blimp_fast": 0.5334328358208955,
+   "minutes": 30.11950242916743
+  },
+  {
+   "step": 7703,
+   "words_seen": 36108505.714897975,
+   "val_loss": 4.693524718284607,
+   "blimp_fast": 0.5661194029850746,
+   "minutes": 50.29246584971746
+  },
+  {
+   "step": 12946,
+   "words_seen": 60685540.04739312,
+   "val_loss": 4.433666825294495,
+   "blimp_fast": 0.5874626865671643,
+   "minutes": 84.13264453411102
+  },
+  {
+   "step": 21759,
+   "words_seen": 101997270.6543509,
+   "val_loss": 4.3237080574035645,
+   "blimp_fast": 0.604776119402985,
+   "minutes": 140.9162938753764
+  }
+ ],
+ "blimp_full": 0.6017164179104477,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.716,
+  "anaphor_gender_agreement": 0.568,
+  "anaphor_number_agreement": 0.808,
+  "animate_subject_passive": 0.644,
+  "animate_subject_trans": 0.704,
+  "causative": 0.476,
+  "complex_NP_island": 0.469,
+  "coordinate_structure_constraint_complex_left_branch": 0.176,
+  "coordinate_structure_constraint_object_extraction": 0.517,
+  "determiner_noun_agreement_1": 0.789,
+  "determiner_noun_agreement_2": 0.762,
+  "determiner_noun_agreement_irregular_1": 0.617,
+  "determiner_noun_agreement_irregular_2": 0.801,
+  "determiner_noun_agreement_with_adj_2": 0.69,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.67,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.726,
+  "determiner_noun_agreement_with_adjective_1": 0.706,
+  "distractor_agreement_relational_noun": 0.288,
+  "distractor_agreement_relative_clause": 0.313,
+  "drop_argument": 0.718,
+  "ellipsis_n_bar_1": 0.321,
+  "ellipsis_n_bar_2": 0.636,
+  "existential_there_object_raising": 0.709,
+  "existential_there_quantifiers_1": 0.93,
+  "existential_there_quantifiers_2": 0.098,
+  "existential_there_subject_raising": 0.64,
+  "expletive_it_object_raising": 0.671,
+  "inchoative": 0.4,
+  "intransitive": 0.55,
+  "irregular_past_participle_adjectives": 0.713,
+  "irregular_past_participle_verbs": 0.817,
+  "irregular_plural_subject_verb_agreement_1": 0.675,
+  "irregular_plural_subject_verb_agreement_2": 0.714,
+  "left_branch_island_echo_question": 0.608,
+  "left_branch_island_simple_question": 0.317,
+  "matrix_question_npi_licensor_present": 0.071,
+  "npi_present_1": 0.229,
+  "npi_present_2": 0.235,
+  "only_npi_licensor_present": 0.817,
+  "only_npi_scope": 0.653,
+  "passive_1": 0.763,
+  "passive_2": 0.709,
+  "principle_A_c_command": 0.697,
+  "principle_A_case_1": 1.0,
+  "principle_A_case_2": 0.585,
+  "principle_A_domain_1": 0.994,
+  "principle_A_domain_2": 0.596,
+  "principle_A_domain_3": 0.546,
+  "principle_A_reconstruction": 0.326,
+  "regular_plural_subject_verb_agreement_1": 0.726,
+  "regular_plural_subject_verb_agreement_2": 0.621,
+  "sentential_negation_npi_licensor_present": 1.0,
+  "sentential_negation_npi_scope": 0.325,
+  "sentential_subject_island": 0.398,
+  "superlative_quantifiers_1": 0.623,
+  "superlative_quantifiers_2": 0.66,
+  "tough_vs_raising_1": 0.461,
+  "tough_vs_raising_2": 0.596,
+  "transitive": 0.664,
+  "wh_island": 0.432,
+  "wh_questions_object_gap": 0.622,
+  "wh_questions_subject_gap": 0.918,
+  "wh_questions_subject_gap_long_distance": 0.976,
+  "wh_vs_that_no_gap": 0.959,
+  "wh_vs_that_no_gap_long_distance": 0.982,
+  "wh_vs_that_with_gap": 0.115,
+  "wh_vs_that_with_gap_long_distance": 0.059
+ },
+ "minutes": 141.60546315113703,
+ "samples": [
+  "Once upon a time. This was the last day.\n\"Go, my lad,\" the boys said.\nPhilip was not to give himself the boys had been out of sight of the sail. \"You must have made your dream, lads about such a mess,\" he said. \"I know you want to give them a message, for the occupation of bringing you a customary lads, for all those sea will be!\"\n\"Surely, is it?\" asked the other, \"to give up the passion of the ranks and around the trenches, and the execution of the wise ones.\"\n\"That one is, and I am not ready for the point; but I don't think I'll find that one, for you go, and go we'll give you a chance; and I can tell you something.\"\n\"Oh, yes, you can't say so.\"\n\"Oh, yes, I'll have to keep it. And that's a trenches.\"\n\"And just went on just for you, with the other journey.\"\n\"Tell the word,\" agreed the young man. \"I'll just drive your muskets. I'll make up the back of the house, and I'll give it a little while.\"\n\"I'll tell you,\" said the Hon. \"I'm a star of gold, and I think you're going to be in the old tipts,\" as he explained to him.",
+  "The little girl.\nJack was holding it when the guests came up the town on the fire.\n\"You're right, Mr. Mackworth,\" said Bert. \"They were not Madeline and I was going to join the work, but I didn't want to change the party in the morning, with all the boys to learn that. I want to go and be ready to take a time.\"\n\"Yes, is it all,\" said Lord Marc, taking prisoners safe to the camp, looking out below the other.\n\"We'll take a minute of the afternoon to walk to the region.\"\n\"What do you remember to the Prince of Orange?\" asked the letters.\n\"No, please.\"\n\"No, you know, I don't want to. He could have taken it out.\"\n\"I wish that that was now.\"\n\"Was it out for a dozen or more now? I didn't want to be; 'I don't know the matters.' I can't know but there seemed to be anything else in the city. We all have to do with him. I don't think that they were not much in the land.\"\n\"We must be going to destroy the next place, but begged in the old it was so great. Because our money is because it is not a good thing,\" he answered, \"you must have been shot of him. There are many more important attacks the boys to live in useful places of Africa.\"\n",
+  "Lily was sad because the first name was the last missing.\n*CHI:\thm I was so sorry.\n*MOT:\tyou know what was going on on the road?\n*CHI:\tI was.\n*MOT:\twell I was thinking about what I decided the petty pensa.\n*MOT:\tbut I think the other thing was gonna make sure that you would make a lot of things.\n*CHI:\tthat.\n*MOT:\tI think so.\n*CHI:\tI'm gonna make a book book.\n*MOT:\tmhm.\n*MOT:\tno.\n*MOT:\tfor the pensa.\n*CHI:\tbut I'm gonna make one of those.\n*MOT:\twell I was gonna make one of those or he might be.\n*MOT:\tnow let's run.\n*MOT:\tthat's right.\n*MOT:\tbut he's just gonna get something to make a game now.\n*MOT:\twhat's he gonna get all the thing?\n*CHI:\tI'm gonna listen.\n*CHI:\tbecause I've gotta get the receiverpast them.\n*MOT:\tyou xxx.\n*MOT:\tdo you want him to see any of the kids?\n*CHI:\tno.\n*MOT:\tyou need to see if you've got the kids throwing them all?"
+ ]
+}
