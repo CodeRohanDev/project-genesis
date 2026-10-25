@@ -1,4 +1,4 @@
-# Related work (paper step 4, draft 1, 2026-10-24)
+# Related work (paper step 4, draft 2, 2026-10-25)
 
 Every reference below was looked up on 2026-10-24 (venue, year, pages from the official proceedings / journal page or
 arXiv listing). Claims about each paper are taken only from its abstract / official summary, not from memory.
@@ -19,23 +19,29 @@ because, like our agent, it needs no task labels.
 
 **Task-free continual learning.** Aljundi et al. [9] move continual learning to a setting without task boundaries
 and decide from the data stream itself when to consolidate. CURL [10] infers tasks inside the model in unsupervised
-learning. In RL, OWL [11] learns one head per task and picks a head at test time with a bandit, and 3RL [12] uses
-replay with a recurrent network so the agent can infer the current task from its history. Dick et al. [26] detect
+learning. In RL, OWL [11] learns one head per task and picks a head at test time with a bandit, and 3RL [12] adds a
+recurrent (GRU) context to SAC with replay of past tasks so the agent can infer the current task from its history;
+3RL can surpass its own multi-task version, which the authors relate to gradient interference between tasks. Dick et al. [26] detect
 context changes with statistical tests on Wasserstein distances between past and current experience and train one
-policy per detected context. Our agent is also task-free and keeps a single policy, but detects a task change from a collapse of its own success and responds by resetting its output heads,
-and stores experience only while it is competent, so the fixed-size memory holds mastered behaviour.
+policy per detected context. Our agent is also task-free and keeps a single policy, but detects a task change from a collapse of its own
+success and responds by re-initialising its network, and stores experience only while it is competent, so the
+fixed-size memory holds mastered behaviour.
 Reservoir sampling [13] keeps a uniform sample of a stream in fixed memory and is a strong replay baseline in
 supervised continual learning [14]; we gate which experience enters the reservoir.
 
 **Loss of plasticity.** Networks that keep training lose the ability to learn new things: Dohare et al. [15] show
 this on ImageNet and RL and propose re-initialising rarely used units; Lyle et al. [16] link it to the curvature of
 the loss landscape; Abbas et al. [17] show it for value-based agents on a repeating sequence of Atari games; Sokar et
-al. [18] find growing numbers of dormant neurons. Nikishin et al. [19] counter the "primacy bias" by periodically
-re-initialising the last layers, and Ash and Adams [20] shrink and perturb weights before training on new data.
+al. [18] find growing numbers of dormant neurons. Nikishin et al. [19] counter the "primacy bias" in single-task, replay-based
+agents by re-initialising the last layers (the whole network for SAC) on a fixed schedule while keeping the replay
+buffer, and Ash and Adams [20] shrink and perturb weights before training on new data.
 Reset & Distill [25] is the closest recipe to ours in continual RL: it resets the online actor and critic after each
-task and distills old experts from a small stored buffer, but it is told when each task ends. We
-found that in PPO the main symptom is collapsed policy entropy, and that resetting only the output heads restores
-learning; unlike the fixed schedule in [19], our reset is triggered by self-detected surprise.
+task and distills old experts from a small stored buffer, but it is told when each task ends. On MiniGrid we
+found that the main symptom in PPO is collapsed policy entropy, which resetting the output heads cures; on MinAtar
+the loss persists with healthy entropy and under 2% dormant units, ReDo [18] does not help, and only a full
+re-initialisation restores learning (to ~90% of learning from scratch). Unlike the fixed schedule in [19] and the
+given task ends in [25], our reset is triggered by self-detected surprise, and old skills return only through
+distillation from the competence-gated memory.
 
 **Environments and algorithm.** We use PPO [21] in a CleanRL-style single-file implementation [22], MiniGrid [23]
 and MinAtar [24], a 10x10 version of five Atari games designed for thorough, many-seed experiments.
@@ -74,22 +80,31 @@ and MinAtar [24], a 10x10 version of five Atari games designed for thorough, man
 - Not new: replay, distillation, head/last-layer reset, reservoir sampling, task-free CL. Each exists ([5], [8], [9],
   [13], [19]).
 - Our contribution is the combination and its trigger: competence-gated filling of a fixed reservoir +
-  self-detected surprise (own success collapses) that resets heads, in on-policy PPO, with no task signal; and the
-  measurement: matches joint training and beats CLEAR on an 8-stage, 6-task-kind sequence (MiniGrid; MinAtar pending).
+  self-detected surprise (own success collapses) that re-initialises the network, in on-policy PPO, with no task
+  signal; and the measurement: on MiniGrid (8 stages, 6 task kinds) matches told-boundary distillation and beats
+  CLEAR; on MinAtar beats CLEAR, no protection and our joint baseline (also at 2x budget), in both game orders.
 - Closest work (a reviewer will ask how we differ):
   - [25] Reset & Distill (arXiv 2024, SAC and PPO, Meta-World): reset actor+critic and distill from a small stored
     buffer. Checked full text: resets "after finishing learning each task", i.e. task boundaries given. Ours: no
-    boundaries, reset triggered by own success collapse, and only output heads reset. Must cite and compare in text.
+    boundaries, reset triggered by own success collapse. Our final variant also resets the whole network, so the
+    recipe is close: the difference is who decides when to reset (the agent itself vs. the experimenter) and
+    gated, fixed-size memory vs. a per-task buffer. Must cite and compare in text.
   - [9] Aljundi et al.: checked full text. Detects plateaus in the loss with a sliding window (mean and variance below
     thresholds) and consolidates (MAS importance weights) there; keeps a 100-sample buffer of highest-loss samples.
     Our "store only while competent" is the same spirit as "consolidate at plateaus", in RL with success instead of
     loss. Say so openly.
   - [26] Dick et al.: statistical change detection, one policy per context (grows). Ours: one fixed-size network.
-  - [12] 3RL, [19] primacy-bias resets: still to read in full.
+  - [12] 3RL (full text read 2026-10-25): SAC + GRU context + replay, task-agnostic, Meta-World; no resets, no
+    change detection. Its finding that task-agnostic CL can beat multi-task training (gradient interference) matches
+    our MinAtar joint result; cite it there.
+  - [19] Primacy bias (full text read 2026-10-25): single-task sample efficiency, resets on a fixed schedule (SPR last
+    layer every 2e4 steps; SAC whole network every 2e5; DrQ last 3 of 7 layers), replay buffer kept, optimizer state
+    also reset ("almost no impact"). Not continual learning. Ours: triggered by surprise, PPO (no replay buffer of
+    raw experience for RL updates), old skills via distillation from a gated reservoir.
 - CLEAR is also task-free; our claim against it rests only on measured results, not on "they need task labels".
 
 ## Still to do
-- Read full text of [9], [12], [19] and adjust the positioning sentences.
+- Full text of [9], [12], [19], [25] read; positioning updated for the final method (full reset, exp 21).
 - First search for 2024-2026 work done (found [25], [26]); one more pass before submission (new papers appear).
 - Seen, not cited (different problem): Hafez & Erekmen, task-agnostic policy distillation, Sci. Rep. 14, 2024
   (intrinsically motivated exploration then distillation), https://doi.org/10.1038/s41598-024-80774-8
