@@ -79,5 +79,16 @@ Phenomena better/worse (>0.5 point): passes 45/17, tokenizer 21/39, size 36/23.
   as a child hears the same words daily) is what helped.
 - Next: more passes on bytes (20 epochs) is the cheapest test; seeds 2-3 for L3b/L3c if tokenizer/size claims matter.
 
+## L4 results (2026-10-25): bytes, 4.9M params, 20 passes
+run_lm_ablate.sh (code 1054ac7), one seed, 12.1 h on GTX 1050 Ti. Full BLiMP **65.5%** (L3c, 10 passes: 62.2%;
+L1, 4 passes: 56.8%). Better on 42/67 phenomena, worse on 15 (>0.5 point); largest gain
+distractor_agreement_relational_noun +20, largest loss complex_NP_island -8.
+Fast-BLiMP along training: 54% @26M words, 57% @43M, 60% @72M, 64% @121M, 66% @204M; val loss still falling
+(1.30 -> 1.26). Still rising at 20 passes: no plateau found yet.
+- Same 10M words, 5x more passes than L1: +8.7 points. Repetition keeps paying off for this small byte model.
+- Still below BabyLM baselines (~70-74%), and the words-seen count (204M) is now ~2x what a child hears by ~10 years
+  (~100M): the gain comes from re-reading, which a child does not do in the same way. Do not call this child-like.
+- Sample: grammatical-looking, meaningless English ("The personal ship was sounded in the forest."). No grounding.
+
 Next (language track): scale-up within the 4 GB GPU (larger model, subword tokenizer learned from the 10M words only,
 more passes), then the child-like ingredients (curriculum, feedback, grounding).

@@ -1,0 +1,182 @@
+{
+ "config": {
+  "name": "L4_babylm10m_bytes_d256_20ep",
+  "train": "data/babylm/train_10M.txt",
+  "valid": "data/babylm/valid.txt",
+  "epochs": 20.0,
+  "batch": 32,
+  "ctx": 256,
+  "layers": 6,
+  "dim": 256,
+  "lr": 0.001,
+  "evals": 12,
+  "seed": 1,
+  "bpe": 0
+ },
+ "device": "cuda",
+ "train_tokens": 55695045,
+ "train_words": 10199908,
+ "params": 4870144,
+ "curve": [
+  {
+   "step": 453,
+   "words_seen": 679622.644890726,
+   "val_loss": 2.6046723127365112,
+   "blimp_fast": 0.5146268656716417,
+   "minutes": 2.5840283830960593
+  },
+  {
+   "step": 760,
+   "words_seen": 1140205.7618475754,
+   "val_loss": 2.4538681507110596,
+   "blimp_fast": 0.5022388059701494,
+   "minutes": 4.393986097971598
+  },
+  {
+   "step": 1277,
+   "words_seen": 1915845.7340517815,
+   "val_loss": 2.104239046573639,
+   "blimp_fast": 0.4922388059701493,
+   "minutes": 7.328607904911041
+  },
+  {
+   "step": 2146,
+   "words_seen": 3219581.006480128,
+   "val_loss": 1.8648895919322968,
+   "blimp_fast": 0.47731343283582084,
+   "minutes": 12.14288649559021
+  },
+  {
+   "step": 3605,
+   "words_seen": 5408476.015079618,
+   "val_loss": 1.6970991492271423,
+   "blimp_fast": 0.5046268656716418,
+   "minutes": 20.10697769323985
+  },
+  {
+   "step": 6055,
+   "words_seen": 9084139.326298775,
+   "val_loss": 1.5825255215168,
+   "blimp_fast": 0.5113432835820896,
+   "minutes": 33.36921337445577
+  },
+  {
+   "step": 10171,
+   "words_seen": 15259253.689146962,
+   "val_loss": 1.4997885823249817,
+   "blimp_fast": 0.5319402985074626,
+   "minutes": 55.505706091721855
+  },
+  {
+   "step": 17084,
+   "words_seen": 25630625.30974208,
+   "val_loss": 1.4375939071178436,
+   "blimp_fast": 0.5434328358208956,
+   "minutes": 92.55700755119324
+  },
+  {
+   "step": 28695,
+   "words_seen": 43050268.86344234,
+   "val_loss": 1.3878283500671387,
+   "blimp_fast": 0.5656716417910448,
+   "minutes": 154.47134155432383
+  },
+  {
+   "step": 48197,
+   "words_seen": 72308548.82074684,
+   "val_loss": 1.347130835056305,
+   "blimp_fast": 0.6041791044776121,
+   "minutes": 257.8836413661639
+  },
+  {
+   "step": 80954,
+   "words_seen": 121452917.4271166,
+   "val_loss": 1.304760366678238,
+   "blimp_fast": 0.6350746268656716,
+   "minutes": 431.44621557792027
+  },
+  {
+   "step": 135974,
+   "words_seen": 203997813.501924,
+   "val_loss": 1.2551428377628326,
+   "blimp_fast": 0.663134328358209,
+   "minutes": 725.7601884802183
+  }
+ ],
+ "blimp_full": 0.6546567164179106,
+ "blimp_per_phenomenon": {
+  "adjunct_island": 0.635,
+  "anaphor_gender_agreement": 0.747,
+  "anaphor_number_agreement": 0.894,
+  "animate_subject_passive": 0.596,
+  "animate_subject_trans": 0.717,
+  "causative": 0.489,
+  "complex_NP_island": 0.316,
+  "coordinate_structure_constraint_complex_left_branch": 0.207,
+  "coordinate_structure_constraint_object_extraction": 0.553,
+  "determiner_noun_agreement_1": 0.98,
+  "determiner_noun_agreement_2": 0.973,
+  "determiner_noun_agreement_irregular_1": 0.66,
+  "determiner_noun_agreement_irregular_2": 0.839,
+  "determiner_noun_agreement_with_adj_2": 0.945,
+  "determiner_noun_agreement_with_adj_irregular_1": 0.78,
+  "determiner_noun_agreement_with_adj_irregular_2": 0.758,
+  "determiner_noun_agreement_with_adjective_1": 0.966,
+  "distractor_agreement_relational_noun": 0.615,
+  "distractor_agreement_relative_clause": 0.485,
+  "drop_argument": 0.733,
+  "ellipsis_n_bar_1": 0.617,
+  "ellipsis_n_bar_2": 0.844,
+  "existential_there_object_raising": 0.739,
+  "existential_there_quantifiers_1": 0.953,
+  "existential_there_quantifiers_2": 0.143,
+  "existential_there_subject_raising": 0.59,
+  "expletive_it_object_raising": 0.681,
+  "inchoative": 0.374,
+  "intransitive": 0.489,
+  "irregular_past_participle_adjectives": 0.991,
+  "irregular_past_participle_verbs": 0.883,
+  "irregular_plural_subject_verb_agreement_1": 0.764,
+  "irregular_plural_subject_verb_agreement_2": 0.834,
+  "left_branch_island_echo_question": 0.228,
+  "left_branch_island_simple_question": 0.461,
+  "matrix_question_npi_licensor_present": 0.135,
+  "npi_present_1": 0.245,
+  "npi_present_2": 0.277,
+  "only_npi_licensor_present": 0.645,
+  "only_npi_scope": 0.687,
+  "passive_1": 0.775,
+  "passive_2": 0.759,
+  "principle_A_c_command": 0.567,
+  "principle_A_case_1": 1.0,
+  "principle_A_case_2": 0.836,
+  "principle_A_domain_1": 0.999,
+  "principle_A_domain_2": 0.542,
+  "principle_A_domain_3": 0.517,
+  "principle_A_reconstruction": 0.483,
+  "regular_plural_subject_verb_agreement_1": 0.909,
+  "regular_plural_subject_verb_agreement_2": 0.872,
+  "sentential_negation_npi_licensor_present": 0.998,
+  "sentential_negation_npi_scope": 0.401,
+  "sentential_subject_island": 0.472,
+  "superlative_quantifiers_1": 0.537,
+  "superlative_quantifiers_2": 0.69,
+  "tough_vs_raising_1": 0.354,
+  "tough_vs_raising_2": 0.708,
+  "transitive": 0.702,
+  "wh_island": 0.53,
+  "wh_questions_object_gap": 0.67,
+  "wh_questions_subject_gap": 0.928,
+  "wh_questions_subject_gap_long_distance": 0.972,
+  "wh_vs_that_no_gap": 0.967,
+  "wh_vs_that_no_gap_long_distance": 0.96,
+  "wh_vs_that_with_gap": 0.154,
+  "wh_vs_that_with_gap_long_distance": 0.092
+ },
+ "minutes": 727.4675879478455,
+ "samples": [
+  "Once upon a time the second silence was riperatured by the boys of the land and a palace of railroads. The personal ship was sounded in the forest. The second silence had had interrupted the splendid ornament and the men were depending on the barrow. There was no distinct or silence barrow and the strength in the b",
+  "The little girl with the highest type of his family who called her.\n\"Who did not leave his hand?\" exclaimed Lady Frances, the children with an observation of starting pathletics and mountains. \"We have lost the boat on the boat and how can we say that the boat what do we say, and should there be some mistress late",
+  "Lily was sad because she was sad and she was home from the world to the song.\n\nGale is an injury that has been found. Although many of these \"Chinese Chinese Gale\" (which particularly produces revealing the resident of the united States) in the song \"The Chinese Chinese Chinese\".\nOther chineses.\nChinese views.\nTowns of"
+ ]
+}
