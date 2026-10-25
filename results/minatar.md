@@ -49,7 +49,7 @@ Figure: paper/figs/fig_minatar.pdf.
    coef 1.0 the replay loss dominates. On MiniGrid the same coef was fine. Its weakness is plasticity, not memory.
 3. Joint training is not an upper bound here: it is best on Breakout / Space Invaders but never learns Freeway,
    Asterix or Seaquest in 10M mixed steps. Different games interfere; sequential training avoids that.
-4. Weakness of ours (and of every sequential method): the last two games are learned far worse than from scratch
+4. [FIXED in exp 21, results/plasticity_fix.md: full reset on surprise] Weakness of ours (and of every sequential method): the last two games are learned far worse than from scratch
    (Asterix 5.8 vs 16.4, Seaquest 2.1 vs 13.4), even with no protection at all (7.1, 1.8). Policy entropy is NOT
    collapsed (1.2-1.4 nats at stage start, max 1.79), so this is a different loss of plasticity than in MiniGrid
    (exp. 3); head reset alone does not fix it. Candidate fixes from the literature: reset more layers [Nikishin

@@ -129,7 +129,7 @@ memory, learns new tasks and keeps old ones, matches all-at-once training and be
 Status:
 1. Figures (paper/figs, figures.py) - DONE
 2. Published baseline CLEAR - DONE (results/baselines.md: +5.0 on 3 tasks, +25.9 on 8 stages)
-3. Second environment - DONE (results/minatar.md: blind > CLEAR > none 10/10 seeds; near joint, not equal; late-game plasticity loss)
+3. Second environment - DONE (results/minatar.md + plasticity_fix.md: with full reset on surprise, blind beats CLEAR, none AND our joint baseline on 10/10 seeds, 42.7% vs 31.8% of scratch; MiniGrid unchanged)
 4. Related work - draft 1 in paper/related_work.md (26 refs, each verified online)
 5. Writing (IEEE format, 6 pages + up to 4 paid pages)
 6. Review, fixes, submit
