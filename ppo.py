@@ -363,7 +363,7 @@ class Life:
             self.mastered = True
             if self.cap:
                 self.consolidate(obs)
-        elif self.mastered and level < 0.3:
+        elif self.mastered and level < self.args.surprise:
             self.best = rate
             self.mastered = False
             self.events.append((self.step, "surprise"))
@@ -536,10 +536,14 @@ def redo(agent, opt, obs, tau, apply=True):
 
 def on_task_switch(agent, opt, mode, lr):
     """Plasticity interventions applied before each new task (not before the first). Returns the optimizer."""
-    if mode in ("adam", "heads"):
+    if mode in ("adam", "heads", "all"):
         if mode == "heads":
             agent.actor.reset_parameters()
             agent.critic.reset_parameters()
+        elif mode == "all":  # whole network, as Reset & Distill (Ahn et al. 2024); old skills only via distill
+            for m in agent.modules():
+                if m is not agent and hasattr(m, "reset_parameters"):
+                    m.reset_parameters()
         return torch.optim.Adam(agent.parameters(), lr=lr, eps=1e-8)
     if mode == "shrink":  # shrink & perturb (Ash & Adams 2020): blend weights with a fresh random init
         fresh = Agent(memory=agent.lstm is not None, goal=agent.goal).to(next(agent.parameters()).device)
@@ -578,8 +582,8 @@ def main():
     p.add_argument("--vf-coef", type=float, default=0.5)
     p.add_argument("--max-grad-norm", type=float, default=0.5)
     p.add_argument("--no-adv-norm", action="store_true", help="skip per-minibatch advantage normalisation")
-    p.add_argument("--task-switch", default="none", choices=["none", "adam", "heads", "shrink"],
-                   help="adam: fresh optimizer; heads: + reinit actor/critic heads; shrink: shrink & perturb + fresh optimizer")
+    p.add_argument("--task-switch", default="none", choices=["none", "adam", "heads", "all", "shrink"],
+                   help="adam: fresh optimizer; heads: + reinit actor/critic heads; all: + reinit whole network; shrink: shrink & perturb + fresh optimizer")
     p.add_argument("--memory", action="store_true", help="LSTM working memory")
     p.add_argument("--goal", action="store_true", help="read mission words (learned from scratch)")
     p.add_argument("--init", default=None, help="path to a saved .pt agent to start from instead of random init")
@@ -590,6 +594,7 @@ def main():
     p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
     p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
     p.add_argument("--master", type=float, default=0.8, help="blind mode: own success rate counted as mastered (consolidate)")
+    p.add_argument("--surprise", type=float, default=0.3, help="blind mode: own success below this after mastery = surprise")
     p.add_argument("--reset-scope", default="heads", choices=["heads", "all"], help="blind mode: what a surprise resets")
     p.add_argument("--redo-every", type=int, default=0, help="ReDo every K rollouts (Sokar 2023); 0 = off")
     p.add_argument("--redo-tau", type=float, default=0.1, help="ReDo dormancy threshold (x layer mean |activation|)")
