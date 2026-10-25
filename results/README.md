@@ -42,6 +42,8 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 18 | Published baseline CLEAR on C1 and L1 | run_clear.sh (MODE=tune / final) | tuneCLEAR_*, C_clear, L_clear | baselines.md |
 | 19 | Language L2: BPE 8k, 13.8M params, 10 epochs on BabyLM 10M (62.0% BLiMP) | lm.py --bpe | results/lm/L2_* | language.md |
 | 20 | Second environment MinAtar: 5 games in sequence, blind vs CLEAR vs none vs joint, 10 seeds | run_minatar.sh | MA_*, MAS_* | minatar.md, fig_minatar |
+| 21 | Plasticity fix tuning (seeds 101-105): full reset on surprise adopted (+15 MinAtar, MiniGrid same); ReDo, CLEAR coef 0.3/0.1 not | run_fix_tune.sh | TL_*, TMA_* | plasticity_fix.md |
+| 21f | Plasticity fix final (seeds 1-10): MinAtar, MiniGrid 8-stage, 3-task | run_fix_final.sh | MA_blind_all, L_blind_all, O_full_all | (running) |
 | - | Paper figures (combined, long sequence, plasticity, generalisation) | figures.py | paper/figs/*.pdf,png | - |
 
 ## Code provenance (important for the paper)
