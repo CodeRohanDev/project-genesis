@@ -57,3 +57,15 @@ plateaus at 63-81% because Pickup alone is ~55%).
 
 So the building blocks combine in one system: words (goal input) + skills + blind continual learning + transfer
 to a composite task. Zero-shot composition is still absent (0% after stage 1).
+
+## 2c rerun with the final method: full reset on surprise (2026-10-25)
+Script run_2c_all.sh, code 2d08f11, seeds 1-10, otherwise identical to run_2c.sh (C2_life_all vs C2_life).
+| Agent (after stage 2) | Unlock | Pickup | UnlockPickup | KeyCorridor |
+|---|---|---|---|---|
+| Life, heads reset (C2_life) | 100 ± 0 | 45 ± 3 | 100 ± 0 | 16 ± 8 |
+| Life, full reset (C2_life_all) | 100 ± 0 | 43 ± 2 | 100 ± 0 | 14 ± 5 |
+Paired full - heads: Pickup -2 ± 3, KeyCorridor -2 ± 10 (n.s.). One surprise per seed in both.
+Steps to 80% on UnlockPickup: full reset 190k-301k (median ~258k) vs heads 104k-565k (median ~126k).
+Reading: final skills are the same, but the full reset learns the composite task about 2x slower in the median
+seed: it throws away the body features that Unlock/Pickup had built, i.e. it gives up forward transfer for
+plasticity. This is the cost side of exp 21; report it in the paper's limitations.

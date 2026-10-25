@@ -161,13 +161,16 @@ Order changes the level (-5.5 +- 2.0): games learned first are retained worst.
 - Lower CLEAR coefs (0.3, 0.1) on MinAtar tuning seeds: 21.0 and 24.0, still below ours (28.4 head-reset, tuning seeds).
   We keep coef 1.0 in the main table and report this as a sensitivity check.
 
-### D. Skills inside the blind learner (optional, if space) [composition.md 2c, TODO: C2_life_all running]
+### D. Cost of the full reset: forward transfer [composition.md 2c]
+Skills (Unlock, Pickup) then the composite UnlockPickup, blind: final skills equal to the head reset (Pickup 43 vs
+45, n.s.), but the composite is learned ~2x slower (median 258k vs 126k steps): the reset discards reusable features.
 
 ## VII. Limitations
 - Small networks and small worlds (MiniGrid, MinAtar); one RL algorithm (PPO); one set of hyperparameters.
 - Thresholds (0.8 mastery, 0.3 surprise) and lambda were set once on MiniGrid; a slow, gradual change of the task
   would not trigger a surprise (not tested).
-- A full reset discards useful features; forward transfer is not shown (later games are learned below scratch speed).
+- A full reset discards useful features: a composite task built from known skills is learned ~2x slower than with
+  a head reset (Sec. VI-D). Choosing what to reset is open.
 - Retention on MinAtar is partial (games learned first keep 20-60% of scratch).
 - CLEAR is our PPO adaptation, not the original.
 - Joint is weak on MinAtar due to interference; it is not an upper bound there.
