@@ -185,8 +185,10 @@ when the next stage is similar (likely cause, not tested directly).
 
 ## VII. Limitations
 - Small networks and small worlds (MiniGrid, MinAtar); one RL algorithm (PPO); one set of hyperparameters.
-- Thresholds (0.8 mastery, 0.3 surprise) and lambda were set once on MiniGrid; a slow, gradual change of the task
-  would not trigger a surprise (not tested).
+- Thresholds (0.8 mastery, 0.3 surprise) and lambda were set once on MiniGrid (sensitivity: Sec. VI-F).
+- A gradual task change (new task mixed in over 200k steps) rarely triggers a surprise (2/20 transitions). On
+  MiniGrid this costs nothing (97.0 vs 96.1 abrupt; memory alone keeps old skills), but on MinAtar, where the reset
+  restores learning, the gain would likely be lost (not tested).
 - A full reset discards useful features: a composite task built from known skills is learned ~2x slower than with
   a head reset (Sec. VI-D). Choosing what to reset is open.
 - Retention on MinAtar is partial (games learned first keep 20-60% of scratch).

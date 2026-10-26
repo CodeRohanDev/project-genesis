@@ -103,3 +103,25 @@ Reading:
 3. On 3 different tasks (2 boundaries, both surprise every time) told and blind are equal, as expected.
 Claim for the paper: "Detecting change beats being told about it when not every change needs a reset (+5.5 ± 1.9,
 10/10 seeds); the competence-gated memory, not the boundary signal, prevents the collapses of Reset & Distill."
+
+# Experiment 27: gradual task change (2026-10-26)
+Code a7b1bd5, script run_drift.sh, 30 runs, 24 min on 12 parallel. Final seeds 1-10, fixed before running.
+MiniGrid 3-task (Empty -> DoorKey -> LavaGap, 600k steps each). Each new stage starts as a mix: an episode is the
+new task with probability rising linearly 0 -> 1 over the first 200k steps (--drift 200000).
+| Run | gradual (mean of 12) | abrupt counterpart | gradual - abrupt |
+|---|---|---|---|
+| Ours (blind, surprise reset) G_ours | 97.0 ± 1.4 (worst seed 93) | O_full_all 96.1 ± 1.7 | +0.8 ± 2.6 |
+| Told reset + our memory G_told | 96.2 ± 1.3 | C_rdres 96.5 ± 1.9 | - |
+| No protection G_none | 53.9 ± 7.7 | C_none 35.3 ± 10.9 | - |
+Ours - none (gradual): +43.0 ± 7.2, 10/10. Ours - told (gradual): +0.7 ± 1.4 (n.s.).
+Surprises (stage 2 / stage 3 transitions): gradual 0/10 and 2/10 seeds; abrupt 4/10 and 10/10.
+Reading:
+1. As expected, a gradual change mostly does NOT trigger the surprise (2 of 20 transitions): success never
+   collapses because old episodes are still mixed in while the new task is learned.
+2. It does no harm here: old skills are kept (97.0, same as abrupt) because the competence-gated reservoir keeps
+   collecting and distilling whatever the agent masters; no reset is needed on MiniGrid (exp 21: heads vs full
+   reset equal). Retention comes from memory, not from detecting the change.
+3. Not tested: MinAtar, where the reset is what restores learning (+15, exp 21). Under gradual change there the
+   reset would likely not fire, so the plasticity gain would likely be lost. Open limitation.
+4. Gradual change also helps the unprotected learner (53.9 vs 35.3): less abrupt forgetting.
+(steps_to_80 is not meaningful under drift: early episodes are mostly the old, already mastered task.)
