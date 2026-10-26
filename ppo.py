@@ -118,6 +118,26 @@ def make_env(spec):
     return thunk
 
 
+class Drift(gym.Env):
+    """Gradual task change: each episode is the NEW task with prob t/ramp (t = this env's steps), else the OLD one."""
+
+    def __init__(self, old, new, ramp):
+        self.envs, self.ramp, self.t, self.rng = [old(), new()], ramp, 0, np.random.default_rng()
+        self.cur = self.envs[0]
+        self.observation_space, self.action_space = self.envs[1].observation_space, self.envs[1].action_space
+
+    def reset(self, seed=None, options=None):
+        if seed is not None:  # first reset: seed both envs and the task choice
+            self.rng = np.random.default_rng(seed)
+            self.envs[1].reset(seed=seed + 1)
+        self.cur = self.envs[int(self.rng.random() < min(1.0, self.t / self.ramp))]
+        return self.cur.reset(seed=seed, options=options)
+
+    def step(self, action):
+        self.t += 1
+        return self.cur.step(action)
+
+
 def to_tensor(obs, device):
     return torch.as_tensor(obs, dtype=torch.float32, device=device)  # (N, OBS_DIM)
 
@@ -216,14 +236,17 @@ def evaluate(agent, env_id, episodes, device):
     return wins / episodes
 
 
-def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, retain=None, life=None):
+def train_task(agent, opt, env_id, args, device, seed, rnd=None, rnd_opt=None, retain=None, life=None, prev=None):
     """retain: optional fn() -> loss that protects old skills; added to every PPO minibatch loss.
-    life: optional boundary-blind learner state (Life), updated after every rollout."""
+    life: optional boundary-blind learner state (Life), updated after every rollout.
+    prev: previous stage's env_id; with --drift > 0 the task changes gradually from prev to env_id."""
     specs = env_id.split("|")  # 'A|B|C' = mixture: env i runs specs[i % len(specs)]
-    envs = gym.vector.SyncVectorEnv(
-        [make_env(specs[i % len(specs)]) for i in range(args.num_envs)],
-        autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
-    )
+    thunks = [make_env(specs[i % len(specs)]) for i in range(args.num_envs)]
+    if prev and args.drift > 0:
+        old = prev.split("|")
+        thunks = [lambda o=make_env(old[i % len(old)]), n=th: Drift(o, n, args.drift / args.num_envs)
+                  for i, th in enumerate(thunks)]
+    envs = gym.vector.SyncVectorEnv(thunks, autoreset_mode=gym.vector.AutoresetMode.SAME_STEP)
     T, N = args.num_steps, args.num_envs
     obs_buf = torch.zeros((T, N, OBS_DIM), device=device)
     act_buf = torch.zeros((T, N), device=device)
@@ -592,6 +615,7 @@ def main():
     p.add_argument("--clear", action="store_true", help="CLEAR baseline (replay of all experience, no boundaries)")
     p.add_argument("--blind", action="store_true", help="no task-boundary signal; use Life (self-detected change)")
     p.add_argument("--reservoir", type=int, default=0, help="blind mode: replay reservoir size, 0 = no replay")
+    p.add_argument("--drift", type=int, default=0, help="change task gradually over this many steps (0 = abrupt)")
     p.add_argument("--surprise-reset", action="store_true", help="blind mode: reset heads when own success collapses")
     p.add_argument("--master", type=float, default=0.8, help="blind mode: own success rate counted as mastered (consolidate)")
     p.add_argument("--surprise", type=float, default=0.3, help="blind mode: own success below this after mastery = surprise")
@@ -640,7 +664,8 @@ def main():
             opt = on_task_switch(agent, opt, args.task_switch, args.lr)
             if life is not None and hasattr(life, "opt"):
                 life.opt = opt
-        res, last_obs = train_task(agent, opt, env_id, args, device, args.seed * 1000 + i, rnd, rnd_opt, retain, life)
+        res, last_obs = train_task(agent, opt, env_id, args, device, args.seed * 1000 + i, rnd, rnd_opt, retain, life,
+                                   tasks[i - 1] if i > 0 else None)
         result["train"].append(res)
         row = [evaluate(agent, e, args.eval_episodes, device) for e in eval_tasks]
         result["matrix"].append(row)
