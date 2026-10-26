@@ -624,7 +624,9 @@ def main():
         assert args.task_switch == "none" and args.retain == "none" and not args.blind
         life = retain = Clear(agent, args, mb, device)
     if args.blind:
-        assert args.task_switch == "none" and args.retain == "none", "blind mode: no boundary-based interventions"
+        # task_switch with --blind (no surprise reset) = control: our memory, but resets at the GIVEN boundaries
+        assert args.retain == "none" and (args.task_switch == "none" or not args.surprise_reset), \
+            "blind mode: no boundary-based interventions"
         life = retain = Life(agent, opt, args, mb, device)
 
     start = time.time()
@@ -636,6 +638,8 @@ def main():
             if retain is not None and life is None:  # boundary-given retention only
                 retain.remember(last_obs)
             opt = on_task_switch(agent, opt, args.task_switch, args.lr)
+            if life is not None and hasattr(life, "opt"):
+                life.opt = opt
         res, last_obs = train_task(agent, opt, env_id, args, device, args.seed * 1000 + i, rnd, rnd_opt, retain, life)
         result["train"].append(res)
         row = [evaluate(agent, e, args.eval_episodes, device) for e in eval_tasks]
