@@ -130,13 +130,14 @@ baselines are within noise.
 |---|---|---|---|
 | No protection | 5.2 +- 1.0 | 68.1 +- 3.3 | +37.5 +- 3.0, 10/10 |
 | CLEAR | 16.5 +- 1.0 | 22.0 +- 1.3 | +26.2 +- 2.3, 10/10 |
+| CLEAR, best MinAtar coef 0.1 | 21.4 +- 2.0 | 42.5 +- 5.9 | +21.3 +- 3.5, 10/10 |
+| Reset & Distill (told) | 45.5 +- 4.2 | 93.7 +- 6.7 | -2.8 +- 4.6, 3/10 |
 | Joint, 10M | 31.8 +- 3.7 | - | +10.9 +- 4.3, 10/10 |
 | Joint, 20M (2x) | 36.2 +- 3.7 | - | +6.5 +- 4.2, 8/10 |
 | **Ours (blind)** | **42.7 +- 2.2** | **91.1 +- 3.7** | - |
 - Settings come from MiniGrid; nothing method-specific was tuned on MinAtar except choosing the full reset by a rule
   fixed in advance on tuning seeds (Sec. VI-C).
-- Surprise fires after each game switch (Space Invaders, Freeway, Asterix: 10/10 seeds) [TODO: recount for full-reset
-  runs]; 4-6 surprises per run.
+- Surprise fires within 500k steps of every game switch (all 4 switches, 10/10 seeds); 4-6 surprises per run.
 - Joint is not an upper bound here: even with 20M steps it never learns Freeway, Asterix or Seaquest (interference,
   as also reported for multi-task SAC in [12]). We claim "above our joint baseline", not "above joint training".
 - CLEAR's weakness on MinAtar is plasticity (new games at 22% of scratch), not memory.
@@ -158,12 +159,23 @@ Order changes the level (-5.5 +- 2.0): games learned first are retained worst.
   (25.6 vs 28.4, tuning seeds); full reset gives +15.0 +- 5.4 (5/5 tuning seeds) and +14.6 +- 2.5 (10/10 final).
 - Choice rule (fixed before running): adopt a fix only if it beats the head reset on MinAtar and is not > 5 points
   worse on MiniGrid L1. Full reset: MiniGrid L1 92.5 vs 92.5, C1 96.1 vs 97.1 (n.s.).
-- Lower CLEAR coefs (0.3, 0.1) on MinAtar tuning seeds: 21.0 and 24.0, still below ours (28.4 head-reset, tuning seeds).
-  We keep coef 1.0 in the main table and report this as a sensitivity check.
+- Lower CLEAR coefs (0.3, 0.1) on MinAtar tuning seeds: 21.0 and 24.0. Its best (0.1) on final seeds: 21.4 +- 2.0,
+  still 21.3 +- 3.5 below ours (10/10) [review.md].
 
 ### D. Cost of the full reset: forward transfer [composition.md 2c]
 Skills (Unlock, Pickup) then the composite UnlockPickup, blind: final skills equal to the head reset (Pickup 43 vs
 45, n.s.), but the composite is learned ~2x slower (median 258k vs 126k steps): the reset discards reusable features.
+
+### E. Being told the boundaries does not help [review.md]
+Reset & Distill [25] adapted to PPO and told each task end (full reset + distill to the last rollout of every
+finished task) vs ours (blind): MinAtar 45.5 vs 42.7 (-2.8 +- 4.6, n.s.); MiniGrid L1 83.6 vs 92.5 (+8.9 +- 11.6),
+C1 84.8 vs 96.1 (+11.4 +- 11.4). R&D loses an early skill completely on 2/10 seeds in each MiniGrid setup (e.g.
+Empty 0%); ours never does. Claim: matches the told method on average, more reliably.
+
+### F. Sensitivity [review.md, tuning seeds 101-105, MiniGrid L1]
+One setting changed at a time: mastery 0.7/0.9, surprise 0.2/0.4, coef 0.1, reservoir 32k all give 91-95 (default
+92.2). Distill coef 1.0 and a 2k reservoir cost ~5 points (5/5 seeds). Mastery 0.9 is +3.0 but was not adopted
+(settings fixed before final runs). MinAtar sensitivity not run.
 
 ## VII. Limitations
 - Small networks and small worlds (MiniGrid, MinAtar); one RL algorithm (PPO); one set of hyperparameters.
@@ -183,6 +195,5 @@ two domains. Memory carries the past; the reset carries the future. Next: ground
 ---
 ## TODOs before LaTeX
 1. Fig. 1 method diagram. 2. Regenerate fig_long_sequence / fig_combined with full-reset runs (L_blind_all,
-O_full_all). 3. Recount surprise detection for MA_blind_all. 4. Add 2c result when C2_life_all finishes, or drop
-VI-D. 5. Word budget: IJCNN 6 pages incl. refs; cut Sec. II to ~0.6 column, tables to 3. 6. Install LaTeX or use
+O_full_all). 3. (done) 4. (done). 5. Word budget: IJCNN 6 pages incl. refs; cut Sec. II to ~0.6 column, tables to 3. 6. Install LaTeX or use
 Overleaf; IEEEtran conference template. 7. Repo/code release link.
