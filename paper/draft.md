@@ -171,11 +171,17 @@ Reset & Distill [25] adapted to PPO and told each task end (full reset + distill
 finished task) vs ours (blind): MinAtar 45.5 vs 42.7 (-2.8 +- 4.6, n.s.); MiniGrid L1 83.6 vs 92.5 (+8.9 +- 11.6),
 C1 84.8 vs 96.1 (+11.4 +- 11.4). R&D loses an early skill completely on 2/10 seeds in each MiniGrid setup (e.g.
 Empty 0%); ours never does. Claim: matches the told method on average, more reliably.
+Control (told reset + our reservoir): no collapses (worst seed 83 / 92 vs 55), so the memory, not the boundary
+signal, prevents them. Same memory, reset trigger told vs detected: 8-stage 87.0 vs 92.5 (+5.5 +- 1.9 for ours,
+10/10); 3-task 96.5 vs 96.1 (n.s.). Told resets fire at all 7 boundaries, ours only 2-4 times, keeping features
+when the next stage is similar (likely cause, not tested directly).
 
-### F. Sensitivity [review.md, tuning seeds 101-105, MiniGrid L1]
-One setting changed at a time: mastery 0.7/0.9, surprise 0.2/0.4, coef 0.1, reservoir 32k all give 91-95 (default
-92.2). Distill coef 1.0 and a 2k reservoir cost ~5 points (5/5 seeds). Mastery 0.9 is +3.0 but was not adopted
-(settings fixed before final runs). MinAtar sensitivity not run.
+### F. Sensitivity [review.md, tuning seeds 101-105, one setting changed at a time]
+- MiniGrid L1: mastery 0.7/0.9, surprise 0.2/0.4, coef 0.1, reservoir 32k all give 91-95 (default 92.2). Distill
+  coef 1.0 and a 2k reservoir cost ~5 points (5/5 seeds).
+- MinAtar: mastery 0.7/0.9 and surprise 0.2/0.4 give 42-47 (default 43.4). Coef 0.1 or 1.0 ~-6 (trade-off: 0.1
+  learns new games at 98% but keeps less, 1.0 keeps more but learns at 64%). Reservoir 2048: -9.0 +- 5.5 (5/5).
+- Memory size matters most on both domains; thresholds hardly matter.
 
 ## VII. Limitations
 - Small networks and small worlds (MiniGrid, MinAtar); one RL algorithm (PPO); one set of hyperparameters.

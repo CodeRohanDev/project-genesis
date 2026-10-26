@@ -60,3 +60,46 @@ Reading:
   the early-skill collapses R&D shows on 2/10 MiniGrid seeds."
 - "Results are stable across a 2-4x range of each setting (MiniGrid, tuning seeds); too strong distillation or a
   much smaller memory costs ~5 points."
+
+# Experiment 25: sensitivity on MinAtar (2026-10-26)
+Code 297dd7a, script run_sens_ma.sh, 35 runs, 7h20m on 12 parallel. TUNING seeds 101-105; reference
+TMA_blind_all (exp 21, same seeds and flags). One setting changed at a time, same values as exp 24 section 3.
+| Setting (default) | value | final, % of scratch | just learned | base - run | surprises |
+|---|---|---|---|---|---|
+| default | - | 43.4 ± 4.0 | 90.0 ± 6.7 | - | 4-6 |
+| mastery (0.8) | 0.7 | 45.2 ± 7.0 | 93.7 ± 3.4 | -1.7 ± 6.6 | 4-6 |
+| | 0.9 | 42.2 ± 3.2 | 87.2 ± 9.0 | +1.3 ± 6.3 | 4-6 |
+| surprise (0.3) | 0.2 | 46.5 ± 3.8 | 92.2 ± 5.0 | -3.1 ± 5.0 | 4-5 |
+| | 0.4 | 42.4 ± 4.9 | 89.7 ± 5.2 | +1.0 ± 1.9 | 5-6 |
+| distill coef (0.3) | 0.1 | 37.4 ± 7.5 | 98.1 ± 11.8 | +6.0 ± 11.3, 4/5 | 4-5 |
+| | 1.0 | 37.5 ± 4.0 | 64.4 ± 4.3 | +5.9 ± 7.7, 4/5 | 3-5 |
+| reservoir (8192) | 2048 | 34.5 ± 7.4 | 91.6 ± 10.4 | +9.0 ± 5.5, 5/5 | 4-6 |
+Reading:
+- Mastery 0.7-0.9 and surprise 0.2-0.4: 42-47, no detectable change. Surprise detection is robust (4-6 per run).
+- Distill coef has a trade-off, as expected: 0.1 learns new games fully (98%) but keeps less; 1.0 keeps old games
+  but learns new ones at 64%. Both ~6 below default (CIs include 0). 0.3 sits between.
+- A 4x smaller reservoir costs 9 points (5/5 seeds): memory size matters most, as on MiniGrid.
+- Mastery 0.9 (+3 on MiniGrid, exp 24) gives -1.3 here: no reason to change the default.
+- Every variant still beats every baseline's final-seed mean (CLEAR 21.4, heads reset 28.1, joint 31.8), but
+  tuning vs final seeds are not paired, so this is indicative only.
+
+# Experiment 26: why does told Reset & Distill collapse? (2026-10-26)
+Code b3fbc1d, script run_rdres.sh, 20 runs, 28 min on 12 parallel. Final seeds 1-10, fixed before running.
+Control "told reset + our memory" (L_rdres, C_rdres): full reset + fresh Adam at every GIVEN task boundary, memory =
+our competence-gated reservoir (8192, distill 0.3), no surprise reset. Differs from R&D only in memory, and from
+ours only in what triggers the reset.
+| Setup | R&D (told, last-rollout memory) | told reset + our memory | ours (blind, surprise reset) |
+|---|---|---|---|
+| MiniGrid 8-stage, mean of 11 | 83.6 ± 10.9 (worst seed 55) | 87.0 ± 1.8 (worst 83) | 92.5 ± 1.4 (worst 89) |
+| MiniGrid 3-task, mean of 12 | 84.8 ± 10.8 (worst 55) | 96.5 ± 1.9 (worst 92) | 96.1 ± 1.7 (worst 91) |
+Paired: 3-task, our memory vs R&D memory +11.8 ± 10.7 (9/10); told vs blind trigger +0.4 ± 2.8 (5/10).
+8-stage, blind trigger vs told reset (same memory) +5.5 ± 1.9, ours higher on 10/10 seeds.
+Reading:
+1. The memory explains the collapse: with our reservoir, no seed loses an early skill (0/20 vs 4/20 for R&D).
+2. On the 8-stage sequence, being TOLD the boundaries is worse than detecting them (10/10 seeds). The told version
+   resets at all 7 boundaries; ours resets only when its own success collapses (2-4 times, exp 21), so it keeps
+   useful features when the next stage is similar (repeated DoorKey/LavaGap stages, related grids). The loss is on
+   the later stages (Obstacles 70 vs 82, Crossing 72 vs 92). Not tested directly: that fewer resets is the cause.
+3. On 3 different tasks (2 boundaries, both surprise every time) told and blind are equal, as expected.
+Claim for the paper: "Detecting change beats being told about it when not every change needs a reset (+5.5 ± 1.9,
+10/10 seeds); the competence-gated memory, not the boundary signal, prevents the collapses of Reset & Distill."

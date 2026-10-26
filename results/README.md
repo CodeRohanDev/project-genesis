@@ -49,6 +49,8 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 23 | Robustness (MinAtar): no-memory ablation, reversed order, 2x joint; MiniGrid no-memory | run_robust.sh | MA_reset_all, MAR_*, MA_joint20M, O_reset_all | robustness.md |
 | 12f | 2c rerun with full reset: same final skills, composite learned ~2x slower (median 258k vs 126k steps) | run_2c_all.sh | C2_life_all | composition.md |
 | 24 | Reviewer checks: CLEAR best coef on MinAtar (21.4, still -21.3), told Reset & Distill (MinAtar tie, MiniGrid collapses 2/10), sensitivity (tuning seeds) | run_review.sh | MA_clear_0.1, MA_rd, L_rd, C_rd, TS_* | review.md |
+| 25 | Sensitivity on MinAtar (tuning seeds): mastery/surprise flat (42-47), coef 0.1/1.0 ~-6, reservoir 2048 -9 | run_sens_ma.sh | TSM_* | review.md |
+| 26 | Told reset + our memory: no collapses (memory explains R&D collapse); blind trigger beats told on 8-stage +5.5 ± 1.9, 10/10 | run_rdres.sh | L_rdres, C_rdres | review.md |
 | - | Paper figures (combined, long sequence, plasticity, generalisation) | figures.py | paper/figs/*.pdf,png | - |
 
 ## Code provenance (important for the paper)
