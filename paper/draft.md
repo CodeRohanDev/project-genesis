@@ -213,6 +213,6 @@ two domains. Memory carries the past; the reset carries the future. Next: ground
 ---
 ## TODOs
 1. (done) Fig. 1 method diagram (figures.py fig_method). 2. (done) Figures regenerated on final 20-seed runs.
-3.-4. (done). 5. (done) Word version, 5 pages: paper/genesis_ijcnn2027.docx; PDF preview genesis_ijcnn2027_preview.pdf.
-6. Fill author affiliation/email; one more related-work search for 2025-26 papers; professor feedback.
+3.-4. (done). 5. (done) Word version, 5 pages: paper/genesis_ijcnn2027.docx; submission PDF paper/ijcnn2027_submission.pdf (anonymous, AI use disclosed per IJCNN 2027 rules).
+6. Camera-ready only: put author names/affiliations back, IEEE PDF eXpress, copyright form; one more related-work search for 2025-26 papers; professor feedback.
 7. Code release + arXiv (repo is private now).

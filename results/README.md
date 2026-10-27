@@ -54,7 +54,7 @@ per-task training curves, policy entropy per update, eval matrix after each stag
 | 27 | Gradual task change (MiniGrid 3-task, 200k-step ramp): surprise rarely fires (2/20) but retention same as abrupt (97.0 vs 96.1); MinAtar untested | run_drift.sh | G_ours, G_told, G_none | review.md |
 | 28 | Replication on new seeds 11-20 (+ seeds 1-10 of pre-repo baselines rerun as _v2): all main claims hold; R&D collapses weakened to 2/20; MinAtar gradual change: retention same, surprise fires 30/40 | run_seeds20.sh, run_v2.sh, results/rep_analysis*.py | same names, seeds 11-20; *_v2; GM_ours; REP_* | review.md |
 | - | Paper figures (method diagram, long sequence, MinAtar, plasticity, combined, generalisation; final 20-seed runs) | figures.py | paper/figs/*.pdf,png | - |
-| - | Paper, IEEE two-column Word (IJCNN 2027 target) | paper/make_docx.js | paper/genesis_ijcnn2027.docx (+ _preview.pdf) | paper/draft.md (annotated sources) |
+| - | Paper, IEEE two-column Word (IJCNN 2027 target) | paper/make_docx.js | paper/genesis_ijcnn2027.docx, paper/ijcnn2027_submission.pdf | paper/draft.md (annotated sources) |
 
 ## Code provenance (important for the paper)
 - Runs of experiments 0-7 were produced before the repo existed. Commit d79f702 holds the code as it was right

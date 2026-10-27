@@ -1,4 +1,6 @@
-// Builds paper/genesis_ijcnn2027.docx (IEEE conference layout: US Letter, two columns, Times 10 pt).
+// Builds paper/genesis_ijcnn2027.docx for IJCNN 2027 initial submission (ijcnn.org/2027 author instructions, read
+// 2026-10-27): IEEE conference layout, US Letter, two columns, single-spaced Times 10 pt, <= 6 pages incl. references,
+// no page numbers, double-blind ("Anonymous Authors"), AI-generated text cited per section + acknowledged.
 // Numbers come from results/review.md (exp 24-28) and earlier write-ups; each table says its seeds.
 // Run: NODE_PATH=<dir with docx installed>/node_modules node paper/make_docx.js
 const fs = require("fs");
@@ -40,6 +42,7 @@ const REFS = {
   cleanrl: 'S. Huang et al., "CleanRL: High-quality single-file implementations of deep reinforcement learning algorithms," J. Mach. Learn. Res., vol. 23, no. 274, pp. 1–18, 2022.',
   minigrid: 'M. Chevalier-Boisvert et al., "Minigrid & Miniworld: Modular & customizable reinforcement learning environments for goal-oriented tasks," in Proc. NeurIPS Datasets and Benchmarks Track, 2023.',
   minatar: 'K. Young and T. Tian, "MinAtar: An Atari-inspired testbed for thorough and reproducible reinforcement learning experiments," arXiv:1903.03176, 2019.',
+  claude: 'Anthropic, "Claude Opus 5.5 (claude-opus-5-5)," large language model, 2026. [Online]. Available: https://www.anthropic.com/claude',
 };
 const order = [];
 function cite(text) { // "[[a,b]]" -> "[1], [2]" numbered by first use
@@ -61,17 +64,26 @@ function runs(text, size = 20, extra = {}) {
     return new TextRun({ text: s, font: FONT, size, ...extra });
   });
 }
-const tight = { line: 228, lineRule: LineRuleType.AUTO, before: 0, after: 0 };
-const P = (text, o = {}) => new Paragraph({
-  children: runs(text, o.size || 20, o.run || {}), alignment: o.align || AlignmentType.JUSTIFIED,
-  indent: o.noIndent ? undefined : { firstLine: 202 }, spacing: { ...tight, ...(o.spacing || {}) },
-});
+const tight = { line: 240, lineRule: LineRuleType.AUTO, before: 0, after: 0 }; // single spaced (IJCNN 2027)
+// IJCNN 2027: AI-generated text must be cited in each section that contains it, and disclosed in the
+// acknowledgement. Every numbered section was drafted with the AI system, so the first paragraph of each cites it.
+let aiCitePending = false;
+const P = (text, o = {}) => {
+  if (aiCitePending) { text = text.replace(/\.$/, " [[claude]]."); aiCitePending = false; }
+  return new Paragraph({
+    children: runs(text, o.size || 20, o.run || {}), alignment: o.align || AlignmentType.JUSTIFIED,
+    indent: o.noIndent ? undefined : { firstLine: 202 }, spacing: { ...tight, ...(o.spacing || {}) },
+  });
+};
 const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 let h1n = 0;
-const H1 = (title) => new Paragraph({
-  children: [new TextRun({ text: `${romans[h1n++]}. ${title}`, font: FONT, size: 20, smallCaps: true })],
-  alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 }, keepNext: true,
-});
+const H1 = (title) => {
+  aiCitePending = true;
+  return new Paragraph({
+    children: [new TextRun({ text: `${romans[h1n++]}. ${title}`, font: FONT, size: 20, smallCaps: true })],
+    alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 }, keepNext: true,
+  });
+};
 let h2n = 0;
 const H2 = (title) => new Paragraph({
   children: [new TextRun({ text: `${"ABCDEFGHIJ"[h2n++]}. ${title}`, font: FONT, size: 20, italics: true })],
@@ -249,6 +261,11 @@ add(H1("Conclusion"));
 add(P("An agent told nothing about task changes can, with a small self-triggered loop (remember what you master, distil toward it, restart when the world surprises you), match learners that are told the boundaries and beat CLEAR on two domains, with results replicated on new seeds. Memory carries the past; the reset carries the future. Next, we will ground language instructions in the same continual agent."));
 add(P("**Reproducibility.** Code, configurations, per-seed result files and logs for all runs will be released with the paper.", { noIndent: true, spacing: { before: 80 } }));
 
+// Acknowledgment (IEEE: unnumbered, before references). Required by IJCNN 2027 for AI-generated text.
+add(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 }, keepNext: true,
+  children: [new TextRun({ text: "Acknowledgment", font: FONT, size: 20, smallCaps: true })] }));
+add(P("The text of all sections of this paper was generated with the AI system Claude Opus 5.5 [[claude]], working from the authors' experiment reports; the same system also wrote the experiment, analysis and figure code under the authors' direction. The authors reviewed the paper and take full responsibility for its content."));
+
 // References
 add(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 },
   children: [new TextRun({ text: "References", font: FONT, size: 20, smallCaps: true })] }));
@@ -264,19 +281,16 @@ if (unused.length) console.warn("uncited references:", unused.join(", "));
 // ---------- document ----------
 const page = { size: { width: 12240, height: 15840 }, margin: { top: 1080, bottom: 1440, left: 900, right: 900 } };
 const doc = new Document({
-  creator: "Rohan Kumar", title,
+  creator: "Anonymous Authors", lastModifiedBy: "Anonymous Authors", title,
   styles: { default: { document: { run: { font: FONT, size: 20 } } } },
   sections: [
     { properties: { page },
       children: [
         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 },
           children: [new TextRun({ text: title, font: FONT, size: 48 })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 },
-          children: [new TextRun({ text: "Rohan Kumar", font: FONT, size: 22 })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 },
-          children: [new TextRun({ text: "[Affiliation, City, Country]", font: FONT, size: 20, italics: true })] }),
+        // double-blind review (IJCNN 2027): "Anonymous Authors", no affiliation; names go back only in camera-ready
         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 },
-          children: [new TextRun({ text: "[email]", font: FONT, size: 20 })] }),
+          children: [new TextRun({ text: "Anonymous Authors", font: FONT, size: 22 })] }),
       ] },
     { properties: { page, type: SectionType.CONTINUOUS, column: { count: 2, space: 360, equalWidth: true } },
       children: body },
