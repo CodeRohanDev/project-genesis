@@ -1,0 +1,49 @@
+[C_clear seed 16] training on MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step    40960  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step    81920  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   122880  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   163840  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   286720  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   491520  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   532480  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   573440  train success(last100) 100%
+  eval after stage: {'Empty-5x5-v0': '100%', 'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=10': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-5x5-v0': '30%', 'DoorKey-8x8-v0': '20%', 'DoorKey-8x8-v0@size=10': '12%', 'DoorKey-8x8-v0@size=12': '6%', 'LavaGapS5-v0': '14%', 'LavaGapS7-v0': '6%', 'LavaGapS7-v0@size=8': '6%', 'LavaGapS7-v0@size=10': '6%'}
+[C_clear seed 16] training on MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    40960  train success(last100) 92%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    81920  train success(last100) 99%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   122880  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   163840  train success(last100) 99%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   286720  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   491520  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   532480  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   573440  train success(last100) 100%
+  eval after stage: {'Empty-5x5-v0': '100%', 'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=10': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-5x5-v0': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=10': '98%', 'DoorKey-8x8-v0@size=12': '96%', 'LavaGapS5-v0': '24%', 'LavaGapS7-v0': '0%', 'LavaGapS7-v0@size=8': '4%', 'LavaGapS7-v0@size=10': '2%'}
+[C_clear seed 16] training on MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    40960  train success(last100) 49%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    81920  train success(last100) 63%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   122880  train success(last100) 90%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   163840  train success(last100) 93%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   204800  train success(last100) 98%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   245760  train success(last100) 91%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   286720  train success(last100) 95%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   327680  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   368640  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   409600  train success(last100) 93%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   450560  train success(last100) 96%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   491520  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   532480  train success(last100) 98%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   573440  train success(last100) 96%
+  eval after stage: {'Empty-5x5-v0': '100%', 'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=10': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-5x5-v0': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=10': '94%', 'DoorKey-8x8-v0@size=12': '90%', 'LavaGapS5-v0': '100%', 'LavaGapS7-v0': '92%', 'LavaGapS7-v0@size=8': '68%', 'LavaGapS7-v0@size=10': '20%'}
+saved results/runs/C_clear_seed16.json  (559s)

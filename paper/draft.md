@@ -16,10 +16,11 @@ that is never told about task changes and uses only what it can observe about it
 experience in a fixed-size reservoir only while it is competent, (ii) distils its policy toward that memory on every
 update, and (iii) when its success collapses after mastery, treats this surprise as a change of the world and
 re-initialises its network, so that old skills survive only in memory. With PPO and no task signal, on an 8-stage
-MiniGrid sequence with six kinds of task the agent keeps 92.5% success on the trained tests, equal to the same
-learner given task boundaries and 25.9 points above CLEAR. On a sequence of five MinAtar games it reaches 42.7% of
-single-game scores after all games, against 16.5% for CLEAR, 5.2% for no protection and 31.8% (36.2% with twice the
-budget) for training on all games at once, on all or most of 10 seeds and in both game orders. Ablations show that
+MiniGrid sequence with six kinds of task the agent keeps 92.7% success on the trained tests, equal to the same
+learner given task boundaries and 24.9 points above CLEAR. On a sequence of five MinAtar games it reaches 44.4% of
+single-game scores after all games, against 16.2% for CLEAR, 5.6% for no protection and 32.8% for training on all
+games at once, equal to Reset & Distill, which is told the boundaries (20 seeds; results replicated on 10 new seeds).
+It also holds when tasks change gradually. Ablations show that
 memory, not the reset, retains old skills, and that the reset, not dormant-unit repair, restores learning.
 
 ## I. Introduction
@@ -33,12 +34,12 @@ memory, not the reset, retains old skills, and that the reset, not dormant-unit 
 4. Contributions:
    - A boundary-blind learner built from three simple, self-triggered parts: competence-gated reservoir memory,
      replay distillation, and surprise-triggered full reset (Sec. III).
-   - Evidence on two domains, 10 seeds each, against CLEAR, no protection, told-boundary distillation and joint
+   - Evidence on two domains, 20 seeds each (10 + 10 new seeds as a pre-registered replication), against CLEAR, no protection, told-boundary distillation and joint
      training: MiniGrid 3-task and 8-stage sequences, and five MinAtar games (Sec. V).
    - Ablations and diagnostics: memory vs. reset, game order, a 2x joint budget, entropy and dormant units as
      plasticity diagnostics; the plasticity loss differs between domains (Sec. VI).
-5. Honesty statement: tuning only on separate tuning seeds (101+), final seeds 1-10, selection rules fixed before
-   running; all code and run logs released. [TODO: repo link]
+5. Honesty statement: tuning only on separate tuning seeds (101+), final seeds 1-10 then 11-20 as replication, selection
+   and replication rules fixed before running; all code and run logs released. [TODO: repo link]
 
 ## II. Related work
 Use paper/related_work.md draft 2 text (~0.6 column). Key differences to state:
@@ -96,45 +97,45 @@ steps from scratch (10 seeds); 30 evaluation episodes per game.
 - Told-boundary distillation (MiniGrid): told each task end; then stores the finished task's observations, resets
   heads + Adam and distils toward them (KL, coef 0.3); an upper reference for "blind".
 - Joint: all tasks mixed, same total steps (MinAtar also 2x).
-**Protocol.** Tuning seeds 101-105; final seeds 1-10. Mean +- 95% CI (t), and paired differences over seeds with the
+**Protocol.** Tuning seeds 101-105; final seeds 1-20 (1-10, then 11-20 as replication with a rule fixed before
+running: a claim stays only if seeds 11-20 alone agree; Sec. V-D). Ablations in Sec. VI use seeds 1-10. Mean +- 95% CI (t), and paired differences over seeds with the
 number of seeds where ours is better. Final runs: code commits recorded per result file.
 
 ## V. Results
-### A. MiniGrid, 3 tasks (C1) [source: baselines.md, plasticity_fix.md]
-| Method | mean of 12 tests | unseen sizes |
-|---|---|---|
-| No protection | 35.3 +- 10.9 | 28.1 +- 10.2 |
-| CLEAR | 92.1 +- 2.9 | 86.9 +- 4.1 |
-| Told-boundary distill | 94.3 +- 3.9 | 90.6 +- 5.0 |
-| Joint | 96.1 +- 1.4 | 92.3 +- 2.8 |
-| **Ours (blind)** | **96.1 +- 1.7** | **92.6 +- 3.2** |
-Paired: ours - CLEAR +4.0 +- 3.4 (7/10 seeds); ours - joint 0.0 +- 2.6. Small setting; differences to the strong
-baselines are within noise.
+### A. MiniGrid, 3 tasks (C1) [source: review.md exp 28; 20 seeds]
+| Method | mean of 12 tests | unseen sizes | ours - method (paired) |
+|---|---|---|---|
+| No protection | 37.8 +- 8.0 | 32.2 +- 9.1 | +58.6 +- 8.2, 20/20 |
+| CLEAR | 92.3 +- 1.7 | 86.9 +- 2.6 | +4.1 +- 1.8, 16/20 |
+| Told-boundary distill | 92.5 +- 5.2 | 88.7 +- 5.7 | +3.9 +- 5.3, 11/20 |
+| Joint | 95.2 +- 1.8 | 91.2 +- 2.8 | +1.1 +- 2.0, 13/20 |
+| **Ours (blind)** | **96.4 +- 0.8** | **93.1 +- 1.7** | - |
+Small setting; differences to the strong baselines are within noise except CLEAR.
 
-### B. MiniGrid, 8 stages (L1) [source: baselines.md, plasticity_fix.md]
+### B. MiniGrid, 8 stages (L1) [source: review.md exp 28; 20 seeds]
 | Method | final mean of 11 trained tests | ours - method (paired) |
 |---|---|---|
-| No protection | 32.4 +- 9.6 | +60.2 +- 8.6, 10/10 |
-| CLEAR | 66.6 +- 2.8 | +25.9 +- 3.6, 10/10 |
-| Joint (4M mixed) | 80.7 +- 10.1 | +11.8 +- 10.3, 9/10 |
-| Told-boundary distill | 92.3 +- 1.7 | +0.2 +- 1.4, 6/10 |
-| **Ours (blind)** | **92.5 +- 1.4** | - |
+| No protection | 32.9 +- 4.5 | +59.7 +- 4.6, 20/20 |
+| CLEAR | 67.8 +- 1.7 | +24.9 +- 2.1, 20/20 |
+| Joint (4M mixed) | 86.2 +- 4.6 | +6.5 +- 4.9, 17/20 |
+| Told-boundary distill | 90.8 +- 3.0 | +1.9 +- 3.3, 10/20 |
+| **Ours (blind)** | **92.7 +- 0.9** (worst seed 89) | - |
 - Without being told, the agent equals the learner that is told the boundaries.
 - CLEAR keeps early tasks but learns the new kinds (Obstacles, Crossing) poorly: replay of everything holds the
   policy to old behaviour. [Fig. 2: success on each test over the 8 stages - fig_long_sequence, TODO regenerate
   with full-reset runs]
 - KeyCorridor (never trained) stays at 0% for all methods: no zero-shot composition.
 
-### C. MinAtar, 5 games [source: minatar.md, plasticity_fix.md, robustness.md]
+### C. MinAtar, 5 games [source: review.md exp 28, robustness.md; 20 seeds unless marked]
 | Method | after all games, % of scratch | just learned, % of scratch | ours - method |
 |---|---|---|---|
-| No protection | 5.2 +- 1.0 | 68.1 +- 3.3 | +37.5 +- 3.0, 10/10 |
-| CLEAR | 16.5 +- 1.0 | 22.0 +- 1.3 | +26.2 +- 2.3, 10/10 |
-| CLEAR, best MinAtar coef 0.1 | 21.4 +- 2.0 | 42.5 +- 5.9 | +21.3 +- 3.5, 10/10 |
-| Reset & Distill (told) | 45.5 +- 4.2 | 93.7 +- 6.7 | -2.8 +- 4.6, 3/10 |
-| Joint, 10M | 31.8 +- 3.7 | - | +10.9 +- 4.3, 10/10 |
-| Joint, 20M (2x) | 36.2 +- 3.7 | - | +6.5 +- 4.2, 8/10 |
-| **Ours (blind)** | **42.7 +- 2.2** | **91.1 +- 3.7** | - |
+| No protection | 5.6 +- 0.9 | 67.5 +- 2.5 | +38.7 +- 2.3, 20/20 |
+| CLEAR | 16.2 +- 0.5 | 22.2 +- 0.8 | +28.2 +- 2.1, 20/20 |
+| CLEAR, best MinAtar coef 0.1 (seeds 1-10) | 21.4 +- 2.0 | 42.5 +- 5.9 | +21.3 +- 3.5, 10/10 |
+| Reset & Distill (told) | 45.1 +- 2.5 | 95.1 +- 4.0 | -0.7 +- 3.2, 10/20 |
+| Joint, 10M | 32.8 +- 2.8 | - | +11.6 +- 3.4, 19/20 |
+| Joint, 20M (2x, seeds 1-10) | 36.2 +- 3.7 | - | +6.5 +- 4.2, 8/10 |
+| **Ours (blind)** | **44.4 +- 2.0** | **92.0 +- 3.1** | - |
 - Settings come from MiniGrid; nothing method-specific was tuned on MinAtar except choosing the full reset by a rule
   fixed in advance on tuning seeds (Sec. VI-C).
 - Surprise fires within 500k steps of every game switch (all 4 switches, 10/10 seeds); 4-6 surprises per run.
@@ -142,6 +143,13 @@ baselines are within noise.
   as also reported for multi-task SAC in [12]). We claim "above our joint baseline", not "above joint training".
 - CLEAR's weakness on MinAtar is plasticity (new games at 22% of scratch), not memory.
 [Fig. 3: fig_minatar, per-game bars]
+
+### D. Replication on new seeds [review.md exp 28]
+Rule fixed before running: seeds 11-20 run from the saved seed-1 configs; a claim stays only if seeds 11-20 alone
+agree. All claims above agree on seeds 11-20 alone (e.g. MinAtar ours - CLEAR +30.1 +- 3.6, 10/10; L1 ours - CLEAR
++23.8 +- 2.6, 10/10; ours vs told methods: ties). One claim was weakened (Sec. VI-E). Six baseline groups whose
+seeds 1-10 predate version control did not reproduce bit-exactly on current code; they were rerun (code is
+deterministic per seed) and only the reruns are pooled.
 
 ## VI. Analysis
 ### A. Memory, not reset, keeps old skills [robustness.md]
@@ -168,12 +176,13 @@ Skills (Unlock, Pickup) then the composite UnlockPickup, blind: final skills equ
 
 ### E. Being told the boundaries does not help [review.md]
 Reset & Distill [25] adapted to PPO and told each task end (full reset + distill to the last rollout of every
-finished task) vs ours (blind): MinAtar 45.5 vs 42.7 (-2.8 +- 4.6, n.s.); MiniGrid L1 83.6 vs 92.5 (+8.9 +- 11.6),
-C1 84.8 vs 96.1 (+11.4 +- 11.4). R&D loses an early skill completely on 2/10 seeds in each MiniGrid setup (e.g.
-Empty 0%); ours never does. Claim: matches the told method on average, more reliably.
-Control (told reset + our reservoir): no collapses (worst seed 83 / 92 vs 55), so the memory, not the boundary
-signal, prevents them. Same memory, reset trigger told vs detected: 8-stage 87.0 vs 92.5 (+5.5 +- 1.9 for ours,
-10/10); 3-task 96.5 vs 96.1 (n.s.). Told resets fire at all 7 boundaries, ours only 2-4 times, keeping features
+finished task) vs ours (blind): MinAtar 45.1 vs 44.4 (-0.7 +- 3.2, n.s., 20 seeds); MiniGrid L1 87.1 vs 92.7 (+5.6 +- 5.5, 15/20), C1 89.4 vs 96.4
+(+7.0 +- 5.6, 17/20). R&D loses an early skill on 2/20 seeds in each MiniGrid setup (worst 55; none on the 10
+replication seeds, so the earlier "2/10" was weakened); ours never drops below 89 / 91. Told distillation drops on
+the same C1 seeds (63, 58). Claim: matches the told method on average, more reliably.
+Control (told reset + our reservoir): no collapses (worst seed 77 / 92), so the memory, not the boundary
+signal, prevents them. Same memory, reset trigger told vs detected: 8-stage 86.1 vs 92.7 (+6.6 +- 1.4 for ours,
+20/20; +7.6 +- 2.2 on the replication seeds alone); 3-task 96.3 vs 96.4 (n.s.). Told resets fire at all 7 boundaries, ours only 2-4 times, keeping features
 when the next stage is similar (likely cause, not tested directly).
 
 ### F. Sensitivity [review.md, tuning seeds 101-105, one setting changed at a time]
@@ -186,9 +195,10 @@ when the next stage is similar (likely cause, not tested directly).
 ## VII. Limitations
 - Small networks and small worlds (MiniGrid, MinAtar); one RL algorithm (PPO); one set of hyperparameters.
 - Thresholds (0.8 mastery, 0.3 surprise) and lambda were set once on MiniGrid (sensitivity: Sec. VI-F).
-- A gradual task change (new task mixed in over 200k steps) rarely triggers a surprise (2/20 transitions). On
-  MiniGrid this costs nothing (97.0 vs 96.1 abrupt; memory alone keeps old skills), but on MinAtar, where the reset
-  restores learning, the gain would likely be lost (not tested).
+- Gradual task change (new task mixed in over the first third of a stage): on MiniGrid it rarely triggers a
+  surprise (2/20 transitions) but costs nothing (97.0 vs 96.1 abrupt; memory alone keeps old skills). On MinAtar the
+  surprise still fires at 30/40 switches, later (median 470k vs 9k steps), and the final score is unchanged (42.5 vs
+  42.7, seeds 1-10). A slow drift that never drops competence below 0.3 would not trigger a reset (not tested).
 - A full reset discards useful features: a composite task built from known skills is learned ~2x slower than with
   a head reset (Sec. VI-D). Choosing what to reset is open.
 - Retention on MinAtar is partial (games learned first keep 20-60% of scratch).

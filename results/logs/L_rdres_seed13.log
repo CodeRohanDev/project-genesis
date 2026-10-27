@@ -1,0 +1,113 @@
+[L_rdres seed 13] training on MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step    40960  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step    81920  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   122880  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   163840  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   286720  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-Empty-5x5-v0|MiniGrid-Empty-6x6-v0|MiniGrid-Empty-8x8-v0 step   491520  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '3%', 'DoorKey-8x8-v0@size=12': '10%', 'LavaGapS7-v0': '0%', 'LavaGapS7-v0@size=10': '0%', 'Dynamic-Obstacles-8x8-v0': '17%', 'Dynamic-Obstacles-8x8-v0@size=10': '30%', 'SimpleCrossingS9N2-v0': '27%', 'SimpleCrossingS11N5-v0': '33%', 'Unlock-v0': '7%', 'KeyCorridorS3R1-v0': '3%'}
+[L_rdres seed 13] training on MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    40960  train success(last100) 19%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    81920  train success(last100) 23%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   122880  train success(last100) 98%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   163840  train success(last100) 99%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   286720  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   491520  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=12': '100%', 'LavaGapS7-v0': '0%', 'LavaGapS7-v0@size=10': '0%', 'Dynamic-Obstacles-8x8-v0': '10%', 'Dynamic-Obstacles-8x8-v0@size=10': '30%', 'SimpleCrossingS9N2-v0': '43%', 'SimpleCrossingS11N5-v0': '17%', 'Unlock-v0': '100%', 'KeyCorridorS3R1-v0': '0%'}
+[L_rdres seed 13] training on MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    40960  train success(last100) 38%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    81920  train success(last100) 30%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   122880  train success(last100) 72%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   163840  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   204800  train success(last100) 99%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   245760  train success(last100) 98%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   286720  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   327680  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   368640  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   409600  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   450560  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   491520  train success(last100) 91%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=12': '83%', 'LavaGapS7-v0': '100%', 'LavaGapS7-v0@size=10': '77%', 'Dynamic-Obstacles-8x8-v0': '10%', 'Dynamic-Obstacles-8x8-v0@size=10': '20%', 'SimpleCrossingS9N2-v0': '43%', 'SimpleCrossingS11N5-v0': '10%', 'Unlock-v0': '70%', 'KeyCorridorS3R1-v0': '0%'}
+[L_rdres seed 13] training on MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step    40960  train success(last100) 84%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step    81920  train success(last100) 99%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   122880  train success(last100) 91%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   163840  train success(last100) 98%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   204800  train success(last100) 99%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   245760  train success(last100) 98%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   286720  train success(last100) 97%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   327680  train success(last100) 99%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   368640  train success(last100) 96%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   450560  train success(last100) 97%
+  MiniGrid-Dynamic-Obstacles-5x5-v0|MiniGrid-Dynamic-Obstacles-6x6-v0|MiniGrid-Dynamic-Obstacles-8x8-v0 step   491520  train success(last100) 98%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=12': '60%', 'LavaGapS7-v0': '90%', 'LavaGapS7-v0@size=10': '23%', 'Dynamic-Obstacles-8x8-v0': '97%', 'Dynamic-Obstacles-8x8-v0@size=10': '97%', 'SimpleCrossingS9N2-v0': '23%', 'SimpleCrossingS11N5-v0': '0%', 'Unlock-v0': '93%', 'KeyCorridorS3R1-v0': '0%'}
+[L_rdres seed 13] training on MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step    40960  train success(last100) 53%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step    81920  train success(last100) 70%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   122880  train success(last100) 78%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   163840  train success(last100) 73%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   204800  train success(last100) 86%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   245760  train success(last100) 95%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   286720  train success(last100) 93%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   327680  train success(last100) 97%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   368640  train success(last100) 98%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   409600  train success(last100) 96%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   450560  train success(last100) 99%
+  MiniGrid-SimpleCrossingS9N1-v0|MiniGrid-SimpleCrossingS9N2-v0|MiniGrid-SimpleCrossingS9N3-v0 step   491520  train success(last100) 98%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '93%', 'DoorKey-8x8-v0@size=12': '77%', 'LavaGapS7-v0': '97%', 'LavaGapS7-v0@size=10': '23%', 'Dynamic-Obstacles-8x8-v0': '80%', 'Dynamic-Obstacles-8x8-v0@size=10': '60%', 'SimpleCrossingS9N2-v0': '97%', 'SimpleCrossingS11N5-v0': '83%', 'Unlock-v0': '70%', 'KeyCorridorS3R1-v0': '10%'}
+[L_rdres seed 13] training on MiniGrid-Unlock-v0
+  MiniGrid-Unlock-v0 step    40960  train success(last100) 22%
+  MiniGrid-Unlock-v0 step    81920  train success(last100) 96%
+  MiniGrid-Unlock-v0 step   122880  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   163840  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   204800  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   245760  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   286720  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   327680  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   368640  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   409600  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   450560  train success(last100) 100%
+  MiniGrid-Unlock-v0 step   491520  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '93%', 'DoorKey-8x8-v0@size=12': '90%', 'LavaGapS7-v0': '70%', 'LavaGapS7-v0@size=10': '30%', 'Dynamic-Obstacles-8x8-v0': '60%', 'Dynamic-Obstacles-8x8-v0@size=10': '43%', 'SimpleCrossingS9N2-v0': '77%', 'SimpleCrossingS11N5-v0': '73%', 'Unlock-v0': '100%', 'KeyCorridorS3R1-v0': '0%'}
+[L_rdres seed 13] training on MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    40960  train success(last100) 94%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step    81920  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   122880  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   163840  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   204800  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   245760  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   286720  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   327680  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   368640  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   409600  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   450560  train success(last100) 100%
+  MiniGrid-DoorKey-5x5-v0|MiniGrid-DoorKey-6x6-v0|MiniGrid-DoorKey-8x8-v0 step   491520  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=12': '97%', 'LavaGapS7-v0': '70%', 'LavaGapS7-v0@size=10': '7%', 'Dynamic-Obstacles-8x8-v0': '70%', 'Dynamic-Obstacles-8x8-v0@size=10': '73%', 'SimpleCrossingS9N2-v0': '67%', 'SimpleCrossingS11N5-v0': '80%', 'Unlock-v0': '100%', 'KeyCorridorS3R1-v0': '0%'}
+[L_rdres seed 13] training on MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    40960  train success(last100) 82%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step    81920  train success(last100) 93%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   122880  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   163840  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   204800  train success(last100) 97%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   245760  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   286720  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   327680  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   368640  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   409600  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   450560  train success(last100) 100%
+  MiniGrid-LavaGapS5-v0|MiniGrid-LavaGapS6-v0|MiniGrid-LavaGapS7-v0 step   491520  train success(last100) 100%
+  eval after stage: {'Empty-8x8-v0': '100%', 'Empty-8x8-v0@size=12': '100%', 'DoorKey-8x8-v0': '100%', 'DoorKey-8x8-v0@size=12': '100%', 'LavaGapS7-v0': '97%', 'LavaGapS7-v0@size=10': '67%', 'Dynamic-Obstacles-8x8-v0': '63%', 'Dynamic-Obstacles-8x8-v0@size=10': '60%', 'SimpleCrossingS9N2-v0': '77%', 'SimpleCrossingS11N5-v0': '67%', 'Unlock-v0': '100%', 'KeyCorridorS3R1-v0': '0%'}
+saved results/runs/L_rdres_seed13.json  (1225s)

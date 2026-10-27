@@ -125,3 +125,72 @@ Reading:
    reset would likely not fire, so the plasticity gain would likely be lost. Open limitation.
 4. Gradual change also helps the unprotected learner (53.9 vs 35.3): less abrupt forgetting.
 (steps_to_80 is not meaningful under drift: early episodes are mostly the old, already mastered task.)
+
+# Experiment 28: replication on new seeds 11-20, code-drift check, gradual change on MinAtar (2026-10-27)
+Code 33bb2bc / 948a8cd (no ppo.py change), scripts run_seeds20.sh (202 runs, 13.9 h) and run_v2.sh (60 runs, 1.1 h),
+12 parallel. Analysis: results/rep_analysis.py (MinAtar), results/rep_analysis_mg.py (MiniGrid).
+Rule fixed BEFORE running (run_seeds20.sh header): tables pool seeds 1-20 on the same code; a claim is kept only if
+seeds 11-20 alone point the same way, else dropped or weakened. MinAtar normaliser stays the seeds 1-10 scratch mean.
+Every command was rebuilt from the seed-1 run's saved config (rerun_cmd.py); only the seed differs.
+
+**Code-drift check.** REP_C_none (seed 1, current code) differs from the old C_none seed 1 (old never learned LavaGap,
+new learns it). Current code is bit-exact per seed (TS_base == TL_blind_all), so the difference is code drift: six
+groups (L_/C_ none, distill, joint) were run before the repo existed (no `code` field). They were rerun on seeds 1-10
+as `*_v2`; tables use `_v2` + seeds 11-20. Old runs are kept. Groups with a recorded commit before 8cebd4e (CLEAR,
+MinAtar none/joint/clear) were checked by diff: 3c17aa2 and 8cebd4e only add options and a measure-only dormant-unit
+probe; MiniGrid success is unchanged (reward only at episode end), so they pool with current code.
+Old vs v2 (seeds 1-10): L_distill 92.3 vs 89.6, L_none 32.4 vs 35.3, L_joint 80.7 vs 89.2, C_distill 94.3 vs 88.6,
+C_none 35.3 vs 41.8, C_joint 96.1 vs 96.0.
+
+**MinAtar (final, % of scratch)**
+| Run | seeds 1-10 | seeds 11-20 | 1-20 | ours - run, 11-20 | ours - run, 1-20 |
+|---|---|---|---|---|---|
+| Ours MA_blind_all | 42.7 ± 2.2 | 46.0 ± 3.6 | 44.4 ± 2.0 | - | - |
+| CLEAR | 16.5 ± 1.0 | 15.9 ± 0.5 | 16.2 ± 0.5 | +30.1 ± 3.6, 10/10 | +28.2 ± 2.1, 20/20 |
+| Reset & Distill (told) | 45.5 ± 4.2 | 44.6 ± 3.6 | 45.1 ± 2.5 | +1.4 ± 4.8, 7/10 | -0.7 ± 3.2, 10/20 |
+| Joint 10M | 31.8 ± 3.7 | 33.8 ± 5.0 | 32.8 ± 2.8 | +12.2 ± 6.2, 9/10 | +11.6 ± 3.4, 19/20 |
+| None | 5.2 ± 1.0 | 6.1 ± 1.6 | 5.6 ± 0.9 | +39.9 ± 3.8, 10/10 | +38.7 ± 2.3, 20/20 |
+Just learned (1-20): ours 92.0 ± 3.1, R&D 95.1 ± 4.0, none 67.5 ± 2.5, CLEAR 22.2 ± 0.8.
+
+**MiniGrid 8-stage (L1, mean of 11 trained tests)**
+| Run | seeds 1-10 | seeds 11-20 | 1-20 | ours - run, 11-20 | ours - run, 1-20 |
+|---|---|---|---|---|---|
+| Ours L_blind_all | 92.5 ± 1.4 | 92.8 ± 1.4 | 92.7 ± 0.9 (worst 89) | - | - |
+| Told distill (v2) | 89.6 ± 6.0 | 91.9 ± 2.4 | 90.8 ± 3.0 | +0.9 ± 3.2, 5/10 | +1.9 ± 3.3, 10/20 |
+| CLEAR | 66.6 ± 2.8 | 68.9 ± 2.1 | 67.8 ± 1.7 | +23.8 ± 2.6, 10/10 | +24.9 ± 2.1, 20/20 |
+| Joint (v2) | 89.2 ± 4.1 | 83.2 ± 8.8 | 86.2 ± 4.6 | +9.6 ± 9.5, 10/10 | +6.5 ± 4.9, 17/20 |
+| None (v2) | 35.3 ± 8.0 | 30.6 ± 5.4 | 32.9 ± 4.5 | +62.2 ± 5.7, 10/10 | +59.7 ± 4.6, 20/20 |
+| R&D (told) | 83.6 ± 10.9 | 90.5 ± 1.9 | 87.1 ± 5.3 | +2.3 ± 2.4, 8/10 | +5.6 ± 5.5, 15/20 |
+| Told reset + our memory | 87.0 ± 1.8 | 85.2 ± 2.4 | 86.1 ± 1.4 | +7.6 ± 2.2, 10/10 | +6.6 ± 1.4, 20/20 |
+
+**MiniGrid 3-task (C1, mean of 12 tests; unseen sizes 1-20 in brackets)**
+| Run | seeds 1-10 | seeds 11-20 | 1-20 | ours - run, 11-20 | ours - run, 1-20 |
+|---|---|---|---|---|---|
+| Ours O_full_all | 96.1 ± 1.7 | 96.6 ± 0.9 | 96.4 ± 0.8 [93.1 ± 1.7] | - | - |
+| Told distill (v2) | 88.6 ± 10.7 | 96.3 ± 1.3 | 92.5 ± 5.2 [88.7 ± 5.7] | +0.3 ± 1.6, 4/10 | +3.9 ± 5.3, 11/20 |
+| CLEAR | 92.1 ± 2.9 | 92.5 ± 2.6 | 92.3 ± 1.7 [86.9 ± 2.6] | +4.1 ± 2.3, 9/10 | +4.1 ± 1.8, 16/20 |
+| Joint (v2) | 96.0 ± 2.2 | 94.5 ± 3.2 | 95.2 ± 1.8 [91.2 ± 2.8] | +2.1 ± 3.1, 8/10 | +1.1 ± 2.0, 13/20 |
+| None (v2) | 41.8 ± 10.9 | 33.8 ± 13.4 | 37.8 ± 8.0 [32.2 ± 9.1] | +62.8 ± 13.7, 10/10 | +58.6 ± 8.2, 20/20 |
+| R&D (told) | 84.8 ± 10.8 | 94.0 ± 2.2 | 89.4 ± 5.4 [83.3 ± 6.2] | +2.6 ± 2.6, 9/10 | +7.0 ± 5.6, 17/20 |
+| Told reset + our memory | 96.5 ± 1.9 | 96.0 ± 1.3 | 96.3 ± 1.1 [92.9 ± 2.0] | +0.6 ± 1.2, 5/10 | +0.1 ± 1.4, 10/20 |
+
+**Gradual change on MinAtar (GM_ours, seeds 1-10)**: each new game mixed in linearly over the first 1/3 of its stage
+(666,667 steps, --drift 666667). Final 42.5 ± 4.5 vs abrupt 42.7 ± 2.2 (-0.2 ± 5.6, n.s.); per game similar.
+Surprise fired at 30/40 switches (abrupt 40/40), first one after a median of 470k steps (abrupt 9k), i.e. once the
+new game dominates. Unlike MiniGrid (exp 27, 2/20) a surprise usually still comes, because on MinAtar one game's
+policy scores poorly on another, so competence relative to own best falls even in a mixture.
+
+**Claims after the pre-fixed rule**
+| Claim | seeds 11-20 | Kept? |
+|---|---|---|
+| Ours beats CLEAR, none, joint on MinAtar | +30 / +40 / +12 | kept |
+| Ours = told R&D on MinAtar (no loss from being blind) | +1.4 ± 4.8 | kept (tie) |
+| Ours = told distill on MiniGrid | +0.9 / +0.3 | kept (tie) |
+| Ours beats CLEAR on L1 and C1 | +23.8 (10/10), +4.1 (9/10) | kept |
+| Ours beats joint on L1 | +9.6 (10/10) | kept; C1 tie |
+| Blind trigger beats told trigger with same memory, L1 | +7.6 ± 2.2, 10/10 | kept |
+| R&D collapses on 2/10 seeds per MiniGrid setup | 0/10 collapses | WEAKENED: 2/20 per setup (L1 seeds 1, 6; C1 seeds 3, 4) |
+| Ours beats R&D on MiniGrid | +2.3 (8/10), +2.6 (9/10), small | weakened: pooled +5.6 ± 5.5 / +7.0 ± 5.6 |
+| Gradual change: retention kept (MiniGrid) | - | MinAtar too (42.5 vs 42.7); surprise still fires 30/40 |
+Note: told distill (v2) drops on the SAME C1 seeds 3 and 4 (63, 58) as R&D (60, 55); ours on those seeds 97-98. So the
+occasional collapse belongs to told-boundary methods on some seeds, not only to R&D's full reset.
