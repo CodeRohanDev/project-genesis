@@ -1,7 +1,7 @@
 # Paper draft 1 (2026-10-25) - IJCNN 2027, IEEE format, 6 pages
 
-Status: full first draft in Markdown; numbers taken from results/*.md (each table cites its source). Convert to
-IEEEtran LaTeX after review. [TODO] marks open items. References [n] = paper/related_work.md.
+Status: superseded as the paper text by paper/make_docx.js -> paper/genesis_ijcnn2027.docx (2026-10-27, 20-seed
+numbers, IEEE two-column Word, 5 pages). This file stays as the source-annotated draft (each table cites its source). [TODO] marks open items. References [n] = paper/related_work.md.
 
 ---
 
@@ -211,7 +211,8 @@ toward it, restart when the world surprises you - match a learner told the bound
 two domains. Memory carries the past; the reset carries the future. Next: grounding language in the same agent.
 
 ---
-## TODOs before LaTeX
-1. Fig. 1 method diagram. 2. Regenerate fig_long_sequence / fig_combined with full-reset runs (L_blind_all,
-O_full_all). 3. (done) 4. (done). 5. Word budget: IJCNN 6 pages incl. refs; cut Sec. II to ~0.6 column, tables to 3. 6. Install LaTeX or use
-Overleaf; IEEEtran conference template. 7. Repo/code release link.
+## TODOs
+1. (done) Fig. 1 method diagram (figures.py fig_method). 2. (done) Figures regenerated on final 20-seed runs.
+3.-4. (done). 5. (done) Word version, 5 pages: paper/genesis_ijcnn2027.docx; PDF preview genesis_ijcnn2027_preview.pdf.
+6. Fill author affiliation/email; one more related-work search for 2025-26 papers; professor feedback.
+7. Code release + arXiv (repo is private now).

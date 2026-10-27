@@ -29,6 +29,14 @@ def runs(prefix):
     return [json.load(open(f)) for f in sorted(glob.glob(f"results/runs/{prefix}_seed*.json"))]
 
 
+def final(prefix):
+    """Paper runs, seeds 1-20 on current code: seeds 1-10 from the _v2 rerun where one exists (pre-repo groups,
+    exp 28), seeds 11-20 from the replication."""
+    first = prefix + "_v2" if glob.glob(f"results/runs/{prefix}_v2_seed1.json") else prefix
+    load = lambda p, seeds: [json.load(open(f)) for s in seeds for f in glob.glob(f"results/runs/{p}_seed{s}.json")]
+    return load(first, range(1, 11)) + load(prefix, range(11, 21))
+
+
 def mci(xs):
     m, h = ci(xs)
     return 100 * m, 100 * h
@@ -37,16 +45,16 @@ def mci(xs):
 def save(fig, name):
     OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / f"{name}.pdf", bbox_inches="tight")
-    fig.savefig(OUT / f"{name}.png", bbox_inches="tight", dpi=200)
+    fig.savefig(OUT / f"{name}.png", bbox_inches="tight", dpi=300)
     plt.close(fig)
 
 
 def fig_combined():
     """Experiments 7-8: final success after Empty -> DoorKey -> Lava, training sizes vs unseen sizes."""
-    methods = [("C_none", "No protection", MUTED, ""), ("C_heads", "Head reset", YELLOW, "//"),
+    methods = [("C_none", "No protection", MUTED, ""), ("C_rd", "Reset & Distill (told)", YELLOW, "//"),
                ("C_distill", "Told + distill", AQUA, ".."), ("C_clear", "CLEAR (replay all)", MAGENTA, "xx"),
-               ("O_full", "Blind (ours)", BLUE, ""), ("C_joint", "Joint (all at once)", ORANGE, "\\\\")]
-    rs0 = runs("C_none")[0]
+               ("O_full_all", "Blind (ours)", BLUE, ""), ("C_joint", "Joint (all at once)", ORANGE, "\\\\")]
+    rs0 = final("C_none")[0]
     evals = rs0["eval_tasks"]
     unseen = [i for i, e in enumerate(evals) if "size=" in e]
     seen = [i for i in range(len(evals)) if i not in unseen]
@@ -54,7 +62,7 @@ def fig_combined():
     x = np.arange(2)
     w = 0.135
     for k, (p, label, color, hatch) in enumerate(methods):
-        rs = runs(p)
+        rs = final(p)
         vals = [mci([np.mean([r["matrix"][-1][i] for i in idx]) for r in rs]) for idx in (seen, unseen)]
         ax.bar(x + (k - 2.5) * w, [v[0] for v in vals], w * 0.9, yerr=[v[1] for v in vals], color=color, label=label,
                hatch=hatch, edgecolor="white", linewidth=0, error_kw={"elinewidth": 0.8, "ecolor": INK, "capsize": 1.5})
@@ -73,8 +81,8 @@ def fig_long():
     for p, label, color, marker, ls in [("L_none", "No protection", MUTED, "o", ":"),
                                         ("L_clear", "CLEAR (replay all)", MAGENTA, "P", (0, (3, 1, 1, 1))),
                                         ("L_distill", "Told + distill", AQUA, "s", "--"),
-                                        ("L_blind", "Blind (ours)", BLUE, "D", "-")]:
-        rs = runs(p)
+                                        ("L_blind_all", "Blind (ours)", BLUE, "D", "-")]:
+        rs = final(p)
         ys, hs = [], []
         for st in range(8):
             learned = sorted({i for f in order[:st + 1] for i in fams[f]})
@@ -83,7 +91,7 @@ def fig_long():
         xs = np.arange(1, 9)
         ax.plot(xs, ys, color=color, marker=marker, linestyle=ls, label=label)
         ax.fill_between(xs, np.array(ys) - hs, np.array(ys) + hs, color=color, alpha=0.15, linewidth=0)
-    joint = runs("L_joint")
+    joint = final("L_joint")
     jm, jh = mci([np.mean(r["matrix"][-1][:11]) for r in joint])
     ax.axhline(jm, color=ORANGE, linewidth=1.2, linestyle="-.", label=f"Joint, end ({jm:.0f}%)")
     ax.set_xticks(range(1, 9), ["Empty", "DoorKey", "Lava", "Obst.", "Cross.", "Unlock", "DoorKey", "Lava"],
@@ -137,13 +145,13 @@ def fig_minatar():
     games = ["breakout", "space_invaders", "freeway", "asterix", "seaquest"]
     scratch = np.array([np.mean([r["matrix"][-1][i] for r in runs(f"MAS_{g}")]) for i, g in enumerate(games)])
     methods = [("MA_none", "No protection", MUTED, ""), ("MA_clear", "CLEAR (replay all)", MAGENTA, "xx"),
-               ("MA_blind", "Blind, heads reset", BLUE, ""), ("MA_joint", "Joint (all at once)", ORANGE, "\\\\"),
-               ("MA_blind_all", "Blind, full reset (ours)", AQUA, "//")]
+               ("MA_joint", "Joint (all at once)", ORANGE, "\\\\"), ("MA_rd", "Reset & Distill (told)", YELLOW, ".."),
+               ("MA_blind_all", "Blind (ours)", BLUE, "")]
     fig, ax = plt.subplots(figsize=(3.4, 2.1))
     x = np.arange(6)
     w = 0.16
     for k, (p, label, color, hatch) in enumerate(methods):
-        fin = np.array([r["matrix"][-1] for r in runs(p)]) / scratch
+        fin = np.array([r["matrix"][-1] for r in final(p)]) / scratch
         vals = [mci(fin[:, i]) for i in range(5)] + [mci(fin.mean(1))]
         ax.bar(x + (k - 2) * w, [v[0] for v in vals], w * 0.9, yerr=[v[1] for v in vals], color=color, label=label,
                hatch=hatch, edgecolor="white", linewidth=0, error_kw={"elinewidth": 0.8, "ecolor": INK, "capsize": 1.5})
@@ -153,7 +161,41 @@ def fig_minatar():
     save(fig, "fig_minatar")
 
 
+def fig_method():
+    """Fig. 1: the boundary-blind loop. Every trigger comes from the agent's own success, never from a task signal."""
+    from matplotlib.patches import FancyBboxPatch
+    fig, ax = plt.subplots(figsize=(3.4, 2.5))
+    ax.set_xlim(0, 10); ax.set_ylim(0, 6.2); ax.axis("off")
+
+    def box(x0, y0, x1, y1, title, sub, color):
+        ax.add_patch(FancyBboxPatch((x0, y0), x1 - x0, y1 - y0, boxstyle="round,pad=0,rounding_size=0.15",
+                                    facecolor=color + "22", edgecolor=color, linewidth=1.2))
+        ax.text((x0 + x1) / 2, (y0 + y1) / 2 + (0.2 if sub else 0), title, ha="center", va="center",
+                fontsize=7.5, weight="bold", color=INK)
+        if sub:
+            ax.text((x0 + x1) / 2, (y0 + y1) / 2 - 0.2, sub, ha="center", va="center", fontsize=6, color=INK)
+
+    def arrow(a, b, label="", lx=0, ly=0, color=INK, ha="center"):
+        ax.annotate("", b, a, arrowprops={"arrowstyle": "-|>", "color": color, "lw": 1.1, "shrinkA": 0, "shrinkB": 0})
+        if label:
+            ax.text((a[0] + b[0]) / 2 + lx, (a[1] + b[1]) / 2 + ly, label, fontsize=6, color=color, ha=ha, va="center")
+
+    box(2.3, 5.25, 7.7, 6.1, "Environment", "tasks change without notice", MUTED)
+    box(0.1, 3.6, 9.9, 4.5, "PPO agent", "one CNN body, actor and critic heads", BLUE)
+    box(2.6, 2.05, 7.4, 2.9, "Competence c", "success over last 100 episodes", AQUA)
+    box(0.1, 0.1, 4.4, 1.3, "Reservoir memory", "8,192 observations + logits", ORANGE)
+    box(5.6, 0.1, 9.9, 1.3, "Surprise reset", "re-initialise weights + Adam", MAGENTA)
+    arrow((4.2, 5.25), (4.2, 4.5), "obs, reward", lx=-0.12, ha="right")
+    arrow((5.8, 4.5), (5.8, 5.25), "action", lx=0.12, ha="left")
+    arrow((5.0, 3.6), (5.0, 2.9), "own outcomes", lx=0.12, ha="left")
+    arrow((3.6, 2.05), (3.0, 1.3), "c \u2265 0.8: store", lx=-0.2, ha="right")
+    arrow((6.4, 2.05), (7.0, 1.3), "mastered,\nthen c < 0.3", lx=0.2, ha="left")
+    arrow((0.6, 1.3), (0.6, 3.6), "distil, \u03bb = 0.3", lx=0.12, ly=0.8, ha="left", color=ORANGE)
+    arrow((9.75, 1.3), (9.75, 3.6), "", color=MAGENTA)
+    save(fig, "fig_method")
+
+
 if __name__ == "__main__":
-    for f in (fig_combined, fig_long, fig_plasticity, fig_generalisation, fig_minatar):
+    for f in (fig_method, fig_combined, fig_long, fig_plasticity, fig_generalisation, fig_minatar):
         f()
         print("ok", f.__name__)
