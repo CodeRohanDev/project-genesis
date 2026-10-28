@@ -1,6 +1,6 @@
 # Paper draft 1 (2026-10-25) - IJCNN 2027, IEEE format, 6 pages
 
-Status: superseded as the paper text by paper/make_docx.js -> paper/genesis_ijcnn2027.docx (2026-10-27, 20-seed
+Status: superseded as the paper text by paper/make_docx.js -> paper/paper_ijcnn2027.docx (2026-10-27, 20-seed
 numbers, IEEE two-column Word, 5 pages). This file stays as the source-annotated draft (each table cites its source). [TODO] marks open items. References [n] = paper/related_work.md.
 
 ---
@@ -213,6 +213,6 @@ two domains. Memory carries the past; the reset carries the future. Next: ground
 ---
 ## TODOs
 1. (done) Fig. 1 method diagram (figures.py fig_method). 2. (done) Figures regenerated on final 20-seed runs.
-3.-4. (done). 5. (done) Word version, 5 pages: paper/genesis_ijcnn2027.docx; submission PDF paper/ijcnn2027_submission.pdf (anonymous, AI use disclosed per IJCNN 2027 rules).
+3.-4. (done). 5. (done) Word version, 5 pages: paper/paper_ijcnn2027.docx; submission PDF paper/ijcnn2027_submission.pdf (anonymous, AI use disclosed per IJCNN 2027 rules).
 6. Camera-ready only: put author names/affiliations back, IEEE PDF eXpress, copyright form; one more related-work search for 2025-26 papers; professor feedback.
 7. Code release + arXiv (repo is private now).

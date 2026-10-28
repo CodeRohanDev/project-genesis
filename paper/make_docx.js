@@ -1,4 +1,4 @@
-// Builds paper/genesis_ijcnn2027.docx for IJCNN 2027 initial submission (ijcnn.org/2027 author instructions, read
+// Builds paper/paper_ijcnn2027.docx for IJCNN 2027 initial submission (ijcnn.org/2027 author instructions, read
 // 2026-10-27): IEEE conference layout, US Letter, two columns, single-spaced Times 10 pt, <= 6 pages incl. references,
 // no page numbers, double-blind ("Anonymous Authors"), AI-generated text cited per section + acknowledged.
 // Numbers come from results/review.md (exp 24-28) and earlier write-ups; each table says its seeds.
@@ -306,7 +306,7 @@ add(P("Networks and worlds are small (MiniGrid, MinAtar), with one RL algorithm 
 // VIII. Conclusion
 add(H1("Conclusion"));
 add(P("An agent told nothing about task changes can, with a small self-triggered loop (remember what you master, distil toward it, restart when the world surprises you), match learners that are told the boundaries and beat CLEAR on two domains, with results replicated on new seeds. Memory carries the past; the reset carries the future. Next, we will ground language instructions in the same continual agent."));
-add(P("**Reproducibility.** Code, configurations, per-seed result files and logs for all runs will be released with the paper.", { noIndent: true, spacing: { before: 80 } }));
+add(P("**Reproducibility.** Code, configurations, per-seed result files and logs for all runs (anonymised for review): https://anonymous.4open.science/r/project-genesis-873C/.", { noIndent: true, spacing: { before: 80 } }));
 
 // Acknowledgment (IEEE: unnumbered, before references). Required by IJCNN 2027 for AI-generated text.
 add(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 }, keepNext: true,
@@ -344,7 +344,7 @@ const doc = new Document({
   ],
 });
 Packer.toBuffer(doc).then((buf) => {
-  const out = path.join(__dirname, "genesis_ijcnn2027.docx");
+  const out = path.join(__dirname, "paper_ijcnn2027.docx");
   fs.writeFileSync(out, buf);
   console.log("wrote", out, "refs", order.length);
 });

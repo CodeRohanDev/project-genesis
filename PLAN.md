@@ -1,6 +1,6 @@
-# Project Genesis: Experiment 1 Plan
+# Experiment 1 Plan
 
-Status: DRAFT, awaiting Rohan's approval. No code written yet.
+Status: DRAFT, awaiting the author's approval. No code written yet.
 
 ## AGI capability being tested
 Continual learning + transfer (from the AGI list: "learn different tasks", "transfer to unfamiliar situations", "retain earlier abilities").
@@ -65,7 +65,7 @@ Two questions split:
 - Exploration (side track, later): 8x8 DoorKey / LavaCrossing, retest curiosity there.
 Baseline default: entropy coef 0.05.
 
-## Overnight plan (2026-10-23, ~6h, autonomous, Rohan asleep)
+## Overnight plan (2026-10-23, ~6h, autonomous, author asleep)
 1. Blind continual learning: no task-boundary signal. Fixed-size reservoir replay (competence-gated),
    self-detected task change (own success collapses) -> heads reset. Compare to boundary-given distill and joint.
 2. Longer sequence: 6+ tasks incl. new kinds and revisits, using best method from 1.
@@ -108,7 +108,7 @@ the world responds to actions, and a way to search with it.
 
 All learned from random init, CPU-sized (small MLP/CNN), data collected by our own agents.
 
-### 3b revised design (2026-10-24, after 3a results; needs Rohan's go)
+### 3b revised design (2026-10-24, after 3a results; needs the author's go)
 3a showed: the world model is accurate for many steps in familiar worlds, weaker in new layouts. Step-by-step search
 over 20-40 actions with sparse success is unlikely to work. Plan over SKILLS instead (child-like: "get key, open
 door, then take the box"):
@@ -138,11 +138,11 @@ extra pages $100 each; TCDS hybrid: no fee unless open access ($2,800), overleng
 IEEE Access APC $2,160; ICDL 2027 Campinas 21-24 Sep 2027, call for papers not yet out.
 
 ## Next research track (after 3b): child-like language, faster
-Rohan's goal (2026-10-24): the system should learn full English and Hindi the way a child does, but faster and more
+The author's goal (2026-10-24): the system should learn full English and Hindi the way a child does, but faster and more
 easily. Not solved anywhere; must be designed and measured (words/examples needed vs a child). Candidate parts:
 reading from scratch (small LM, child-level text), grounding words in the gridworld agent, a teacher curriculum.
 
-## Decisions (made by Claude, Rohan delegated)
+## Decisions (made by Claude, author delegated)
 1. Environment: MiniGrid. Standard, cheap, comparable with published results.
 2. Stage 2 order: decided by Stage 1 evidence, not guessed now.
    - Baselines fail to learn DoorKey/Lava at all: exploration problem, so curiosity (RND) first.

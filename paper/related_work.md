@@ -46,7 +46,7 @@ distillation from the competence-gated memory.
 **Environments and algorithm.** We use PPO [21] in a CleanRL-style single-file implementation [22], MiniGrid [23]
 and MinAtar [24], a 10x10 version of five Atari games designed for thorough, many-seed experiments.
 
-## Where each claim comes from (for Rohan)
+## Where each claim comes from (for the author)
 | Claim in our paper / text | Paper | Link |
 |---|---|---|
 | Continual RL survey, taxonomy of non-stationarity | [1] Khetarpal et al., JAIR 2022 | https://www.jair.org/index.php/jair/article/view/13673 |

@@ -1,7 +1,7 @@
 # Language track (L): child-like language learning, but faster (started 2026-10-24)
 
 ## Goal
-Rohan's goal: the system should learn full English and Hindi the way a child does, but faster and more easily.
+The author's goal: the system should learn full English and Hindi the way a child does, but faster and more easily.
 No system does this today. This track measures how much text a from-scratch learner needs for grammar, and tests
 child-like ingredients one at a time to see which make learning more sample-efficient.
 
@@ -9,7 +9,7 @@ child-like ingredients one at a time to see which make learning more sample-effi
 The BabyLM challenge trains models on child-scale input: ~10M words (strict-small, about what a child hears in the
 first 2-5 years) or ~100M words, and evaluates grammar with BLiMP minimal pairs. Best 2024 strict-small BLiMP
 (GPT-BERT) ~81% macro average; baselines ~70-74% ([findings](https://arxiv.org/pdf/2412.05149)).
-Official English data: https://huggingface.co/datasets/BabyLM-community/babylm-eng (gated: needs Rohan's Hugging Face
+Official English data: https://huggingface.co/datasets/BabyLM-community/babylm-eng (gated: needs the author's Hugging Face
 login + access). Until then, development runs use 12.2M words of TinyStories (synthetic children's stories, open).
 No Hindi child-directed corpus was found (results/lm/DATA_SOURCES.md); a gap to fill later.
 

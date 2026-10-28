@@ -43,7 +43,7 @@ Any single run can be reproduced exactly from its saved config (runs are bit-exa
 PYTHONPATH=. .venv/bin/python results/rep_analysis.py      # MinAtar tables (seeds 1-20, paired differences)
 PYTHONPATH=. .venv/bin/python results/rep_analysis_mg.py   # MiniGrid tables
 .venv/bin/python figures.py                                # paper/figs/*.pdf, *.png
-node paper/make_docx.js                                    # paper/genesis_ijcnn2027.docx (needs npm package docx)
+node paper/make_docx.js                                    # paper/paper_ijcnn2027.docx (needs npm package docx)
 ```
 `results/README.md` indexes every experiment (question, script, run names, write-up). Write-ups in `results/*.md`
 report failures and negative results as well. Hyperparameters were tuned only on seeds 101+.
