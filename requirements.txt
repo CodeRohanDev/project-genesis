@@ -21,7 +21,7 @@ Jinja2==3.1.6
 kiwisolver==1.5.1
 MarkupSafe==3.0.4
 matplotlib==3.11.2
-MinAtar @ file:///tmp/claude-1000/-home-rohan-kumar-Projects-agi/045846f0-8c7b-45f7-b553-090a019ae487/scratchpad/minatar_pkg/MinAtar-1.0.15-py3-none-any.whl#sha256=f40450e133c552b97222702bb7b1c5254b47758390f4bd25e411399af0b21d42
+MinAtar==1.0.15
 minigrid==3.2.0
 mpmath==1.3.0
 networkx==3.7
