@@ -306,7 +306,7 @@ add(P("Networks and worlds are small (MiniGrid, MinAtar), with one RL algorithm 
 // VIII. Conclusion
 add(H1("Conclusion"));
 add(P("An agent told nothing about task changes can, with a small self-triggered loop (remember what you master, distil toward it, restart when the world surprises you), match learners that are told the boundaries and beat CLEAR on two domains, with results replicated on new seeds. Memory carries the past; the reset carries the future. Next, we will ground language instructions in the same continual agent."));
-add(P("**Reproducibility.** Code, configurations, per-seed result files and logs for all runs (anonymised for review): https://anonymous.4open.science/r/project-genesis-873C/.", { noIndent: true, spacing: { before: 80 } }));
+add(P("**Reproducibility.** Code, configurations, per-seed result files and logs for all runs (anonymised for review): https://anonymous.4open.science/r/blind-crl-ijcnn/.", { noIndent: true, spacing: { before: 80 } }));
 
 // Acknowledgment (IEEE: unnumbered, before references). Required by IJCNN 2027 for AI-generated text.
 add(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 160, after: 80 }, keepNext: true,
